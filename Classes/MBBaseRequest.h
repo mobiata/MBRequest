@@ -33,4 +33,7 @@ typedef void (^MBRequestUploadProgressCallback)(NSInteger bytes, NSInteger total
 @property (atomic, copy) MBRequestDownloadProgressCallback downloadProgressCallback;
 @property (atomic, copy) MBRequestUploadProgressCallback uploadProgressCallback;
 
+// Whether or not this request affects the global network activity indicator. Defaults to YES.
+@property (atomic, assign) BOOL affectsNetworkActivityIndicator;
+
 @end

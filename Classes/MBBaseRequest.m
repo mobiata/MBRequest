@@ -7,7 +7,9 @@
 //
 
 #import "MBBaseRequest.h"
+
 #import "MBBaseRequestSubclass.h"
+#import "MBNetworkActivityIndicatorManager.h"
 
 @interface MBBaseRequest ()
 @property (atomic, retain, readwrite) NSError *error;
@@ -47,6 +49,7 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 @implementation MBBaseRequest
 
+@synthesize affectsNetworkActivityIndicator = _affectsNetworkActivityIndicator;
 @synthesize connectionOperation = _connectionOperation;
 @synthesize downloadProgressCallback = _downloadProgressCallback;
 @synthesize error = _error;
@@ -54,6 +57,16 @@ void _MBRemoveRequest(MBBaseRequest *request)
 @synthesize uploadProgressCallback = _uploadProgressCallback;
 
 #pragma mark - Object Lifecycle
+
+- (id)init
+{
+    if ((self = [super init]))
+    {
+        _affectsNetworkActivityIndicator = YES;
+    }
+
+    return self;
+}
 
 - (void)dealloc
 {
@@ -73,6 +86,11 @@ void _MBRemoveRequest(MBBaseRequest *request)
     {
         [[self connectionOperation] cancel];
         [self setRunning:NO];
+
+        if ([self affectsNetworkActivityIndicator])
+        {
+            [[MBNetworkActivityIndicatorManager sharedManager] networkActivityStopped];
+        }
     }
 
     _MBRemoveRequest(self);
@@ -105,6 +123,11 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 - (void)scheduleOperationOnQueue:(NSOperationQueue *)queue
 {
+    if ([self affectsNetworkActivityIndicator])
+    {
+        [[MBNetworkActivityIndicatorManager sharedManager] networkActivityStarted];
+    }
+
     _MBAddRequest(self);
     [queue addOperation:[self connectionOperation]];
     [self setRunning:YES];
@@ -123,6 +146,11 @@ void _MBRemoveRequest(MBBaseRequest *request)
         [self setError:[operation error]];
         [self connectionOperationDidFinish];
         [self setRunning:NO];
+
+        if ([self affectsNetworkActivityIndicator])
+        {
+            [[MBNetworkActivityIndicatorManager sharedManager] networkActivityStopped];
+        }
     }
 
     _MBRemoveRequest(self);
