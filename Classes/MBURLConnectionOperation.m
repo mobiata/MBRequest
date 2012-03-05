@@ -7,6 +7,8 @@
 //
 
 #import "MBURLConnectionOperation.h"
+
+#import "MBRequestLog.h"
 #import "MBURLConnectionOperationSubclass.h"
 
 @interface MBURLConnectionOperation ()
@@ -49,7 +51,15 @@
     {
         if (![self isCancelled] && ![self isFinished])
         {
-            [self setConnection:[NSURLConnection connectionWithRequest:[self request] delegate:self]];
+            if ([self request] == nil)
+            {
+                NSLog(@"%@: Unable to send request. No NSURLRequest object set!", self);
+            }
+            else
+            {
+                MBRequestLog(@"Sending Request: %@", [[self request] URL]);
+                [self setConnection:[NSURLConnection connectionWithRequest:[self request] delegate:self]];
+            }
         }
         
         CFRunLoopRun();
@@ -101,7 +111,7 @@
         else
         {
             [self setResponse:response];
-            
+
             long long capacity = [response expectedContentLength];
             capacity = (capacity == NSURLResponseUnknownLength) ? 1024 : capacity;
             capacity = MIN(capacity, 1024 * 1000);
@@ -140,6 +150,7 @@
         if (![self isCancelled] && ![self isFinished])
         {
             [self setError:error];
+            MBRequestLog(@"Request Error: %@", [self error]);
             [self handleResponse];
             [self finish];
         }
@@ -154,6 +165,7 @@
         {
             [self setResponseData:[NSData dataWithData:[self incrementalResponseData]]];
             [self setIncrementalResponseData:nil];
+            MBRequestLog(@"Received Response:\n%@", [self responseDataAsUTF8String]);
             [self handleResponse];
             [self finish];
         }
