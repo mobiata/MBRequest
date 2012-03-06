@@ -123,7 +123,7 @@ void _MBRemoveRequest(MBBaseRequest *request)
     return [[self connectionOperation] isCancelled];
 }
 
-#pragma mark - Protected Methods
+#pragma mark - Response
 
 - (void)parseResults
 {

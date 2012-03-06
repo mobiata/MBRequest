@@ -32,7 +32,7 @@
     return self;
 }
 
-#pragma mark - Protected Methods
+#pragma mark - Response
 
 - (void)parseResults
 {
