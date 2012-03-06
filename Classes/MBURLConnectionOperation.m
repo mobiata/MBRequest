@@ -57,7 +57,8 @@
             }
             else
             {
-                MBRequestLog(@"Sending Request: %@", [[self request] URL]);
+                MBRequestLog(@"Sending %@ Request: %@", [[self request] HTTPMethod], [[self request] URL]);
+                MBRequestLog(@"Headers: %@", [[self request] allHTTPHeaderFields]);
                 [self setConnection:[NSURLConnection connectionWithRequest:[self request] delegate:self]];
             }
         }
