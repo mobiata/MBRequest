@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Mobiata, LLC. All rights reserved.
 //
 
-#import "MBBaseRequest.h"
+#import "MBHTTPRequest.h"
 
 // A basic starter class for implementing an XML parser. When you subclass this class,
 // implement the NSXMLParserDelegate methods and be sure to check [self isCancelled]
@@ -14,6 +14,6 @@
 // amount of time to parse. If [self isCancelled] ever comes back true, make sure that
 // you abort the NSXMLParser as quickly as possible.
 
-@interface MBXMLRequest : MBBaseRequest <NSXMLParserDelegate>
+@interface MBXMLRequest : MBHTTPRequest <NSXMLParserDelegate>
 
 @end
