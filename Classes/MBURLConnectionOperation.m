@@ -8,6 +8,8 @@
 
 #import "MBURLConnectionOperation.h"
 
+#import "MBRequestError.h"
+#import "MBRequestLocalization.h"
 #import "MBRequestLog.h"
 #import "MBURLConnectionOperationSubclass.h"
 
@@ -53,17 +55,30 @@
         {
             if ([self request] == nil)
             {
-                NSLog(@"%@: Unable to send request. No NSURLRequest object set!", self);
+                [NSException raise:NSInternalInconsistencyException format:@"%@: Unable to send request. No NSURLRequest object set!", self];
             }
             else
             {
                 MBRequestLog(@"Sending %@ Request: %@", [[self request] HTTPMethod], [[self request] URL]);
                 MBRequestLog(@"Headers: %@", [[self request] allHTTPHeaderFields]);
                 [self setConnection:[NSURLConnection connectionWithRequest:[self request] delegate:self]];
+                if ([self connection] == nil)
+                {
+                    NSLog(@"NSURLConnection's initWithRequest returned nil for %@. How is this possible?", [self request]);
+                    NSString *message = MBRequestLocalizedString(@"unknown_error_occurred", @"An unknown error has occurred.");
+                    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:message forKey:NSLocalizedDescriptionKey];
+                    NSError *error = [NSError errorWithDomain:MBRequestErrorDomain
+                                                         code:MBRequestErrorCodeUnknown
+                                                     userInfo:userInfo];
+                    [self setError:error];
+                }
             }
         }
-        
-        CFRunLoopRun();
+
+        if ([self error] == nil)
+        {
+            CFRunLoopRun();
+        }
     }
 }
 

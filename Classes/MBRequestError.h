@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
+    MBRequestErrorCodeUnknown = -1,
     MBRequestErrorCodeUnsuccessfulServerResponse = 1
 } MBRequestErrorCode;
 
