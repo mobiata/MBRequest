@@ -87,6 +87,7 @@
     @synchronized (self)
     {
         [super cancel];
+        [[self connection] cancel];
         [self finish];
     }
 }
@@ -120,11 +121,7 @@
 {
     @synchronized (self)
     {
-        if ([self isCancelled] || [self isFinished])
-        {
-            [connection cancel];
-        }
-        else
+        if (![self isCancelled] && ![self isFinished])
         {
             [self setResponse:response];
 
@@ -140,21 +137,17 @@
 {
     @synchronized (self)
     {
-        if ([self isCancelled] || [self isFinished])
-        {
-            [connection cancel];
-        }
-        else
+        if (![self isCancelled] && ![self isFinished])
         {
             [[self incrementalResponseData] appendData:data];
-        }
-        
-        if ([_delegate respondsToSelector:@selector(connectionOperation:didReceiveBodyData:totalBytesRead:totalBytesExpectedToRead:)])
-        {
-            [_delegate connectionOperation:self
-                        didReceiveBodyData:[data length]
-                            totalBytesRead:[[self incrementalResponseData] length]
-                  totalBytesExpectedToRead:[[self response] expectedContentLength]];
+
+            if ([_delegate respondsToSelector:@selector(connectionOperation:didReceiveBodyData:totalBytesRead:totalBytesExpectedToRead:)])
+            {
+                [_delegate connectionOperation:self
+                            didReceiveBodyData:[data length]
+                                totalBytesRead:[[self incrementalResponseData] length]
+                      totalBytesExpectedToRead:[[self response] expectedContentLength]];
+            }
         }
     }
 }
