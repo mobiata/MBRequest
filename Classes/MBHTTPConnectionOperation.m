@@ -8,6 +8,7 @@
 
 #import "MBHTTPConnectionOperation.h"
 
+#import "MBRequestLocalization.h"
 #import "MBRequestError.h"
 #import "MBRequestLocalization.h"
 #import "MBURLConnectionOperationSubclass.h"
@@ -55,7 +56,23 @@
     @synchronized (self)
     {
         [super handleResponse];
-        
+
+        NSError *error = [self error];
+
+        // A sketchy connection can cause a very unfriendly error message. Make it nicer.
+        if ([self error] != nil)
+        {
+            if ([[error domain] isEqualToString:NSPOSIXErrorDomain] && [error code] == 22)
+            {
+                NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:[error userInfo]];
+                NSString *msg = MBRequestLocalizedString(@"unable_perform_request_check_internet_connection_try_again",
+                                                         @"Unable to perform request. Please check your internet connection and try again.");
+                [userInfo setObject:msg forKey:NSLocalizedDescriptionKey];
+                [self setError:[NSError errorWithDomain:[error domain] code:[error code] userInfo:userInfo]];
+            }
+        }
+
+        // Check for a bad status code.
         if ([self error] == nil)
         {
             NSHTTPURLResponse *response = [self response];
