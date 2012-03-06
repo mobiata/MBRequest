@@ -19,25 +19,23 @@
 
 @dynamic error;
 
-#pragma mark - Response
+#pragma mark - Protected Methods
 
-- (void)connectionOperationDidFinish
+- (void)parseResults
 {
-    [super connectionOperationDidFinish];
+    [super parseResults];
 
-    if ([self error] == nil && ![self isCancelled])
-    {
-        // Create an autorelease pool for this parser.
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    // Create an autorelease pool for this parser.
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
-        // Parse the XML response.
-        NSXMLParser *parser = [[NSXMLParser alloc] initWithData:[[self connectionOperation] responseData]];
-        [parser setDelegate:self];
-        [parser parse];
+    // Parse the XML response.
+    NSXMLParser *parser = [[NSXMLParser alloc] initWithData:[[self connectionOperation] responseData]];
+    [parser setDelegate:self];
+    [parser parse];
 
-        [parser release];
-        [pool release];
-    }
+    // Cleanup
+    [parser release];
+    [pool release];
 }
 
 #pragma mark - NSXMLParserDelegate

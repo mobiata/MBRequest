@@ -14,40 +14,62 @@
 @interface MBJSONRequest ()
 @property (atomic, retain, readwrite) NSError *error;
 @property (atomic, retain, readwrite) id responseJSON;
+@property (nonatomic, copy, readwrite) MBRequestJSONCompletionHandler JSONCompletionHandler;
 @end
 
 
 @implementation MBJSONRequest
 
 @dynamic error;
+@synthesize JSONCompletionHandler = _JSONCompletionHandler;
 @synthesize responseJSON = _responseJSON;
 
 #pragma mark - Object Lifecycle
 
 - (void)dealloc
 {
+    [_JSONCompletionHandler release];
     [_responseJSON release];
     [super dealloc];
 }
 
-#pragma mark - Response
+#pragma mark - Public Methods
 
-- (void)connectionOperationDidFinish
+- (void)performJSONRequest:(NSURLRequest *)request completionHandler:(MBRequestJSONCompletionHandler)completionHandler
 {
-    [super connectionOperationDidFinish];
+    [[self connectionOperation] setRequest:request];
+    [self setJSONCompletionHandler:completionHandler];
+    [self scheduleOperation];
+}
 
-    if ([self error] == nil && ![self isCancelled])
+#pragma mark - Protected Methods
+
+- (void)parseResults
+{
+    [super parseResults];
+
+    NSError *error = nil;
+    id obj = MBJSONObjectFromData([[self connectionOperation] responseData], &error);
+    if (error != nil)
     {
-        NSError *error = nil;
-        id obj = MBJSONObjectFromData([[self connectionOperation] responseData], &error);
-        if (error != nil)
-        {
-            [self setError:error];
-        }
-        else
-        {
-            [self setResponseJSON:obj];
-        }
+        [self setError:error];
+    }
+    else
+    {
+        [self setResponseJSON:obj];
+    }
+}
+
+- (void)notifyCaller
+{
+    if ([self JSONCompletionHandler] != nil)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (![self isCancelled])
+            {
+                [self JSONCompletionHandler]([self responseJSON], [self error]);
+            }
+        });
     }
 }
 

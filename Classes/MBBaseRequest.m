@@ -14,7 +14,7 @@
 @interface MBBaseRequest ()
 @property (atomic, retain, readwrite) NSError *error;
 @property (atomic, assign, readwrite, getter=isRunning) BOOL running;
-@property (atomic, retain, readwrite) MBURLConnectionOperation *connectionOperation;
+@property (nonatomic, copy, readwrite) MBRequestDataCompletionHandler dataCompletionHandler;
 @end
 
 
@@ -51,6 +51,7 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 @synthesize affectsNetworkActivityIndicator = _affectsNetworkActivityIndicator;
 @synthesize connectionOperation = _connectionOperation;
+@synthesize dataCompletionHandler = _dataCompletionHandler;
 @synthesize downloadProgressCallback = _downloadProgressCallback;
 @synthesize error = _error;
 @synthesize running = _running;
@@ -72,13 +73,34 @@ void _MBRemoveRequest(MBBaseRequest *request)
 {
     [_connectionOperation cancel];
     [_connectionOperation release];
+    [_dataCompletionHandler release];
     [_downloadProgressCallback release];
     [_error release];
     [_uploadProgressCallback release];
     [super dealloc];
 }
 
+#pragma mark - Accessors
+
+- (MBURLConnectionOperation *)connectionOperation
+{
+    if (_connectionOperation == nil)
+    {
+        _connectionOperation = [[MBURLConnectionOperation alloc] init];
+        [_connectionOperation setDelegate:self];
+    }
+
+    return _connectionOperation;
+}
+
 #pragma mark - Public Methods
+
+- (void)performBasicRequest:(NSURLRequest *)request completionHandler:(MBRequestDataCompletionHandler)completionHandler
+{
+    [[self connectionOperation] setRequest:request];
+    [self setDataCompletionHandler:completionHandler];
+    [self scheduleOperation];
+}
 
 - (void)cancel
 {
@@ -101,7 +123,27 @@ void _MBRemoveRequest(MBBaseRequest *request)
     return [[self connectionOperation] isCancelled];
 }
 
-#pragma mark - Private Methods
+#pragma mark - Protected Methods
+
+- (void)parseResults
+{
+    // Nothing to do.
+}
+
+- (void)notifyCaller
+{
+    if ([self dataCompletionHandler] != nil)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (![self isCancelled])
+            {
+                [self dataCompletionHandler]([[self connectionOperation] responseData], [self error]);
+            }
+        });
+    }
+}
+
+#pragma mark - Request Queues
 
 - (NSOperationQueue *)sharedRequestQueue
 {
@@ -133,10 +175,6 @@ void _MBRemoveRequest(MBBaseRequest *request)
     [self setRunning:YES];
 }
 
-- (void)connectionOperationDidFinish
-{
-}
-
 #pragma mark - MBURLConnectionOperationDelegate
 
 - (void)connectionOperationDidFinish:(MBURLConnectionOperation *)operation
@@ -144,8 +182,12 @@ void _MBRemoveRequest(MBBaseRequest *request)
     @synchronized (self)
     {
         [self setError:[operation error]];
-        [self connectionOperationDidFinish];
+        if ([self error] == nil)
+        {
+            [self parseResults];
+        }
         [self setRunning:NO];
+        [self notifyCaller];
 
         if ([self affectsNetworkActivityIndicator])
         {

@@ -12,6 +12,16 @@
 
 @interface MBBaseRequest (ForSubclassEyesOnly)
 
+// Subclasses should override this method to parse the results of the connection. Subclasses must
+// call the super implementation of this method before executing their own code. If any errors
+// occur while parsing, be sure to call setError:. This method will not be called if an error has
+// already occurred.
+- (void)parseResults;
+
+// Subclasses should override this method and notify their caller that the request has completed
+// (either successfully or unsuccessfully). Subclasses need not call the super implementation.
+- (void)notifyCaller;
+
 // The shared request queue for all MBBaseRequest objects. You may override this method to return
 // a different queue if you would like to separate some requests from other requests. For example,
 // you might want a special queue to handle certain requests which are fast and return very little
@@ -24,11 +34,5 @@
 
 // Schedules the operation on a particular NSOperationQueue.
 - (void)scheduleOperationOnQueue:(NSOperationQueue *)queue;
-
-// Override this method in your subclass to properly handle the response. It should parse
-// the response into understandable objects for the caller and then notify the caller in
-// some way, whether that be through delegate callbacks or blocks. To make things simpler for
-// the callers, consider executing any callback code on the main thread.
-- (void)connectionOperationDidFinish;
 
 @end
