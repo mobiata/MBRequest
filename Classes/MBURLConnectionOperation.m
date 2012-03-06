@@ -19,6 +19,7 @@
 @property (atomic, retain, readwrite) NSURLResponse *response;
 @property (atomic, retain, readwrite) NSData *responseData;
 @property (atomic, retain, readwrite) NSError *error;
+- (void)finish;
 @end
 
 
