@@ -23,6 +23,7 @@
 @dynamic error;
 @synthesize delegate = _delegate;
 @synthesize successfulStatusCodes = _successfulStatusCodes;
+@synthesize validContentTypes = _validContentTypes;
 
 #pragma mark - Object Lifecycle
 
@@ -39,6 +40,7 @@
 - (void)dealloc
 {
     [_successfulStatusCodes release];
+    [_validContentTypes release];
     [super dealloc];
 }
 
@@ -86,6 +88,31 @@
                                                      code:MBRequestErrorCodeUnsuccessfulServerResponse
                                                  userInfo:userInfo];
                 [self setError:error];
+            }
+        }
+
+        // Check for captive portals or other invalid content types.
+        if ([self error] == nil && [[self validContentTypes] count] > 0 && [[self responseData] length] > 0)
+        {
+            NSString *currentType = [[self response] MIMEType];
+            if ([currentType length] && ![[self validContentTypes] containsObject:currentType])
+            {
+                NSString *msg;
+                NSLog(@"Received content type '%@' when we expected %@.", currentType, [self validContentTypes]);
+                if ([currentType isEqualToString:@"text/html"])
+                {
+                    NSLog(@"Unexpected content type 'text/html' is often (but not always) due to a captive portal capturing all network requests and then trying to show a login form to the user.");
+                    msg = MBRequestLocalizedString(@"unable_perform_request_check_internet_connection_try_again",
+                                                   @"Unable to perform request. Please check your internet connection and try again.");
+                }
+                else
+                {
+                    msg = MBRequestLocalizedString(@"unexpected_content_type_received",
+                                                   @"Unable to perform request. Unexpected content type received.");
+                }
+
+                NSDictionary *userInfo = [NSDictionary dictionaryWithObject:msg forKey:NSLocalizedDescriptionKey];
+                [self setError:[NSError errorWithDomain:MBRequestErrorDomain code:MBRequestErrorCodeUnsuccessfulServerResponse userInfo:userInfo]];
             }
         }
     }

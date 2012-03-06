@@ -19,6 +19,19 @@
 
 @dynamic error;
 
+#pragma mark - Object Lifecycle
+
+- (id)init
+{
+    if ((self = [super init]))
+    {
+        NSSet *types = [NSSet setWithObjects:@"text/xml", nil];
+        [[self connectionOperation] setValidContentTypes:types];
+    }
+
+    return self;
+}
+
 #pragma mark - Protected Methods
 
 - (void)parseResults

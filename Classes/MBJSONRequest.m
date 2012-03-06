@@ -26,6 +26,17 @@
 
 #pragma mark - Object Lifecycle
 
+- (id)init
+{
+    if ((self = [super init]))
+    {
+        NSSet *types = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", nil];
+        [[self connectionOperation] setValidContentTypes:types];
+    }
+
+    return self;
+}
+
 - (void)dealloc
 {
     [_JSONCompletionHandler release];
