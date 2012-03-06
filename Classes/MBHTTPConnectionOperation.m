@@ -81,7 +81,7 @@
             NSInteger statusCode = [response statusCode];
             if (![[self successfulStatusCodes] containsIndex:statusCode])
             {
-                NSString *format = MBRequestLocalizedString(@"request_unsuccessful_bad_status_code", @"Request failed (status code %d)");
+                NSString *format = MBRequestLocalizedString(@"request_unsuccessful_bad_status_code", @"Unable to perform request. An HTTP error occurred (%d).");
                 NSString *msg = [NSString stringWithFormat:format, statusCode];
                 NSDictionary *userInfo = [NSDictionary dictionaryWithObject:msg forKey:NSLocalizedDescriptionKey];
                 NSError *error = [NSError errorWithDomain:MBRequestErrorDomain
@@ -107,8 +107,9 @@
                 }
                 else
                 {
-                    msg = MBRequestLocalizedString(@"unexpected_content_type_received",
-                                                   @"Unable to perform request. Unexpected content type received.");
+                    NSString *format = MBRequestLocalizedString(@"unexpected_content_type_received",
+                                                                @"Unable to perform request. Unexpected content type received (%@).");
+                    msg = [NSString stringWithFormat:format, currentType];
                 }
 
                 NSDictionary *userInfo = [NSDictionary dictionaryWithObject:msg forKey:NSLocalizedDescriptionKey];
