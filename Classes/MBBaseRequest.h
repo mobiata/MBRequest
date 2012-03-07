@@ -35,19 +35,19 @@ typedef void (^MBRequestUploadProgressCallback)(NSInteger bytes, NSInteger total
 // completes.
 @property (atomic, assign, readonly, getter=isRunning) BOOL running;
 
-// Performs a basic request and notifies the caller with any data downloaded.
-- (void)performBasicRequest:(NSURLRequest *)request completionHandler:(MBRequestDataCompletionHandler)completionHandler;
-
 // Cancels the request. Once cancelled, you should not receive any callbacks (success or
 // error) that relates to this request.
 - (void)cancel;
 - (BOOL)isCancelled;
 
+// Performs a basic request and notifies the caller with any data downloaded.
+- (void)performBasicRequest:(NSURLRequest *)request completionHandler:(MBRequestDataCompletionHandler)completionHandler;
+
 // The operation associated with the URL connection.
 @property (nonatomic, retain, readonly) MBURLConnectionOperation *connectionOperation;
 
 // An error associated with this request.
-@property (atomic, retain, readonly) NSError *error;
+@property (nonatomic, retain, readonly) NSError *error;
 
 // Basic callback that just handles basic NSData downloads.
 @property (nonatomic, copy, readonly) MBRequestDataCompletionHandler dataCompletionHandler;

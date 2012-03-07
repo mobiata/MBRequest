@@ -71,12 +71,7 @@
 
     if ([self imageCompletionHandler] != nil)
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (![self isCancelled])
-            {
-                [self imageCompletionHandler]([self responseImage], [self error]);
-            }
-        });
+        [self imageCompletionHandler]([self responseImage], [self error]);
     }
 }
 

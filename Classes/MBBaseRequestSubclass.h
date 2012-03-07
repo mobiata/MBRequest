@@ -21,7 +21,7 @@
 // Subclasses should override this method and notify their caller that the request has completed
 // (either successfully or unsuccessfully). Subclasses should call the super implementation if they
 // want the basic superclass request methods to work (like performJSONRequest:completionHandler:
-// and performBasicRequest:completionHandler:.
+// and performBasicRequest:completionHandler:. This method will be called on the main thread.
 - (void)notifyCaller;
 
 // The shared request queue for all MBBaseRequest objects. You may override this method to return

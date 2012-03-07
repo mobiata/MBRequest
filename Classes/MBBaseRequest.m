@@ -12,8 +12,8 @@
 #import "MBNetworkActivityIndicatorManager.h"
 
 @interface MBBaseRequest ()
-@property (atomic, retain, readwrite) NSError *error;
 @property (atomic, assign, readwrite, getter=isRunning) BOOL running;
+@property (nonatomic, retain, readwrite) NSError *error;
 @property (nonatomic, copy, readwrite) MBRequestDataCompletionHandler dataCompletionHandler;
 @end
 
@@ -104,9 +104,10 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 - (void)cancel
 {
-    @synchronized (self)
+    @synchronized ([self connectionOperation])
     {
         [[self connectionOperation] cancel];
+
         [self setRunning:NO];
 
         if ([self affectsNetworkActivityIndicator])
@@ -134,12 +135,7 @@ void _MBRemoveRequest(MBBaseRequest *request)
 {
     if ([self dataCompletionHandler] != nil)
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (![self isCancelled])
-            {
-                [self dataCompletionHandler]([[self connectionOperation] responseData], [self error]);
-            }
-        });
+        [self dataCompletionHandler]([[self connectionOperation] responseData], [self error]);
     }
 }
 
@@ -179,21 +175,25 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 - (void)connectionOperationDidFinish:(MBURLConnectionOperation *)operation
 {
-    @synchronized (self)
+    [self setError:[operation error]];
+    if ([self error] == nil)
     {
-        [self setError:[operation error]];
-        if ([self error] == nil)
-        {
-            [self parseResults];
-        }
-        [self setRunning:NO];
-        [self notifyCaller];
-
-        if ([self affectsNetworkActivityIndicator])
-        {
-            [[MBNetworkActivityIndicatorManager sharedManager] networkActivityStopped];
-        }
+        [self parseResults];
     }
+
+    [self setRunning:NO];
+
+    if ([self affectsNetworkActivityIndicator])
+    {
+        [[MBNetworkActivityIndicatorManager sharedManager] networkActivityStopped];
+    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (![self isCancelled])
+        {
+            [self notifyCaller];
+        }
+    });
 
     _MBRemoveRequest(self);
 }

@@ -77,12 +77,7 @@
 
     if ([self JSONCompletionHandler] != nil)
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (![self isCancelled])
-            {
-                [self JSONCompletionHandler]([self responseJSON], [self error]);
-            }
-        });
+        [self JSONCompletionHandler]([self responseJSON], [self error]);
     }
 }
 
