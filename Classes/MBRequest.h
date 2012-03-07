@@ -8,8 +8,11 @@
 
 #import "MBBaseRequest.h"
 #import "MBHTTPConnectionOperation.h"
+#import "MBHTTPRequest.h"
+#import "MBImageRequest.h"
 #import "MBJSONRequest.h"
 #import "MBRequestError.h"
 #import "MBRequestLocalization.h"
+#import "MBRequestLog.h"
 #import "MBURLConnectionOperation.h"
 #import "MBXMLRequest.h"
