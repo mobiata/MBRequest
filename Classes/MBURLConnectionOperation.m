@@ -87,9 +87,12 @@
 {
     @synchronized (self)
     {
-        [super cancel];
-        [[self connection] cancel];
-        [self finish];
+        if ([self isExecuting])
+        {
+            [super cancel];
+            [[self connection] cancel];
+            [self finish];
+        }
     }
 }
 
