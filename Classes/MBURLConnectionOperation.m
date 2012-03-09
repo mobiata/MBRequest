@@ -19,6 +19,7 @@
 @property (atomic, retain, readwrite) NSURLResponse *response;
 @property (atomic, retain, readwrite) NSData *responseData;
 @property (atomic, retain, readwrite) NSError *error;
+@property (atomic, assign) CFRunLoopRef runLoop;
 - (void)finish;
 @end
 
@@ -32,6 +33,7 @@
 @synthesize request = _request;
 @synthesize response = _response;
 @synthesize responseData = _responseData;
+@synthesize runLoop = _runLoop;
 
 #pragma mark - Object Lifecycle
 
@@ -79,6 +81,7 @@
         if ([self error] == nil)
         {
             CFRunLoopRun();
+            [self setRunLoop:CFRunLoopGetCurrent()];
         }
     }
 }
@@ -108,8 +111,9 @@
         {
             [[self delegate] connectionOperationDidFinish:self];
         }
-        
-        CFRunLoopStop(CFRunLoopGetCurrent());
+
+        CFRunLoopStop([self runLoop]);
+        [self setRunLoop:NULL];
     }
 }
 
