@@ -80,8 +80,8 @@
 
         if ([self error] == nil)
         {
-            CFRunLoopRun();
             [self setRunLoop:CFRunLoopGetCurrent()];
+            CFRunLoopRun();
         }
     }
 }
