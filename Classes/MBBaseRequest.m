@@ -71,7 +71,6 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 - (void)dealloc
 {
-    [_connectionOperation cancel];
     [_connectionOperation release];
     [_dataCompletionHandler release];
     [_downloadProgressCallback release];
@@ -106,13 +105,16 @@ void _MBRemoveRequest(MBBaseRequest *request)
 {
     @synchronized ([self connectionOperation])
     {
-        [[self connectionOperation] cancel];
-
-        [self setRunning:NO];
-
-        if ([self affectsNetworkActivityIndicator])
+        if (![[self connectionOperation] isCancelled])
         {
-            [[MBNetworkActivityIndicatorManager sharedManager] networkActivityStopped];
+            [[self connectionOperation] cancel];
+
+            [self setRunning:NO];
+
+            if ([self affectsNetworkActivityIndicator])
+            {
+                [[MBNetworkActivityIndicatorManager sharedManager] networkActivityStopped];
+            }
         }
     }
 

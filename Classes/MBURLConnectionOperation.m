@@ -54,7 +54,7 @@
 {
     @synchronized (self)
     {
-        if (![self isCancelled] && ![self isFinished])
+        if (![self isCancelled])
         {
             if ([self request] == nil)
             {
@@ -75,13 +75,12 @@
                                                      userInfo:userInfo];
                     [self setError:error];
                 }
+                else
+                {
+                    [self setRunLoop:CFRunLoopGetCurrent()];
+                    CFRunLoopRun();
+                }
             }
-        }
-
-        if ([self error] == nil)
-        {
-            [self setRunLoop:CFRunLoopGetCurrent()];
-            CFRunLoopRun();
         }
     }
 }
@@ -90,7 +89,7 @@
 {
     @synchronized (self)
     {
-        if ([self isExecuting])
+        if (![self isCancelled])
         {
             [super cancel];
             [[self connection] cancel];
@@ -105,13 +104,13 @@
 
 - (void)finish
 {
-    @synchronized (self)
+    if (![self isCancelled])
     {
-        if (![self isCancelled])
-        {
-            [[self delegate] connectionOperationDidFinish:self];
-        }
+        [[self delegate] connectionOperationDidFinish:self];
+    }
 
+    if ([self runLoop])
+    {
         CFRunLoopStop([self runLoop]);
         [self setRunLoop:NULL];
     }
