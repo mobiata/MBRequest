@@ -59,15 +59,18 @@
 {
     [super parseResults];
 
-    NSError *error = nil;
-    id obj = MBJSONObjectFromData([[self connectionOperation] responseData], &error);
-    if (error != nil)
+    if ([self error] == nil)
     {
-        [self setError:error];
-    }
-    else
-    {
-        [self setResponseJSON:obj];
+        NSError *error = nil;
+        id obj = MBJSONObjectFromData([[self connectionOperation] responseData], &error);
+        if (error != nil)
+        {
+            [self setError:error];
+        }
+        else
+        {
+            [self setResponseJSON:obj];
+        }
     }
 }
 
