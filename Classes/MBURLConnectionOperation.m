@@ -52,34 +52,31 @@
 
 - (void)main
 {
-    @synchronized (self)
+    if (![self isCancelled])
     {
-        if (![self isCancelled])
+        if ([self request] == nil)
         {
-            if ([self request] == nil)
+            [NSException raise:NSInternalInconsistencyException format:@"%@: Unable to send request. No NSURLRequest object set!", self];
+        }
+        else
+        {
+            MBRequestLog(@"Sending %@ Request: %@", [[self request] HTTPMethod], [[self request] URL]);
+            MBRequestLog(@"Headers: %@", [[self request] allHTTPHeaderFields]);
+            [self setConnection:[NSURLConnection connectionWithRequest:[self request] delegate:self]];
+            if ([self connection] == nil)
             {
-                [NSException raise:NSInternalInconsistencyException format:@"%@: Unable to send request. No NSURLRequest object set!", self];
+                NSLog(@"NSURLConnection's initWithRequest returned nil for %@. How is this possible?", [self request]);
+                NSString *message = MBRequestLocalizedString(@"unknown_error_occurred", @"An unknown error has occurred.");
+                NSDictionary *userInfo = [NSDictionary dictionaryWithObject:message forKey:NSLocalizedDescriptionKey];
+                NSError *error = [NSError errorWithDomain:MBRequestErrorDomain
+                                                     code:MBRequestErrorCodeUnknown
+                                                 userInfo:userInfo];
+                [self setError:error];
             }
             else
             {
-                MBRequestLog(@"Sending %@ Request: %@", [[self request] HTTPMethod], [[self request] URL]);
-                MBRequestLog(@"Headers: %@", [[self request] allHTTPHeaderFields]);
-                [self setConnection:[NSURLConnection connectionWithRequest:[self request] delegate:self]];
-                if ([self connection] == nil)
-                {
-                    NSLog(@"NSURLConnection's initWithRequest returned nil for %@. How is this possible?", [self request]);
-                    NSString *message = MBRequestLocalizedString(@"unknown_error_occurred", @"An unknown error has occurred.");
-                    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:message forKey:NSLocalizedDescriptionKey];
-                    NSError *error = [NSError errorWithDomain:MBRequestErrorDomain
-                                                         code:MBRequestErrorCodeUnknown
-                                                     userInfo:userInfo];
-                    [self setError:error];
-                }
-                else
-                {
-                    [self setRunLoop:CFRunLoopGetCurrent()];
-                    CFRunLoopRun();
-                }
+                [self setRunLoop:CFRunLoopGetCurrent()];
+                CFRunLoopRun();
             }
         }
     }
@@ -87,14 +84,11 @@
 
 - (void)cancel
 {
-    @synchronized (self)
+    if (![self isCancelled])
     {
-        if (![self isCancelled])
-        {
-            [super cancel];
-            [[self connection] cancel];
-            [self finish];
-        }
+        [super cancel];
+        [[self connection] cancel];
+        [self finish];
     }
 }
 
@@ -126,74 +120,59 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    @synchronized (self)
+    if (![self isCancelled] && ![self isFinished])
     {
-        if (![self isCancelled] && ![self isFinished])
-        {
-            [self setResponse:response];
+        [self setResponse:response];
 
-            long long capacity = [response expectedContentLength];
-            capacity = (capacity == NSURLResponseUnknownLength) ? 1024 : capacity;
-            capacity = MIN(capacity, 1024 * 1000);
-            [self setIncrementalResponseData:[NSMutableData dataWithCapacity:capacity]];
-        }
+        long long capacity = [response expectedContentLength];
+        capacity = (capacity == NSURLResponseUnknownLength) ? 1024 : capacity;
+        capacity = MIN(capacity, 1024 * 1000);
+        [self setIncrementalResponseData:[NSMutableData dataWithCapacity:capacity]];
     }
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    @synchronized (self)
+    if (![self isCancelled] && ![self isFinished])
     {
-        if (![self isCancelled] && ![self isFinished])
-        {
-            [[self incrementalResponseData] appendData:data];
+        [[self incrementalResponseData] appendData:data];
 
-            if ([_delegate respondsToSelector:@selector(connectionOperation:didReceiveBodyData:totalBytesRead:totalBytesExpectedToRead:)])
-            {
-                [_delegate connectionOperation:self
-                            didReceiveBodyData:[data length]
-                                totalBytesRead:[[self incrementalResponseData] length]
-                      totalBytesExpectedToRead:[[self response] expectedContentLength]];
-            }
+        if ([_delegate respondsToSelector:@selector(connectionOperation:didReceiveBodyData:totalBytesRead:totalBytesExpectedToRead:)])
+        {
+            [_delegate connectionOperation:self
+                        didReceiveBodyData:[data length]
+                            totalBytesRead:[[self incrementalResponseData] length]
+                  totalBytesExpectedToRead:[[self response] expectedContentLength]];
         }
     }
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    @synchronized (self)
+    if (![self isCancelled] && ![self isFinished])
     {
-        if (![self isCancelled] && ![self isFinished])
-        {
-            [self setError:error];
-            MBRequestLog(@"Request Error: %@", [self error]);
-            [self handleResponse];
-            [self finish];
-        }
+        [self setError:error];
+        MBRequestLog(@"Request Error: %@", [self error]);
+        [self handleResponse];
+        [self finish];
     }
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    @synchronized (self)
+    if (![self isCancelled] && ![self isFinished])
     {
-        if (![self isCancelled] && ![self isFinished])
-        {
-            [self setResponseData:[NSData dataWithData:[self incrementalResponseData]]];
-            [self setIncrementalResponseData:nil];
-            MBRequestLog(@"Received Response:\n%@", [self responseDataAsUTF8String]);
-            [self handleResponse];
-            [self finish];
-        }
+        [self setResponseData:[NSData dataWithData:[self incrementalResponseData]]];
+        [self setIncrementalResponseData:nil];
+        MBRequestLog(@"Received Response:\n%@", [self responseDataAsUTF8String]);
+        [self handleResponse];
+        [self finish];
     }
 }
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse
 {
-    @synchronized (self)
-    {
-        return ([self isCancelled]) ? nil : cachedResponse;
-    }
+    return ([self isCancelled]) ? nil : cachedResponse;
 }
 
 - (void)connection:(NSURLConnection *)connection
@@ -201,17 +180,14 @@
  totalBytesWritten:(NSInteger)totalBytesWritten
 totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
 {
-    @synchronized (self)
+    if (![self isCancelled] && ![self isFinished])
     {
-        if (![self isCancelled] && ![self isFinished])
+        if ([_delegate respondsToSelector:@selector(connectionOperation:didSendBodyData:totalBytesWritten:totalBytesExpectedToWrite:)])
         {
-            if ([_delegate respondsToSelector:@selector(connectionOperation:didSendBodyData:totalBytesWritten:totalBytesExpectedToWrite:)])
-            {
-                [_delegate connectionOperation:self
-                               didSendBodyData:bytesWritten
-                             totalBytesWritten:totalBytesWritten
-                     totalBytesExpectedToWrite:totalBytesExpectedToWrite];
-            }
+            [_delegate connectionOperation:self
+                           didSendBodyData:bytesWritten
+                         totalBytesWritten:totalBytesWritten
+                 totalBytesExpectedToWrite:totalBytesExpectedToWrite];
         }
     }
 }
