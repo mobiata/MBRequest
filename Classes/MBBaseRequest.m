@@ -12,6 +12,7 @@
 #import "MBNetworkActivityIndicatorManager.h"
 
 @interface MBBaseRequest ()
+@property (atomic, assign, readwrite, getter=isCancelled) BOOL cancelled;
 @property (atomic, assign, readwrite, getter=isRunning) BOOL running;
 @property (nonatomic, retain, readwrite) NSError *error;
 @property (nonatomic, copy, readwrite) MBRequestDataCompletionHandler dataCompletionHandler;
@@ -50,6 +51,7 @@ void _MBRemoveRequest(MBBaseRequest *request)
 @implementation MBBaseRequest
 
 @synthesize affectsNetworkActivityIndicator = _affectsNetworkActivityIndicator;
+@synthesize cancelled = _cancelled;
 @synthesize connectionOperation = _connectionOperation;
 @synthesize dataCompletionHandler = _dataCompletionHandler;
 @synthesize downloadProgressCallback = _downloadProgressCallback;
@@ -103,27 +105,21 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 - (void)cancel
 {
-    @synchronized ([self connectionOperation])
-    {
-        if (![[self connectionOperation] isCancelled])
-        {
-            [[self connectionOperation] cancel];
-
-            [self setRunning:NO];
-
-            if ([self affectsNetworkActivityIndicator])
-            {
-                [[MBNetworkActivityIndicatorManager sharedManager] networkActivityStopped];
-            }
-        }
-    }
-
-    _MBRemoveRequest(self);
-}
-
-- (BOOL)isCancelled
-{
-    return [[self connectionOperation] isCancelled];
+    [self setCancelled:YES];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
+                   ^{
+                       if (![[self connectionOperation] isCancelled])
+                       {
+                           [[self connectionOperation] cancel];
+                           [self setRunning:NO];
+                           
+                           if ([self affectsNetworkActivityIndicator])
+                           {
+                               [[MBNetworkActivityIndicatorManager sharedManager] networkActivityStopped];
+                           }
+                       }
+                       _MBRemoveRequest(self);
+                   });
 }
 
 #pragma mark - Response

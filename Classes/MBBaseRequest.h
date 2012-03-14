@@ -38,7 +38,7 @@ typedef void (^MBRequestUploadProgressCallback)(NSInteger bytes, NSInteger total
 // Cancels the request. Once cancelled, you should not receive any callbacks (success or
 // error) that relates to this request.
 - (void)cancel;
-- (BOOL)isCancelled;
+@property (atomic, assign, readonly, getter=isCancelled) BOOL cancelled;
 
 // Performs a basic request and notifies the caller with any data downloaded.
 - (void)performBasicRequest:(NSURLRequest *)request completionHandler:(MBRequestDataCompletionHandler)completionHandler;
