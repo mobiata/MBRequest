@@ -14,7 +14,6 @@
 @interface MBBaseRequest ()
 @property (atomic, assign, readwrite, getter=isCancelled) BOOL cancelled;
 @property (atomic, assign, readwrite, getter=isRunning) BOOL running;
-@property (atomic, retain, readwrite) NSError *error;
 @property (nonatomic, copy, readwrite) MBRequestDataCompletionHandler dataCompletionHandler;
 - (void)finish;
 @end

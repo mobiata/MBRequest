@@ -10,14 +10,7 @@
 
 #import "MBBaseRequestSubclass.h"
 
-@interface MBXMLRequest ()
-@property (nonatomic, retain, readwrite) NSError *error;
-@end
-
-
 @implementation MBXMLRequest
-
-@dynamic error;
 
 #pragma mark - Object Lifecycle
 

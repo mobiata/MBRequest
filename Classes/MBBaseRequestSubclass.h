@@ -37,4 +37,8 @@
 // Schedules the operation on a particular NSOperationQueue.
 - (void)scheduleOperationOnQueue:(NSOperationQueue *)queue;
 
+// Any error which might occur in the request. We allow subclasses to easily set this
+// error by overriding the property here.
+@property (atomic, retain, readwrite) NSError *error;
+
 @end

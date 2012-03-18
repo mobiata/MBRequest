@@ -13,7 +13,6 @@
 #import "MBRequestLocalization.h"
 
 @interface MBImageRequest ()
-@property (atomic, retain, readwrite) NSError *error;
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
 @property (nonatomic, retain) UIImage *responseImage;
 #elif __MAC_OS_X_VERSION_MIN_REQUIRED
@@ -24,7 +23,6 @@
 
 @implementation MBImageRequest
 
-@dynamic error;
 @synthesize imageCompletionHandler = _imageCompletionHandler;
 @synthesize responseImage = _responseImage;
 

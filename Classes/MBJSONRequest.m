@@ -12,7 +12,6 @@
 #import "MBJSON.h"
 
 @interface MBJSONRequest ()
-@property (atomic, retain, readwrite) NSError *error;
 @property (atomic, retain, readwrite) id responseJSON;
 @property (nonatomic, copy, readwrite) MBRequestJSONCompletionHandler JSONCompletionHandler;
 @end
@@ -20,7 +19,6 @@
 
 @implementation MBJSONRequest
 
-@dynamic error;
 @synthesize JSONCompletionHandler = _JSONCompletionHandler;
 @synthesize responseJSON = _responseJSON;
 
