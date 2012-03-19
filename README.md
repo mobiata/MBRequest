@@ -55,7 +55,7 @@ If you want to incorporate MBRequest, you will likely find the following classes
 * [`MBBaseRequest`](https://github.com/mobiata/MBRequest/blob/master/Classes/MBBaseRequest.h) — The basic request object.
 * [`MBHTTPRequest`](https://github.com/mobiata/MBRequest/blob/master/Classes/MBHTTPRequest.h) — A subclass of `MBBaseRequest` that handles HTTP requests.
 * [`MBJSONRequest`](https://github.com/mobiata/MBRequest/blob/master/Classes/MBJSONRequest.h) — A subclass of `MBHTTPRequest` that deals directly with JSON data.
-* [`MBImageRequest`](https://github.com/mobiata/MBRequest/blob/master/Classes/MBImageRequest.h) — A sublcass of `MBHTTPRequest` that handles the downloading of remote images.
+* [`MBImageRequest`](https://github.com/mobiata/MBRequest/blob/master/Classes/MBImageRequest.h) — A subclass of `MBHTTPRequest` that handles the downloading of remote images.
 
 To create your own requests, you will most likely want to subclass one of the above classes.
 
