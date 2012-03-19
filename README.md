@@ -48,9 +48,23 @@ MBJSONRequest *jsonRequest = [[[MBJSONRequest alloc] init] autorelease];
 }];
 ```
 
+### Interesting Classes
+
+If you want to incorporate MBRequest, you will likely find the following classes interesting:
+
+* [`MBBaseRequest`](https://github.com/mobiata/MBRequest/blob/master/Classes/MBBaseRequest.h) — The basic request object.
+* [`MBHTTPRequest`](https://github.com/mobiata/MBRequest/blob/master/Classes/MBHTTPRequest.h) — A subclass of `MBBaseRequest` that handles HTTP requests.
+* [`MBJSONRequest`](https://github.com/mobiata/MBRequest/blob/master/Classes/MBJSONRequest.h) — A subclass of `MBHTTPRequest` that deals directly with JSON data.
+* [`MBImageRequest`](https://github.com/mobiata/MBRequest/blob/master/Classes/MBImageRequest.h) — A sublcass of `MBHTTPRequest` that handles the downloading of remote images.
+
+To create your own requests, you will most likely want to subclass one of the above classes.
+
 ### Custom Request Subclass
 
-Even though it is possible to download JSON data directly with `MBJSONRequest` (as shown in the above example), it is highly recommended that you create your own `MBJSONRequest` subclass that handles that specific request for you. It would be silly to force everyone who wants to perform a specific request to understand how to setup the request as well as parse the data that they need out of the resulting JSON object. So, we could take the previous example and instead create an `MBRYouTubeRequest` class that handles much of this for you. For an example, please see [`MBRYouTubeRequest.h`][MBRYouTubeRequest.h] and [`MBRYouTubeRequest.m`][MBRYouTubeRequest.m].
+Even though it is possible to download JSON data directly with `MBJSONRequest` (as shown in the above example), it is highly recommended that you create your own `MBJSONRequest` subclass that handles the specific request for you. This will make your code more modular and much more readable (and will make your class look and act like Apple's [`CLGeocoder`][CLGeocoder] class). It would be silly to force everyone who wants to perform a request to understand how to setup that particular request as well as parse the data that they need out of the resulting JSON object. So, let's take the previous example and instead create an `MBRYouTubeRequest` class:
+
+* [`MBRYouTubeRequest.h`][MBRYouTubeRequest.h]
+* [`MBRYouTubeRequest.m`][MBRYouTubeRequest.m]
 
 ## ARC Support
 
