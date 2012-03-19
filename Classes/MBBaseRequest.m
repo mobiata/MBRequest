@@ -12,6 +12,7 @@
 #import "MBNetworkActivityIndicatorManager.h"
 
 @interface MBBaseRequest ()
+@property (atomic, retain, readwrite) NSError *error;
 @property (atomic, assign, readwrite, getter=isCancelled) BOOL cancelled;
 @property (atomic, assign, readwrite, getter=isRunning) BOOL running;
 @property (nonatomic, copy, readwrite) MBRequestDataCompletionHandler dataCompletionHandler;
