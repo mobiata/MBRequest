@@ -83,7 +83,7 @@ MBCommon defines a couple of methods in `MBJSON.h` that allow MBCommon and MBReq
 
 ## Localization
 
-MBRequest defines a few strings that could theoretically be shown to users. These are most often error messages placed into the `userInfo` dictionary of `NSError` objects. MBRequest uses the `MBRequestLocalizedString` macro to try and find translated versions of these strings for your users. This macro gives you a couple of choices if you decide to localize your application for languages other than English. `MBRequestLocalizedString` is defined as follows.
+MBRequest defines a few strings that could theoretically be shown to users. These are most often error messages placed into the `userInfo` dictionary of `NSError` objects. MBRequest uses the `MBRequestLocalizedString` macro to try and find translated versions of these strings for your users. This macro gives you a couple of choices if you decide to localize your application for languages other than English. `MBRequestLocalizedString` is defined as follows:
 
 ```objc
 #ifdef MBRequestLocalizationTable
@@ -103,13 +103,13 @@ This macro allows you to add MBRequest strings directly to your standard `Locali
 #define MBRequestLocalizationTable @"MBRequest"
 ```
 
-You can look for all strings used by MBRequest by grepping for `MBRequestLocalizedString` in this project. You should see a number of hits like the following:
+You can look for all strings used by MBRequest by searching for references to `MBRequestLocalizedString` in this project. You should see a number of hits like the following:
 
 ```objc
 NSString *msg = MBRequestLocalizedString(@"request_unsuccessful_could_not_download_image", @"Request failed. Unable to download image.");
 ```
 
-MBCommon also defines a number of localized strings by using `MBLocalizedString` and `MBLocalizationTable.`
+MBCommon also defines a number of its own localized strings by using `MBLocalizedString` and `MBLocalizationTable.` It is perfectly reasonable to set `MBLocalizationTable` and `MBRequestLocalizationTable` to the same value.
 
 [blocks]: http://developer.apple.com/library/ios/documentation/cocoa/Conceptual/Blocks/Articles/00_Introduction.html
 [NSURLConnection]: http://developer.apple.com/documentation/Cocoa/Reference/Foundation/Classes/nsurlconnection_Class/Reference/Reference.html
