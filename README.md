@@ -25,26 +25,28 @@ To reference any of the functionality defined in MBRequest, simply `#import "MBR
 
 It is possible to use `MBJSONRequest` to quickly grab JSON data at any URL. For example, the following code will print out the titles and authors of the top-rated YouTube videos of the past week:
 
-    NSURL *url = [NSURL URLWithString:@"https://gdata.youtube.com/feeds/api/standardfeeds/top_rated?alt=json?time=this_week"];
-    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
-    [urlRequest setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
-    MBJSONRequest *jsonRequest = [[[MBJSONRequest alloc] init] autorelease];
-    [jsonRequest performJSONRequest:urlRequest completionHandler:^(id responseJSON, NSError *error) {
-        if (error != nil)
+```objc
+NSURL *url = [NSURL URLWithString:@"https://gdata.youtube.com/feeds/api/standardfeeds/top_rated?alt=json?time=this_week"];
+NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
+[urlRequest setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+MBJSONRequest *jsonRequest = [[[MBJSONRequest alloc] init] autorelease];
+[jsonRequest performJSONRequest:urlRequest completionHandler:^(id responseJSON, NSError *error) {
+    if (error != nil)
+    {
+        NSLog(@"Error requesting top-rated videos: %@", error);
+    }
+    else
+    {
+        NSArray *videos = [[responseJSON objectForKey:@"feed"] objectForKey:@"entry"];
+        for (NSDictionary *videoInfo in videos)
         {
-            NSLog(@"Error requesting YouTube data: %@", error);
+            NSString *title = [[videoInfo objectForKey:@"title"] objectForKey:@"$t"];
+            NSString *author = [[[[videoInfo objectForKey:@"author"] objectAtIndex:0] objectForKey:@"name"] objectForKey:@"$t"];
+            NSLog(@"'%@' by %@", title, author);
         }
-        else
-        {
-            NSArray *videos = [[responseJSON objectForKey:@"feed"] objectForKey:@"entry"];
-            for (NSDictionary *videoInfo in videos)
-            {
-                NSString *title = [[videoInfo objectForKey:@"title"] objectForKey:@"$t"];
-                NSString *author = [[[[videoInfo objectForKey:@"author"] objectAtIndex:0] objectForKey:@"name"] objectForKey:@"$t"];
-                NSLog(@"'%@' by %@", title, author);
-            }
-        }
-    }];
+    }
+}];
+```
 
 ### Custom Request Subclass
 
@@ -69,23 +71,29 @@ MBCommon defines a couple of methods in `MBJSON.h` that allow MBCommon and MBReq
 
 MBRequest defines a few strings that could theoretically be shown to users. These are most often error messages placed into the `userInfo` dictionary of `NSError` objects. MBRequest uses the `MBRequestLocalizedString` macro to try and find translated versions of these strings for your users. This macro gives you a couple of choices if you decide to localize your application for languages other than English. `MBRequestLocalizedString` is defined as follows.
 
-    #ifdef MBRequestLocalizationTable
-    #define MBRequestLocalizedString(key, default) \
-    [[NSBundle mainBundle] localizedStringForKey:(key) value:(default) table:MBRequestLocalizationTable]
-    #else
-    #define MBRequestLocalizedString(key, default) \
-    [[NSBundle mainBundle] localizedStringForKey:(key) value:(default) table:nil]
-    #endif
+```objc
+#ifdef MBRequestLocalizationTable
+#define MBRequestLocalizedString(key, default) \
+[[NSBundle mainBundle] localizedStringForKey:(key) value:(default) table:MBRequestLocalizationTable]
+#else
+#define MBRequestLocalizedString(key, default) \
+[[NSBundle mainBundle] localizedStringForKey:(key) value:(default) table:nil]
+#endif
+```
 
 The first parameter of this macro is the string key while the second is the default (English) translation.
 
 This macro allows you to add MBRequest strings directly to your standard `Localizable.strings` file. Or, if you wish, you can put all MBRequest strings into their own `.strings` file. If you opt for the latter, you must define `MBRequestLocalizationTable` to be the name of this file. For example, if you want to use a file called `MBRequest.strings`, you would add the following to the `Prefix.pch` file of your project:
 
-    #define MBRequestLocalizationTable @"MBRequest"
+```objc
+#define MBRequestLocalizationTable @"MBRequest"
+```
 
 You can look for all strings used by MBRequest by grepping for `MBRequestLocalizedString` in this project. You should see a number of hits like the following:
 
-    NSString *msg = MBRequestLocalizedString(@"request_unsuccessful_could_not_download_image", @"Request failed. Unable to download image.");
+```objc
+NSString *msg = MBRequestLocalizedString(@"request_unsuccessful_could_not_download_image", @"Request failed. Unable to download image.");
+```
 
 MBCommon also defines a number of localized strings by using `MBLocalizedString` and `MBLocalizationTable.`
 
