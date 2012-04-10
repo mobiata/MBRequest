@@ -106,9 +106,15 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 - (void)cancel
 {
-    [self setCancelled:YES];
-    [[self connectionOperation] cancel];
-    [self finish];
+    @synchronized (self)
+    {
+        if ([self isRunning] && ![self isCancelled])
+        {
+            [self setCancelled:YES];
+            [[self connectionOperation] cancel];
+            [self finish];
+        }
+    }
 }
 
 #pragma mark - Cleanup
