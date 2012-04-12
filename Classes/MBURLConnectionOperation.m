@@ -62,7 +62,13 @@
         {
             MBRequestLog(@"Sending %@ Request: %@", [[self request] HTTPMethod], [[self request] URL]);
             MBRequestLog(@"Headers: %@", [[self request] allHTTPHeaderFields]);
-            [self setConnection:[NSURLConnection connectionWithRequest:[self request] delegate:self]];
+
+            NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:[self request]
+                                                                          delegate:self
+                                                                  startImmediately:NO];
+            [self setConnection:connection];
+            [connection release];
+
             if ([self connection] == nil)
             {
                 NSLog(@"NSURLConnection's initWithRequest returned nil for %@. How is this possible?", [self request]);
@@ -76,6 +82,7 @@
             else
             {
                 [self setRunLoop:CFRunLoopGetCurrent()];
+                [[self connection] start];
                 CFRunLoopRun();
             }
         }
@@ -87,28 +94,39 @@
     if (![self isCancelled])
     {
         [super cancel];
-        [[self connection] cancel];
-        [self finish];
+
+        // Run the majority of the cancellation on the operation's runloop. This makes cancellations
+        // safer and allows us to avoid synchronization calls. The operation might do some more
+        // work before the cancellation is finalized, but since all of the other methods check to
+        // see if the operation is cancelled (which is set to YES in the [super cancel] call above),
+        // the extra work done is negligible.
+        CFRunLoopPerformBlock([self runLoop], kCFRunLoopCommonModes, ^{
+            if (![self isFinished])
+            {
+                [[self connection] cancel];
+                [self setConnection:nil];
+                [self finish];
+            }
+        });
     }
+}
+
+- (void)finish
+{
+    if (![self isCancelled] && ![self isFinished])
+    {
+        [[self delegate] connectionOperationDidFinish:self];
+    }
+
+    CFRunLoopStop([self runLoop]);
+    [self setRunLoop:NULL];
 }
 
 - (void)handleResponse
 {
 }
 
-- (void)finish
-{
-    if (![self isCancelled])
-    {
-        [[self delegate] connectionOperationDidFinish:self];
-    }
-
-    if ([self runLoop])
-    {
-        CFRunLoopStop([self runLoop]);
-        [self setRunLoop:NULL];
-    }
-}
+#pragma mark - Helper Methods
 
 - (NSString *)responseDataAsUTF8String
 {
