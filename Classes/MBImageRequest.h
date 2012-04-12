@@ -22,6 +22,13 @@ typedef void (^MBRequestImageCompletionHandler)(NSImage *image, NSError *error);
 
 @interface MBImageRequest : MBHTTPRequest
 
+// The image returned in the response.
+@property (atomic, retain, readonly) UIImage *responseImage;
+
+// Performs a basic request and notifies the caller with any data downloaded.
+- (void)performImageRequest:(NSURLRequest *)request completionHandler:(MBRequestImageCompletionHandler)completionHandler;
+
+// The callback for image requests.
 @property (nonatomic, copy, readonly) MBRequestImageCompletionHandler imageCompletionHandler;
 
 @end

@@ -42,7 +42,7 @@
     [super dealloc];
 }
 
-#pragma mark - Public Methods
+#pragma mark - Request
 
 - (void)performJSONRequest:(NSURLRequest *)request completionHandler:(MBRequestJSONCompletionHandler)completionHandler
 {

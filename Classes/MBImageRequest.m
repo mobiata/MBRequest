@@ -14,10 +14,11 @@
 
 @interface MBImageRequest ()
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
-@property (nonatomic, retain) UIImage *responseImage;
+@property (atomic, retain, readwrite) UIImage *responseImage;
 #elif __MAC_OS_X_VERSION_MIN_REQUIRED
-@property (nonatomic, retain) NSImage *responseImage;
+@property (atomic, retain, readwrite) NSImage *responseImage;
 #endif
+@property (nonatomic, copy, readwrite) MBRequestImageCompletionHandler imageCompletionHandler;
 @end
 
 
@@ -32,6 +33,15 @@
 {
     [_imageCompletionHandler release];
     [super dealloc];
+}
+
+#pragma mark - Request
+
+- (void)performImageRequest:(NSURLRequest *)request completionHandler:(MBRequestImageCompletionHandler)completionHandler
+{
+    [[self connectionOperation] setRequest:request];
+    [self setImageCompletionHandler:completionHandler];
+    [self scheduleOperation];
 }
 
 #pragma mark - Response
