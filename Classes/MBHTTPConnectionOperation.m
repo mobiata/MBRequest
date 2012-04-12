@@ -21,7 +21,6 @@
 @implementation MBHTTPConnectionOperation
 
 @dynamic error;
-@synthesize delegate = _delegate;
 @synthesize successfulStatusCodes = _successfulStatusCodes;
 @synthesize validContentTypes = _validContentTypes;
 
