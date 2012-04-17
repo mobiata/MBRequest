@@ -75,7 +75,7 @@
             {
                 // The operation couldn't be completed. Connection reset by peer.
                 NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:[error userInfo]];
-                NSString *msg = MBRequestLocalizedString(@"unable_perform_request_try_again",
+                NSString *msg = MBRequestLocalizedString(@"connection_unexpectedly_lost_try_again",
                                                          @"The connection was unexpectedly lost. Please try again.");
                 [userInfo setObject:msg forKey:NSLocalizedDescriptionKey];
                 [self setError:[NSError errorWithDomain:[error domain] code:[error code] userInfo:userInfo]];
