@@ -58,16 +58,28 @@
 
     NSError *error = [self error];
 
-    // A sketchy connection can cause a very unfriendly error message. Make it nicer.
     if ([self error] != nil)
     {
-        if ([[error domain] isEqualToString:NSPOSIXErrorDomain] && [error code] == 22)
+        if ([[error domain] isEqualToString:NSPOSIXErrorDomain])
         {
-            NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:[error userInfo]];
-            NSString *msg = MBRequestLocalizedString(@"unable_perform_request_check_internet_connection_try_again",
-                                                     @"Unable to perform request. Please check your internet connection and try again.");
-            [userInfo setObject:msg forKey:NSLocalizedDescriptionKey];
-            [self setError:[NSError errorWithDomain:[error domain] code:[error code] userInfo:userInfo]];
+            if ([error code] == 22)
+            {
+                // A sketchy connection can cause a very unfriendly error message. Make it nicer.
+                NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:[error userInfo]];
+                NSString *msg = MBRequestLocalizedString(@"unable_perform_request_check_internet_connection_try_again",
+                                                         @"Unable to perform request. Please check your internet connection and try again.");
+                [userInfo setObject:msg forKey:NSLocalizedDescriptionKey];
+                [self setError:[NSError errorWithDomain:[error domain] code:[error code] userInfo:userInfo]];
+            }
+            else if ([error code] == 54)
+            {
+                // The operation couldn't be completed. Connection reset by peer.
+                NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:[error userInfo]];
+                NSString *msg = MBRequestLocalizedString(@"unable_perform_request_try_again",
+                                                         @"The connection was unexpectedly lost. Please try again.");
+                [userInfo setObject:msg forKey:NSLocalizedDescriptionKey];
+                [self setError:[NSError errorWithDomain:[error domain] code:[error code] userInfo:userInfo]];
+            }
         }
     }
 
