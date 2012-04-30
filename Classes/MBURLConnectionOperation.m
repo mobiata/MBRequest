@@ -100,14 +100,17 @@
         // work before the cancellation is finalized, but since all of the other methods check to
         // see if the operation is cancelled (which is set to YES in the [super cancel] call above),
         // the extra work done is negligible.
-        CFRunLoopPerformBlock([self runLoop], kCFRunLoopCommonModes, ^{
-            if (![self isFinished])
-            {
-                [[self connection] cancel];
-                [self setConnection:nil];
-                [self finish];
-            }
-        });
+        if ([self isExecuting])
+        {
+            CFRunLoopPerformBlock([self runLoop], kCFRunLoopCommonModes, ^{
+                if (![self isFinished])
+                {
+                    [[self connection] cancel];
+                    [self setConnection:nil];
+                    [self finish];
+                }
+            });
+        }
     }
 }
 
