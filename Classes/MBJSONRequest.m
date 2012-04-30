@@ -61,13 +61,13 @@
     {
         NSError *error = nil;
         id obj = MBJSONObjectFromData([[self connectionOperation] responseData], &error);
-        if (error != nil)
+        if (obj != nil)
         {
-            [self setError:error];
+            [self setResponseJSON:obj];
         }
         else
         {
-            [self setResponseJSON:obj];
+            [self setError:error];
         }
     }
 }
