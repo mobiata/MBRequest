@@ -121,8 +121,11 @@
         [[self delegate] connectionOperationDidFinish:self];
     }
 
-    CFRunLoopStop([self runLoop]);
-    [self setRunLoop:NULL];
+    if ([self isExecuting])
+    {
+        CFRunLoopStop([self runLoop]);
+        [self setRunLoop:NULL];    
+    }
 }
 
 - (void)handleResponse
