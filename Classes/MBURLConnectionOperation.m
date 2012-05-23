@@ -20,6 +20,8 @@
 @property (atomic, retain, readwrite) NSData *responseData;
 @property (atomic, retain, readwrite) NSError *error;
 @property (atomic, assign) CFRunLoopRef runLoop;
+@property (atomic, assign) BOOL runLoopIsRunning;
+@property (atomic, assign) BOOL shouldCancel;
 - (void)finish;
 @end
 
@@ -34,6 +36,8 @@
 @synthesize response = _response;
 @synthesize responseData = _responseData;
 @synthesize runLoop = _runLoop;
+@synthesize runLoopIsRunning = _runLoopIsRunning;
+@synthesize shouldCancel = _shouldCancel;
 
 #pragma mark - Object Lifecycle
 
@@ -60,30 +64,38 @@
         }
         else
         {
-            MBRequestLog(@"Sending %@ Request: %@", [[self request] HTTPMethod], [[self request] URL]);
-            MBRequestLog(@"Headers: %@", [[self request] allHTTPHeaderFields]);
-
-            NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:[self request]
-                                                                          delegate:self
-                                                                  startImmediately:NO];
-            [self setConnection:connection];
-            [connection release];
-
-            if ([self connection] == nil)
+            if ([self shouldCancel])
             {
-                NSLog(@"NSURLConnection's initWithRequest returned nil for %@. How is this possible?", [self request]);
-                NSString *message = MBRequestLocalizedString(@"unknown_error_occurred", @"An unknown error has occurred.");
-                NSDictionary *userInfo = [NSDictionary dictionaryWithObject:message forKey:NSLocalizedDescriptionKey];
-                NSError *error = [NSError errorWithDomain:MBRequestErrorDomain
-                                                     code:MBRequestErrorCodeUnknown
-                                                 userInfo:userInfo];
-                [self setError:error];
+                [self cancel];
             }
             else
             {
-                [self setRunLoop:CFRunLoopGetCurrent()];
-                [[self connection] start];
-                CFRunLoopRun();
+                MBRequestLog(@"Sending %@ Request: %@", [[self request] HTTPMethod], [[self request] URL]);
+                MBRequestLog(@"Headers: %@", [[self request] allHTTPHeaderFields]);
+
+                NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:[self request]
+                                                                              delegate:self
+                                                                      startImmediately:NO];
+                [self setConnection:connection];
+                [connection release];
+
+                if ([self connection] == nil)
+                {
+                    NSLog(@"NSURLConnection's initWithRequest returned nil for %@. How is this possible?", [self request]);
+                    NSString *message = MBRequestLocalizedString(@"unknown_error_occurred", @"An unknown error has occurred.");
+                    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:message forKey:NSLocalizedDescriptionKey];
+                    NSError *error = [NSError errorWithDomain:MBRequestErrorDomain
+                                                         code:MBRequestErrorCodeUnknown
+                                                     userInfo:userInfo];
+                    [self setError:error];
+                }
+                else
+                {
+                    [[self connection] start];
+                    [self setRunLoop:CFRunLoopGetCurrent()];
+                    CFRunLoopRun();
+                    [self setRunLoopIsRunning:YES];
+                }
             }
         }
     }
@@ -91,25 +103,21 @@
 
 - (void)cancel
 {
-    if (![self isCancelled])
+    if (![self isCancelled] && ![self isFinished])
     {
-        [super cancel];
-
-        // Run the majority of the cancellation on the operation's runloop. This makes cancellations
-        // safer and allows us to avoid synchronization calls. The operation might do some more
-        // work before the cancellation is finalized, but since all of the other methods check to
-        // see if the operation is cancelled (which is set to YES in the [super cancel] call above),
-        // the extra work done is negligible.
-        if ([self isExecuting])
+        if (CFRunLoopGetCurrent() == [self runLoop])
         {
-            CFRunLoopPerformBlock([self runLoop], kCFRunLoopCommonModes, ^{
-                if (![self isFinished])
-                {
-                    [[self connection] cancel];
-                    [self setConnection:nil];
-                    [self finish];
-                }
-            });
+            [super cancel];
+
+            [self setShouldCancel:NO];
+            [[self connection] cancel];
+            [self setConnection:nil];
+            [self finish];
+        }
+        else
+        {
+            // Defer the actual cancellation to a later iteration of the operation runloop.
+            [self setShouldCancel:YES];
         }
     }
 }
@@ -121,10 +129,11 @@
         [[self delegate] connectionOperationDidFinish:self];
     }
 
-    if ([self isExecuting])
+    if ([self isExecuting] && [self runLoopIsRunning])
     {
         CFRunLoopStop([self runLoop]);
-        [self setRunLoop:NULL];    
+        [self setRunLoop:NULL];
+        [self setRunLoopIsRunning:NO];
     }
 }
 
@@ -146,12 +155,19 @@
 {
     if (![self isCancelled] && ![self isFinished])
     {
-        [self setResponse:response];
+        if ([self shouldCancel])
+        {
+            [self cancel];
+        }
+        else
+        {
+            [self setResponse:response];
 
-        long long capacity = [response expectedContentLength];
-        capacity = (capacity == NSURLResponseUnknownLength) ? 1024 : capacity;
-        capacity = MIN(capacity, 1024 * 1000);
-        [self setIncrementalResponseData:[NSMutableData dataWithCapacity:capacity]];
+            long long capacity = [response expectedContentLength];
+            capacity = (capacity == NSURLResponseUnknownLength) ? 1024 : capacity;
+            capacity = MIN(capacity, 1024 * 1000);
+            [self setIncrementalResponseData:[NSMutableData dataWithCapacity:capacity]];
+        }
     }
 }
 
@@ -159,14 +175,21 @@
 {
     if (![self isCancelled] && ![self isFinished])
     {
-        [[self incrementalResponseData] appendData:data];
-
-        if ([_delegate respondsToSelector:@selector(connectionOperation:didReceiveBodyData:totalBytesRead:totalBytesExpectedToRead:)])
+        if ([self shouldCancel])
         {
-            [_delegate connectionOperation:self
-                        didReceiveBodyData:[data length]
-                            totalBytesRead:[[self incrementalResponseData] length]
-                  totalBytesExpectedToRead:[[self response] expectedContentLength]];
+            [self cancel];
+        }
+        else
+        {
+            [[self incrementalResponseData] appendData:data];
+
+            if ([_delegate respondsToSelector:@selector(connectionOperation:didReceiveBodyData:totalBytesRead:totalBytesExpectedToRead:)])
+            {
+                [_delegate connectionOperation:self
+                            didReceiveBodyData:[data length]
+                                totalBytesRead:[[self incrementalResponseData] length]
+                      totalBytesExpectedToRead:[[self response] expectedContentLength]];
+            }
         }
     }
 }
@@ -175,10 +198,17 @@
 {
     if (![self isCancelled] && ![self isFinished])
     {
-        [self setError:error];
-        MBRequestLog(@"Request Error: %@", [self error]);
-        [self handleResponse];
-        [self finish];
+        if ([self shouldCancel])
+        {
+            [self cancel];
+        }
+        else
+        {
+            [self setError:error];
+            MBRequestLog(@"Request Error: %@", [self error]);
+            [self handleResponse];
+            [self finish];
+        }
     }
 }
 
@@ -186,17 +216,24 @@
 {
     if (![self isCancelled] && ![self isFinished])
     {
-        [self setResponseData:[NSData dataWithData:[self incrementalResponseData]]];
-        [self setIncrementalResponseData:nil];
-        MBRequestLog(@"Received Response:\n%@", [self responseDataAsUTF8String]);
-        [self handleResponse];
-        [self finish];
+        if ([self shouldCancel])
+        {
+            [self cancel];
+        }
+        else
+        {
+            [self setResponseData:[NSData dataWithData:[self incrementalResponseData]]];
+            [self setIncrementalResponseData:nil];
+            MBRequestLog(@"Received Response:\n%@", [self responseDataAsUTF8String]);
+            [self handleResponse];
+            [self finish];
+        }
     }
 }
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse
 {
-    return ([self isCancelled]) ? nil : cachedResponse;
+    return ([self isCancelled] || [self shouldCancel]) ? nil : cachedResponse;
 }
 
 - (void)connection:(NSURLConnection *)connection
@@ -206,12 +243,19 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
 {
     if (![self isCancelled] && ![self isFinished])
     {
-        if ([_delegate respondsToSelector:@selector(connectionOperation:didSendBodyData:totalBytesWritten:totalBytesExpectedToWrite:)])
+        if ([self shouldCancel])
         {
-            [_delegate connectionOperation:self
-                           didSendBodyData:bytesWritten
-                         totalBytesWritten:totalBytesWritten
-                 totalBytesExpectedToWrite:totalBytesExpectedToWrite];
+            [self cancel];
+        }
+        else
+        {
+            if ([_delegate respondsToSelector:@selector(connectionOperation:didSendBodyData:totalBytesWritten:totalBytesExpectedToWrite:)])
+            {
+                [_delegate connectionOperation:self
+                               didSendBodyData:bytesWritten
+                             totalBytesWritten:totalBytesWritten
+                     totalBytesExpectedToWrite:totalBytesExpectedToWrite];
+            }
         }
     }
 }
