@@ -3,7 +3,8 @@
 MBRequest is a simple networking library for iOS and OS X. It uses a [blocks-based][blocks] API built on top of [NSURLConnection][NSURLConnection] and [NSOperation][NSOperation]. MBRequest follows the style of Apple's [CLGeocoder][CLGeocoder] class to create simple, easy-to-use classes that encapsulate the entire network request. The goals of MBRequest are as follows:
 
 * Create the simplest possible API for making network requests. With only a few lines of code, developers should be able to start a network request and pass along a single block for handling the results of that particular request.
-* Give developers an extremely simple way to create their own CLGeocoder-like classes. These subclasses should only need to worry about setting up the request and parsing the response.
+* Give developers an extremely simple way to create their own CLGeocoder-like classes. These subclasses should only need to set up the request and parse the response.
+* Do not force a particular implementation strategy such as singletons, "engines", or "clients". Instead, whittle the API down to the basics and let developers work with it however they wish.
 
 ## Requirements
 
