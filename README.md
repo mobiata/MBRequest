@@ -67,6 +67,27 @@ Even though it is possible to download JSON data directly with `MBJSONRequest` (
 * [`MBRYouTubeRequest.h`][MBRYouTubeRequest.h]
 * [`MBRYouTubeRequest.m`][MBRYouTubeRequest.m]
 
+Using this class would simplify the above example as follows:
+
+```objc
+MBRYouTubeRequest *request = [[[MBRYouTubeRequest alloc] init] autorelease];
+[request requestTopRatedVideosFromIndex:1
+                             maxResults:20
+                      completionHandler:^(NSArray *videos, NSError *error) {
+                          if (error != nil)
+                          {
+                              NSLog(@"Error: %@", error);
+                          }
+                          else
+                          {
+                              for (MBRVideo *video in videos)
+                              {
+                                  NSLog(@"'%@' by %@", [video title], [video author]);
+                              }
+                          }
+                      }];
+```
+
 ## ARC Support
 
 MBRequest and MBCommon do not currently support [ARC (Automatic Reference Counting)][ARC]. This may change in the future. For now, if you are using ARC in your own projects, you will need to set the `-fno-objc-arc` compiler flag on all MBRequest and MBCommon files. To do this:
