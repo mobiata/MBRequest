@@ -28,6 +28,7 @@
 
 @implementation MBURLConnectionOperation
 
+@synthesize allowsUntrustedServerCertificates = _allowsUntrustedServerCertificates;
 @synthesize connection = _connection;
 @synthesize delegate = _delegate;
 @synthesize error = _error;
@@ -256,6 +257,59 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
                              totalBytesWritten:totalBytesWritten
                      totalBytesExpectedToWrite:totalBytesExpectedToWrite];
             }
+        }
+    }
+}
+
+#pragma mark Authentication Challenges
+
+// iOS 5+ only.
+- (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{
+    [self handleAuthenticationChallenge:challenge forConnection:connection];
+}
+
+// This method has been deprecated for connection:willSendRequestForAuthenticationChallenge in iOS 5.
+- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace
+{
+    BOOL canAuth = NO;
+    if ([self allowsUntrustedServerCertificates] &&
+        [[protectionSpace authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust])
+    {
+        canAuth = YES;
+    }
+
+    return canAuth;
+}
+
+// This method has been deprecated for connection:willSendRequestForAuthenticationChallenge in iOS 5.
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{
+    [self handleAuthenticationChallenge:challenge forConnection:connection];
+}
+
+- (void)handleAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge forConnection:(NSURLConnection *)connection
+{
+    BOOL handledAuth = NO;
+    if ([self allowsUntrustedServerCertificates] &&
+        [[[challenge protectionSpace] authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust] &&
+        [challenge previousFailureCount] == 0 &&
+        [challenge proposedCredential] == nil)
+    {
+        [[challenge sender] useCredential:[NSURLCredential credentialForTrust:[[challenge protectionSpace] serverTrust]]
+               forAuthenticationChallenge:challenge];
+        handledAuth = YES;
+    }
+
+    if (!handledAuth)
+    {
+        if ([[challenge sender] respondsToSelector:@selector(performDefaultHandlingForAuthenticationChallenge:)])
+        {
+            [[challenge sender] performDefaultHandlingForAuthenticationChallenge:challenge];
+        }
+        else
+        {
+            [[challenge sender] continueWithoutCredentialForAuthenticationChallenge:challenge];
         }
     }
 }

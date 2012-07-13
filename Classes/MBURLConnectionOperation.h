@@ -51,6 +51,11 @@
 @property (atomic, retain, readonly) NSData *responseData;
 @property (atomic, assign) id <MBURLConnectionOperationDelegate> delegate;
 
+// By default, NSURLConnection will not connect using SSL to servers with untrusted certificates.
+// This includes all self-signed certificates. Setting allowsUntrustedServerCertificates to YES
+// will allow these types of connections to occur. Defaults to NO.
+@property (atomic, assign) BOOL allowsUntrustedServerCertificates;
+
 // Returns the response data as a UTF-8 string.
 - (NSString *)responseDataAsUTF8String;
 
