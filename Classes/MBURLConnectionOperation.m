@@ -94,8 +94,8 @@
                 {
                     [[self connection] start];
                     [self setRunLoop:CFRunLoopGetCurrent()];
-                    CFRunLoopRun();
                     [self setRunLoopIsRunning:YES];
+                    CFRunLoopRun();
                 }
             }
         }
