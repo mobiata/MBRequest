@@ -95,6 +95,16 @@ void _MBRemoveRequest(MBBaseRequest *request)
     return _connectionOperation;
 }
 
+- (id)responseDataOverride
+{
+    return [[self connectionOperation] responseDataOverride];
+}
+
+- (void)setResponseDataOverride:(NSData *)data
+{
+    [[self connectionOperation] setResponseDataOverride:data];
+}
+
 #pragma mark - Public Methods
 
 - (void)performBasicRequest:(NSURLRequest *)request completionHandler:(MBRequestDataCompletionHandler)completionHandler
@@ -174,14 +184,22 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 - (void)scheduleOperationOnQueue:(NSOperationQueue *)queue
 {
+    [self setRunning:YES];
+
     if ([self affectsNetworkActivityIndicator])
     {
         [[MBNetworkActivityIndicatorManager sharedManager] networkActivityStarted];
     }
 
-    _MBAddRequest(self);
-    [queue addOperation:[self connectionOperation]];
-    [self setRunning:YES];
+    if ([self responseDataOverride]) {
+        NSBlockOperation *myOperation = [NSBlockOperation blockOperationWithBlock: ^{
+            [self connectionOperationDidFinish:[self connectionOperation]];
+        }];
+        [queue addOperation:myOperation];
+    } else {
+        _MBAddRequest(self);
+        [queue addOperation:[self connectionOperation]];
+    }
 }
 
 #pragma mark - MBURLConnectionOperationDelegate

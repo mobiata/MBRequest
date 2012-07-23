@@ -59,4 +59,7 @@ typedef void (^MBRequestUploadProgressCallback)(NSInteger bytes, NSInteger total
 // Whether or not this request affects the global network activity indicator. Defaults to YES.
 @property (nonatomic, assign) BOOL affectsNetworkActivityIndicator;
 
+// The test data is from a JSON file.
+- (void)setResponseDataOverride:(NSData *)data;
+
 @end

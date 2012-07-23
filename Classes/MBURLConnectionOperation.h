@@ -59,4 +59,8 @@
 // Returns the response data as a UTF-8 string.
 - (NSString *)responseDataAsUTF8String;
 
+// The test data is from a JSON file.
+- (void)setResponseDataOverride:(NSData *)data;
+- (NSData *)responseDataOverride;
+
 @end
