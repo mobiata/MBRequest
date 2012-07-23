@@ -23,7 +23,11 @@ typedef void (^MBRequestImageCompletionHandler)(NSImage *image, NSError *error);
 @interface MBImageRequest : MBHTTPRequest
 
 // The image returned in the response.
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
 @property (atomic, retain, readonly) UIImage *responseImage;
+#elif __MAC_OS_X_VERSION_MIN_REQUIRED
+@property (atomic, retain, readonly) NSImage *responseImage;
+#endif
 
 // Performs a basic request and notifies the caller with any data downloaded.
 - (void)performImageRequest:(NSURLRequest *)request completionHandler:(MBRequestImageCompletionHandler)completionHandler;
