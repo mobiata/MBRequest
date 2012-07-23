@@ -40,19 +40,6 @@
 @synthesize runLoopIsRunning = _runLoopIsRunning;
 @synthesize shouldCancel = _shouldCancel;
 
-#pragma mark - Accessors
-
-- (NSData *)responseDataOverride
-{
-    return [self responseData];
-}
-
-- (void)setResponseDataOverride:(NSData *)responseDataOverride
-{
-    self.responseData = responseDataOverride;
-}
-
-
 #pragma mark - Object Lifecycle
 
 - (void)dealloc
@@ -64,6 +51,13 @@
     [_response release];
     [_responseData release];
     [super dealloc];
+}
+
+#pragma mark - Accessors
+
+- (void)setResponseDataOverride:(NSData *)data
+{
+    [self setResponseData:data];
 }
 
 #pragma mark - Main Functionality
