@@ -97,7 +97,7 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 - (void)setResponseDataOverride:(NSData *)data
 {
-    [[self connectionOperation] setResponseData:data];
+    [[self connectionOperation] setResponseDataOverride:data];
 }
 
 #pragma mark - Public Methods
