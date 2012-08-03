@@ -72,11 +72,7 @@
         }
         else
         {
-            if ([self shouldCancel])
-            {
-                [self cancel];
-            }
-            else
+            if (![self shouldCancel])
             {
                 MBRequestLog(@"Sending %@ Request: %@", [[self request] HTTPMethod], [[self request] URL]);
                 MBRequestLog(@"Headers: %@", [[self request] allHTTPHeaderFields]);
