@@ -137,7 +137,21 @@ void _MBRemoveRequest(MBBaseRequest *request)
                 [[MBNetworkActivityIndicatorManager sharedManager] networkActivityStopped];
             }
 
-            _MBRemoveRequest(self);
+            if (![self isCancelled])
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (![self isCancelled])
+                    {
+                        [self notifyCaller];
+                    }
+
+                    _MBRemoveRequest(self);
+                });
+            }
+            else
+            {
+                _MBRemoveRequest(self);
+            }
         }
     }
 }
@@ -211,13 +225,6 @@ void _MBRemoveRequest(MBBaseRequest *request)
         {
             [self parseResults];
         }
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (![self isCancelled])
-            {
-                [self notifyCaller];
-            }
-        });
 
         [self finish];
     }
