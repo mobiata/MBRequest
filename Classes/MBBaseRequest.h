@@ -10,7 +10,7 @@
 
 // A basic callback for a request that passes back the data (if downloaded) and any error that
 // may have occurred.
-typedef void (^MBRequestDataCompletionHandler)(NSData *data, NSError *error);
+typedef void (^MBBaseRequestCompletionHandler)(NSData *data, NSError *error);
 
 // Callbacks for getting progress on upload or download operations.
 typedef void (^MBRequestDownloadProgressCallback)(NSInteger bytes, NSInteger totalBytes, NSInteger totalBytesExpected);
@@ -26,9 +26,6 @@ typedef void (^MBRequestUploadProgressCallback)(NSInteger bytes, NSInteger total
 // requests that you want to support.
 
 @interface MBBaseRequest : NSObject <MBURLConnectionOperationDelegate>
-{
-    MBURLConnectionOperation *_connectionOperation;
-}
 
 // Returns true if the request is currently active. This will be true as soon as the URL connection
 // operation has been added to the queue and will remain true until the request is cancelled or
@@ -41,16 +38,13 @@ typedef void (^MBRequestUploadProgressCallback)(NSInteger bytes, NSInteger total
 @property (atomic, assign, readonly, getter=isCancelled) BOOL cancelled;
 
 // Performs a basic request and notifies the caller with any data downloaded.
-- (void)performBasicRequest:(NSURLRequest *)request completionHandler:(MBRequestDataCompletionHandler)completionHandler;
+- (void)performBasicRequest:(NSURLRequest *)request completionHandler:(MBBaseRequestCompletionHandler)completionHandler;
 
 // The operation associated with the URL connection.
 @property (nonatomic, retain, readonly) MBURLConnectionOperation *connectionOperation;
 
 // An error associated with this request.
 @property (atomic, retain, readonly) NSError *error;
-
-// Basic callback that just handles basic NSData downloads.
-@property (nonatomic, copy, readonly) MBRequestDataCompletionHandler dataCompletionHandler;
 
 // Callbacks for upload and download progress.
 @property (nonatomic, copy) MBRequestDownloadProgressCallback downloadProgressCallback;

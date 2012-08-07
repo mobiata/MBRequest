@@ -18,7 +18,7 @@
 #elif __MAC_OS_X_VERSION_MIN_REQUIRED
 @property (atomic, retain, readwrite) NSImage *responseImage;
 #endif
-@property (nonatomic, copy, readwrite) MBRequestImageCompletionHandler imageCompletionHandler;
+@property (nonatomic, copy, readwrite) MBImageRequestCompletionHandler imageCompletionHandler;
 @end
 
 
@@ -37,7 +37,7 @@
 
 #pragma mark - Request
 
-- (void)performImageRequest:(NSURLRequest *)request completionHandler:(MBRequestImageCompletionHandler)completionHandler
+- (void)performImageRequest:(NSURLRequest *)request completionHandler:(MBImageRequestCompletionHandler)completionHandler
 {
     [[self connectionOperation] setRequest:request];
     [self setImageCompletionHandler:completionHandler];

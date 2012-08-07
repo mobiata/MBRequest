@@ -15,12 +15,15 @@
 #import "MBHTTPRequest.h"
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
-typedef void (^MBRequestImageCompletionHandler)(UIImage *image, NSError *error);
+typedef void (^MBImageRequestCompletionHandler)(UIImage *image, NSError *error);
 #elif __MAC_OS_X_VERSION_MIN_REQUIRED
-typedef void (^MBRequestImageCompletionHandler)(NSImage *image, NSError *error);
+typedef void (^MBImageRequestCompletionHandler)(NSImage *image, NSError *error);
 #endif
 
 @interface MBImageRequest : MBHTTPRequest
+
+// Performs a basic request and notifies the caller with any data downloaded.
+- (void)performImageRequest:(NSURLRequest *)request completionHandler:(MBImageRequestCompletionHandler)completionHandler;
 
 // The image returned in the response.
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
@@ -28,11 +31,5 @@ typedef void (^MBRequestImageCompletionHandler)(NSImage *image, NSError *error);
 #elif __MAC_OS_X_VERSION_MIN_REQUIRED
 @property (atomic, retain, readonly) NSImage *responseImage;
 #endif
-
-// Performs a basic request and notifies the caller with any data downloaded.
-- (void)performImageRequest:(NSURLRequest *)request completionHandler:(MBRequestImageCompletionHandler)completionHandler;
-
-// The callback for image requests.
-@property (nonatomic, copy, readonly) MBRequestImageCompletionHandler imageCompletionHandler;
 
 @end

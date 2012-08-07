@@ -13,13 +13,13 @@
 
 @interface MBJSONRequest ()
 @property (atomic, retain, readwrite) id responseJSON;
-@property (nonatomic, copy, readwrite) MBRequestJSONCompletionHandler JSONCompletionHandler;
+@property (nonatomic, copy, readwrite) MBJSONRequestCompletionHandler JSONCompletionHandler;
 @end
 
 
 @implementation MBJSONRequest
 
-@synthesize JSONCompletionHandler = _JSONCompletionHandler;
+@synthesize JSONCompletionHandler = _jsonCompletionHandler;
 @synthesize responseJSON = _responseJSON;
 
 #pragma mark - Object Lifecycle
@@ -37,14 +37,14 @@
 
 - (void)dealloc
 {
-    [_JSONCompletionHandler release];
+    [_jsonCompletionHandler release];
     [_responseJSON release];
     [super dealloc];
 }
 
 #pragma mark - Request
 
-- (void)performJSONRequest:(NSURLRequest *)request completionHandler:(MBRequestJSONCompletionHandler)completionHandler
+- (void)performJSONRequest:(NSURLRequest *)request completionHandler:(MBJSONRequestCompletionHandler)completionHandler
 {
     [[self connectionOperation] setRequest:request];
     [self setJSONCompletionHandler:completionHandler];

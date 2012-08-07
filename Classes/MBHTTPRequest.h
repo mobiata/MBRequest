@@ -11,7 +11,7 @@
 
 // A basic callback for an HTTP request that passes back the raw data and any error that
 // may have occurred.
-typedef void (^MBRequestHTTPCompletionHandler)(NSData *responseData, NSError *error);
+typedef void (^MBHTTPRequestCompletionHandler)(NSData *responseData, NSError *error);
 
 @interface MBHTTPRequest : MBBaseRequest
 
@@ -19,9 +19,6 @@ typedef void (^MBRequestHTTPCompletionHandler)(NSData *responseData, NSError *er
 @property (nonatomic, retain, readonly) MBHTTPConnectionOperation *connectionOperation;
 
 // Performs a basic request and notifies the caller with any data downloaded.
-- (void)performHTTPRequest:(NSURLRequest *)request completionHandler:(MBRequestHTTPCompletionHandler)completionHandler;
-
-// A basic callback for generic HTTP requests.
-@property (nonatomic, copy, readonly) MBRequestHTTPCompletionHandler HTTPCompletionHandler;
+- (void)performHTTPRequest:(NSURLRequest *)request completionHandler:(MBHTTPRequestCompletionHandler)completionHandler;
 
 @end

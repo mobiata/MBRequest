@@ -31,6 +31,11 @@
 // 2 or 3.
 - (NSOperationQueue *)sharedRequestQueue;
 
+// This method is used to create the URL connection operation. Override this method if you need
+// to create a subclass of MBURLConnectionOperation or customize just how that operation is
+// created.
+- (MBURLConnectionOperation *)createConnectionOperation;
+
 // Schedules the operation on the sharedRequestQueue returned by the current class.
 - (void)scheduleOperation;
 

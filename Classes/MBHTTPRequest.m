@@ -12,39 +12,34 @@
 #import "MBHTTPConnectionOperation.h"
 
 @interface MBHTTPRequest ()
-@property (nonatomic, copy, readwrite) MBRequestHTTPCompletionHandler HTTPCompletionHandler;
+@property (nonatomic, copy, readwrite) MBHTTPRequestCompletionHandler HTTPCompletionHandler;
 @end
 
 @implementation MBHTTPRequest
 
 @dynamic connectionOperation;
-@synthesize HTTPCompletionHandler = _HTTPCompletionHandler;
+@synthesize HTTPCompletionHandler = _httpCompletionHandler;
 
 #pragma mark - Object Lifecycle
 
 - (void)dealloc
 {
-    [_HTTPCompletionHandler release];
+    [_httpCompletionHandler release];
     [super dealloc];
 }
 
 #pragma mark - Accessors
 
-- (MBHTTPConnectionOperation *)connectionOperation
+- (MBURLConnectionOperation *)createConnectionOperation
 {
-    if (_connectionOperation == nil)
-    {
-        _connectionOperation = [[MBHTTPConnectionOperation alloc] init];
-        [_connectionOperation setDelegate:self];
-    }
-
-    return (MBHTTPConnectionOperation *)_connectionOperation;
+    MBHTTPConnectionOperation *op = [[MBHTTPConnectionOperation alloc] init];
+    return [op autorelease];
 }
 
 #pragma mark - Request
 
 - (void)performHTTPRequest:(NSURLRequest *)request
-         completionHandler:(MBRequestHTTPCompletionHandler)completionHandler
+         completionHandler:(MBHTTPRequestCompletionHandler)completionHandler
 {
     [[self connectionOperation] setRequest:request];
     [self setHTTPCompletionHandler:completionHandler];

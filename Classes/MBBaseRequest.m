@@ -15,8 +15,7 @@
 @property (atomic, retain, readwrite) NSError *error;
 @property (atomic, assign, readwrite, getter=isCancelled) BOOL cancelled;
 @property (atomic, assign, readwrite, getter=isRunning) BOOL running;
-@property (nonatomic, copy, readwrite) MBRequestDataCompletionHandler dataCompletionHandler;
-- (void)finish;
+@property (nonatomic, copy, readwrite) MBBaseRequestCompletionHandler baseCompletionHandler;
 @end
 
 
@@ -52,9 +51,9 @@ void _MBRemoveRequest(MBBaseRequest *request)
 @implementation MBBaseRequest
 
 @synthesize affectsNetworkActivityIndicator = _affectsNetworkActivityIndicator;
+@synthesize baseCompletionHandler = _baseCompletionHandler;
 @synthesize cancelled = _cancelled;
 @synthesize connectionOperation = _connectionOperation;
-@synthesize dataCompletionHandler = _dataCompletionHandler;
 @synthesize downloadProgressCallback = _downloadProgressCallback;
 @synthesize error = _error;
 @synthesize running = _running;
@@ -74,8 +73,8 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 - (void)dealloc
 {
+    [_baseCompletionHandler release];
     [_connectionOperation release];
-    [_dataCompletionHandler release];
     [_downloadProgressCallback release];
     [_error release];
     [_uploadProgressCallback release];
@@ -88,11 +87,17 @@ void _MBRemoveRequest(MBBaseRequest *request)
 {
     if (_connectionOperation == nil)
     {
-        _connectionOperation = [[MBURLConnectionOperation alloc] init];
+        _connectionOperation = [[self createConnectionOperation] retain];
         [_connectionOperation setDelegate:self];
     }
 
     return _connectionOperation;
+}
+
+- (MBURLConnectionOperation *)createConnectionOperation
+{
+    MBURLConnectionOperation *op = [[MBURLConnectionOperation alloc] init];
+    return [op autorelease];
 }
 
 - (void)setResponseDataOverride:(NSData *)data
@@ -102,10 +107,10 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 #pragma mark - Public Methods
 
-- (void)performBasicRequest:(NSURLRequest *)request completionHandler:(MBRequestDataCompletionHandler)completionHandler
+- (void)performBasicRequest:(NSURLRequest *)request completionHandler:(MBBaseRequestCompletionHandler)completionHandler
 {
     [[self connectionOperation] setRequest:request];
-    [self setDataCompletionHandler:completionHandler];
+    [self setBaseCompletionHandler:completionHandler];
     [self scheduleOperation];
 }
 
@@ -165,9 +170,9 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 - (void)notifyCaller
 {
-    if ([self dataCompletionHandler] != nil)
+    if ([self baseCompletionHandler] != nil)
     {
-        [self dataCompletionHandler]([[self connectionOperation] responseData], [self error]);
+        [self baseCompletionHandler]([[self connectionOperation] responseData], [self error]);
     }
 }
 
