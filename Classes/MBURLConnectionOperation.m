@@ -115,12 +115,13 @@
     {
         if (CFRunLoopGetCurrent() == [self runLoop])
         {
-            [super cancel];
-
             [self setShouldCancel:NO];
             [[self connection] cancel];
             [self setConnection:nil];
-            [self finish];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [super cancel];
+                [self finish];
+            });
         }
         else
         {
