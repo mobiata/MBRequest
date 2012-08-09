@@ -74,7 +74,7 @@
         {
             if ([self shouldCancel])
             {
-                [super cancel];
+                [self cancelOperation];
             }
             else
             {
@@ -113,22 +113,29 @@
 {
     if (![self isCancelled] && ![self isFinished])
     {
-        if (CFRunLoopGetCurrent() == [self runLoop])
-        {
-            [self setShouldCancel:NO];
-            [[self connection] cancel];
-            [self setConnection:nil];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [super cancel];
-                [self finish];
-            });
-        }
-        else
-        {
-            // Defer the actual cancellation to a later iteration of the operation runloop.
-            [self setShouldCancel:YES];
-        }
+        // Defer the actual cancellation to a later iteration of the operation runloop.
+        [self setShouldCancel:YES];
     }
+}
+
+- (void)cancelFromRunLoop
+{
+    [self setShouldCancel:NO];
+    [[self connection] cancel];
+    [self setConnection:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // We run this on the main thread to ensure safe cleanup of the operation and
+        // the run loop. Without this block, it would be possible for [self cancelOperation]
+        // to remove the NSOperartion from the NSOperationQueue and thus immediately deallocate
+        // the operation before [self finish] can complete successfully.
+        [self cancelOperation];
+        [self finish];
+    });
+}
+
+- (void)cancelOperation
+{
+    [super cancel];
 }
 
 - (void)finish
@@ -166,7 +173,7 @@
     {
         if ([self shouldCancel])
         {
-            [self cancel];
+            [self cancelFromRunLoop];
         }
         else
         {
@@ -186,7 +193,7 @@
     {
         if ([self shouldCancel])
         {
-            [self cancel];
+            [self cancelFromRunLoop];
         }
         else
         {
@@ -209,7 +216,7 @@
     {
         if ([self shouldCancel])
         {
-            [self cancel];
+            [self cancelFromRunLoop];
         }
         else
         {
@@ -227,7 +234,7 @@
     {
         if ([self shouldCancel])
         {
-            [self cancel];
+            [self cancelFromRunLoop];
         }
         else
         {
@@ -254,7 +261,7 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
     {
         if ([self shouldCancel])
         {
-            [self cancel];
+            [self cancelFromRunLoop];
         }
         else
         {
