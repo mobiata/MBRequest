@@ -45,6 +45,7 @@
 - (void)dealloc
 {
     [_connection release];
+    [_delegate release];
     [_error release];
     [_incrementalResponseData release];
     [_request release];
@@ -64,47 +65,44 @@
 
 - (void)main
 {
-    if (![self isCancelled])
+    if ([self request] == nil)
     {
-        if ([self request] == nil)
+        [NSException raise:NSInternalInconsistencyException format:@"%@: Unable to send request. No NSURLRequest object set!", self];
+    }
+
+    if ([self shouldCancel])
+    {
+        [self cancelOperation];
+        [self finish];
+    }
+    else
+    {
+        MBRequestLog(@"Sending %@ Request: %@", [[self request] HTTPMethod], [[self request] URL]);
+        MBRequestLog(@"Headers: %@", [[self request] allHTTPHeaderFields]);
+
+        NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:[self request]
+                                                                      delegate:self
+                                                              startImmediately:NO];
+        [self setConnection:connection];
+        [connection release];
+
+        if ([self connection] == nil)
         {
-            [NSException raise:NSInternalInconsistencyException format:@"%@: Unable to send request. No NSURLRequest object set!", self];
+            NSLog(@"NSURLConnection's initWithRequest returned nil for %@. How is this possible?", [self request]);
+            NSString *message = MBRequestLocalizedString(@"unknown_error_occurred", @"An unknown error has occurred.");
+            NSDictionary *userInfo = [NSDictionary dictionaryWithObject:message forKey:NSLocalizedDescriptionKey];
+            NSError *error = [NSError errorWithDomain:MBRequestErrorDomain
+                                                 code:MBRequestErrorCodeUnknown
+                                             userInfo:userInfo];
+            [self setError:error];
+            [self finish];
         }
         else
         {
-            if ([self shouldCancel])
-            {
-                [self cancelOperation];
-            }
-            else
-            {
-                MBRequestLog(@"Sending %@ Request: %@", [[self request] HTTPMethod], [[self request] URL]);
-                MBRequestLog(@"Headers: %@", [[self request] allHTTPHeaderFields]);
-
-                NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:[self request]
-                                                                              delegate:self
-                                                                      startImmediately:NO];
-                [self setConnection:connection];
-                [connection release];
-
-                if ([self connection] == nil)
-                {
-                    NSLog(@"NSURLConnection's initWithRequest returned nil for %@. How is this possible?", [self request]);
-                    NSString *message = MBRequestLocalizedString(@"unknown_error_occurred", @"An unknown error has occurred.");
-                    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:message forKey:NSLocalizedDescriptionKey];
-                    NSError *error = [NSError errorWithDomain:MBRequestErrorDomain
-                                                         code:MBRequestErrorCodeUnknown
-                                                     userInfo:userInfo];
-                    [self setError:error];
-                }
-                else
-                {
-                    [[self connection] start];
-                    [self setRunLoop:CFRunLoopGetCurrent()];
-                    [self setRunLoopIsRunning:YES];
-                    CFRunLoopRun();
-                }
-            }
+            [[self connection] start];
+            [self setRunLoop:CFRunLoopGetCurrent()];
+            [self setRunLoopIsRunning:YES];
+            CFRunLoopRun();
         }
     }
 }
@@ -144,6 +142,11 @@
     {
         [[self delegate] connectionOperationDidFinish:self];
     }
+
+    // Break the retain cycle. We no longer need to retain our delegate since we never need to
+    // reference it again. This must be done on the runloop (if it is running) since the runloop's
+    // thread may be *just* about to send a message to the delegate.
+    [self setDelegate:nil];
 
     if ([self isExecuting] && [self runLoopIsRunning])
     {

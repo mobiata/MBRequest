@@ -49,7 +49,13 @@
 @property (atomic, retain, readonly) NSError *error;
 @property (atomic, retain, readonly) NSURLResponse *response;
 @property (atomic, retain, readonly) NSData *responseData;
-@property (atomic, assign) id <MBURLConnectionOperationDelegate> delegate;
+
+// The delegate of the MBURLConnectionOperation. Note that this is a strong reference. This is
+// important since the MBBaseRequest could be deallocated on the main thread when the background
+// thread is *just* about to send a message to it. We can either create lots of horrible
+// synchronization blocks, or we can create a retain cycle (which we are careful to eventually
+// break). A retain cycle makes the code much cleaner than @synchronized blocks.
+@property (atomic, retain) id <MBURLConnectionOperationDelegate> delegate;
 
 // By default, NSURLConnection will not connect using SSL to servers with untrusted certificates.
 // This includes all self-signed certificates. Setting allowsUntrustedServerCertificates to YES
