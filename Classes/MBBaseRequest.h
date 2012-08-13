@@ -53,9 +53,4 @@ typedef void (^MBRequestUploadProgressCallback)(NSInteger bytes, NSInteger total
 // Whether or not this request affects the global network activity indicator. Defaults to YES.
 @property (nonatomic, assign) BOOL affectsNetworkActivityIndicator;
 
-// NSData to use instead of the standard response. Useful for bypassing the actual request when
-// running automated tests. You should probably never call this method unless you are running a
-// unit test.
-- (void)setResponseDataOverride:(NSData *)data;
-
 @end

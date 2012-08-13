@@ -100,11 +100,6 @@ void _MBRemoveRequest(MBBaseRequest *request)
     return [op autorelease];
 }
 
-- (void)setResponseDataOverride:(NSData *)data
-{
-    [[self connectionOperation] setResponseDataOverride:data];
-}
-
 #pragma mark - Public Methods
 
 - (void)performBasicRequest:(NSURLRequest *)request completionHandler:(MBBaseRequestCompletionHandler)completionHandler
