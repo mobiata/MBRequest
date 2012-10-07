@@ -13,8 +13,8 @@
 typedef void (^MBBaseRequestCompletionHandler)(NSData *data, NSError *error);
 
 // Callbacks for getting progress on upload or download operations.
-typedef void (^MBRequestDownloadProgressCallback)(NSInteger bytes, NSInteger totalBytes, NSInteger totalBytesExpected);
-typedef void (^MBRequestUploadProgressCallback)(NSInteger bytes, NSInteger totalBytes, NSInteger totalBytesExpected);
+typedef void (^MBRequestDownloadProgressCallback)(NSUInteger bytes, NSUInteger totalBytes, long long totalBytesExpected);
+typedef void (^MBRequestUploadProgressCallback)(NSUInteger bytes, NSUInteger totalBytes, long long totalBytesExpected);
 
 
 //__________________________________________________________________________________________________

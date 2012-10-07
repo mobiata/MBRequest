@@ -196,7 +196,7 @@
             long long capacity = [response expectedContentLength];
             capacity = (capacity == NSURLResponseUnknownLength) ? 1024 : capacity;
             capacity = MIN(capacity, 1024 * 1000);
-            [self setIncrementalResponseData:[NSMutableData dataWithCapacity:capacity]];
+            [self setIncrementalResponseData:[NSMutableData dataWithCapacity:(NSUInteger)capacity]];
         }
     }
 }

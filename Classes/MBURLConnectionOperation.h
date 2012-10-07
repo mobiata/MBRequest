@@ -25,16 +25,16 @@
 // This method is called to notify the delegate when data has been downloaded from
 // the connection.
 - (void)connectionOperation:(MBURLConnectionOperation *)operation
-         didReceiveBodyData:(NSInteger)bytesRead
-             totalBytesRead:(NSInteger)totalBytesReceived
-   totalBytesExpectedToRead:(NSInteger)totalBytesExpectedToRead;
+         didReceiveBodyData:(NSUInteger)bytesRead
+             totalBytesRead:(NSUInteger)totalBytesReceived
+   totalBytesExpectedToRead:(long long)totalBytesExpectedToRead;
 
 // This method is called to notify the delegate when data has been uploaded to
 // the connection.
 - (void)connectionOperation:(MBURLConnectionOperation *)operation
-            didSendBodyData:(NSInteger)bytesWritten
-          totalBytesWritten:(NSInteger)totalBytesWritten
-  totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite;
+            didSendBodyData:(NSUInteger)bytesWritten
+          totalBytesWritten:(NSUInteger)totalBytesWritten
+  totalBytesExpectedToWrite:(long long)totalBytesExpectedToWrite;
 
 @end
 

@@ -231,9 +231,9 @@ void _MBRemoveRequest(MBBaseRequest *request)
 }
 
 - (void)connectionOperation:(MBURLConnectionOperation *)operation
-         didReceiveBodyData:(NSInteger)bytesRead
-             totalBytesRead:(NSInteger)totalBytesReceived
-   totalBytesExpectedToRead:(NSInteger)totalBytesExpectedToRead
+         didReceiveBodyData:(NSUInteger)bytesRead
+             totalBytesRead:(NSUInteger)totalBytesReceived
+   totalBytesExpectedToRead:(long long)totalBytesExpectedToRead
 {
     if (![self isCancelled] && [self downloadProgressCallback])
     {
@@ -247,9 +247,9 @@ void _MBRemoveRequest(MBBaseRequest *request)
 }
 
 - (void)connectionOperation:(MBURLConnectionOperation *)operation
-            didSendBodyData:(NSInteger)bytesWritten
-          totalBytesWritten:(NSInteger)totalBytesWritten
-  totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
+            didSendBodyData:(NSUInteger)bytesWritten
+          totalBytesWritten:(NSUInteger)totalBytesWritten
+  totalBytesExpectedToWrite:(long long)totalBytesExpectedToWrite
 {
     if (![self isCancelled] && [self uploadProgressCallback])
     {
