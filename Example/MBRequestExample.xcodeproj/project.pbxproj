@@ -32,6 +32,7 @@
 		633FA9C015177A090078A312 /* MBRBasicTopRatedVideosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA9BF15177A080078A312 /* MBRBasicTopRatedVideosViewController.m */; };
 		633FA9C715177D140078A312 /* MBRTopRatedVideosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA9C615177D140078A312 /* MBRTopRatedVideosViewController.m */; };
 		633FA9CA15177DCB0078A312 /* MBRBetterTopRatedVideosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA9C915177DCB0078A312 /* MBRBetterTopRatedVideosViewController.m */; };
+		637C88961621D9BB00FB00D0 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 637C88951621D9BA00FB00D0 /* Default-568h@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -91,6 +92,7 @@
 		633FA9C615177D140078A312 /* MBRTopRatedVideosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBRTopRatedVideosViewController.m; sourceTree = "<group>"; };
 		633FA9C815177DCB0078A312 /* MBRBetterTopRatedVideosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBRBetterTopRatedVideosViewController.h; sourceTree = "<group>"; };
 		633FA9C915177DCB0078A312 /* MBRBetterTopRatedVideosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBRBetterTopRatedVideosViewController.m; sourceTree = "<group>"; };
+		637C88951621D9BA00FB00D0 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 				633FA92D151759710078A312 /* MBRequestExample-Info.plist */,
 				633FA931151759710078A312 /* main.m */,
 				633FA933151759710078A312 /* MBRequestExample-Prefix.pch */,
+				637C88951621D9BA00FB00D0 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -295,6 +298,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				637C88961621D9BB00FB00D0 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
