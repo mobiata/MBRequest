@@ -227,6 +227,13 @@ void _MBRemoveRequest(MBBaseRequest *request)
         }
 
         [self finish];
+        [self setUploadProgress:1.0];
+        [self setDownloadProgress:1.0];
+    }
+    else
+    {
+        [self setUploadProgress:-1.0];
+        [self setDownloadProgress:-1.0];
     }
 }
 
@@ -244,6 +251,15 @@ void _MBRemoveRequest(MBBaseRequest *request)
             }
         });
     }
+    
+    if (![self isCancelled] && totalBytesExpectedToRead > 0.0)
+    {
+        [self setDownloadProgress:totalBytesReceived / (double)totalBytesExpectedToRead];
+    }
+    else
+    {
+        [self setDownloadProgress:-1.0];
+    }
 }
 
 - (void)connectionOperation:(MBURLConnectionOperation *)operation
@@ -259,6 +275,15 @@ void _MBRemoveRequest(MBBaseRequest *request)
                 [self uploadProgressCallback](bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
             }
         });
+    }
+    
+    if (![self isCancelled] && totalBytesExpectedToWrite > 0.0)
+    {
+        [self setUploadProgress:totalBytesWritten / (double)totalBytesExpectedToWrite];
+    }
+    else
+    {
+        [self setUploadProgress:-1.0];
     }
 }
 

@@ -53,4 +53,9 @@ typedef void (^MBRequestUploadProgressCallback)(NSUInteger bytes, NSUInteger tot
 // Whether or not this request affects the global network activity indicator. Defaults to YES.
 @property (nonatomic, assign) BOOL affectsNetworkActivityIndicator;
 
+// Percent complete for download and upload progress. Values between 0.0 and 1.0 tell completion
+// percentages. Values are -1.0 before request is started or after a request is canceled.
+@property (nonatomic, assign) double downloadProgress;
+@property (nonatomic, assign) double uploadProgress;
+
 @end
