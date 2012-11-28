@@ -52,6 +52,8 @@ If you want to incorporate MBRequest, you will likely find the following classes
 * [`MBHTTPRequest`](https://github.com/mobiata/MBRequest/blob/master/Classes/MBHTTPRequest.h) — A subclass of `MBBaseRequest` that handles HTTP requests.
 * [`MBJSONRequest`](https://github.com/mobiata/MBRequest/blob/master/Classes/MBJSONRequest.h) — A subclass of `MBHTTPRequest` that deals directly with JSON data.
 * [`MBImageRequest`](https://github.com/mobiata/MBRequest/blob/master/Classes/MBImageRequest.h) — A subclass of `MBHTTPRequest` that handles the downloading of remote images.
+* [`MBXMLRequest`](https://github.com/mobiata/MBRequest/blob/master/Classes/MBXMLRequest.h) — A subclass of `MBHTTPRequest` that handles the downloading and parsing of XML data.
+* [`MBMultipartFormData`](https://github.com/mobiata/MBRequest/blob/master/Classes/MBMultipartFormData.h) — A class that helps with the creation of [multipart form data][MultipartFormData].
 
 To create your own requests, you will most likely want to subclass one of the above classes.
 
@@ -140,3 +142,4 @@ MBCommon also defines a number of its own localized strings by using `MBLocalize
 [JSONKit]: https://github.com/johnezang/JSONKit
 [SBJson]: http://stig.github.com/json-framework/
 [JSON]: http://json.org/
+[MultipartFormData]: http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4.2
