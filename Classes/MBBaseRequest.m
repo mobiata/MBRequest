@@ -230,11 +230,6 @@ void _MBRemoveRequest(MBBaseRequest *request)
         [self setUploadProgress:1.0];
         [self setDownloadProgress:1.0];
     }
-    else
-    {
-        [self setUploadProgress:-1.0];
-        [self setDownloadProgress:-1.0];
-    }
 }
 
 - (void)connectionOperation:(MBURLConnectionOperation *)operation
@@ -242,23 +237,26 @@ void _MBRemoveRequest(MBBaseRequest *request)
              totalBytesRead:(NSUInteger)totalBytesReceived
    totalBytesExpectedToRead:(long long)totalBytesExpectedToRead
 {
-    if (![self isCancelled] && [self downloadProgressCallback])
+    if (![self isCancelled])
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (![self isCancelled])
-            {
-                [self downloadProgressCallback](bytesRead, totalBytesReceived, totalBytesExpectedToRead);
-            }
-        });
-    }
-    
-    if (![self isCancelled] && totalBytesExpectedToRead > 0.0)
-    {
-        [self setDownloadProgress:totalBytesReceived / (double)totalBytesExpectedToRead];
-    }
-    else
-    {
-        [self setDownloadProgress:-1.0];
+        if (totalBytesExpectedToRead > 0)
+        {
+            [self setDownloadProgress:totalBytesReceived / (double)totalBytesExpectedToRead];
+        }
+        else
+        {
+            [self setDownloadProgress:-1.0];
+        }
+
+        if ([self downloadProgressCallback])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (![self isCancelled])
+                {
+                    [self downloadProgressCallback](bytesRead, totalBytesReceived, totalBytesExpectedToRead);
+                }
+            });
+        }
     }
 }
 
@@ -267,23 +265,26 @@ void _MBRemoveRequest(MBBaseRequest *request)
           totalBytesWritten:(NSUInteger)totalBytesWritten
   totalBytesExpectedToWrite:(long long)totalBytesExpectedToWrite
 {
-    if (![self isCancelled] && [self uploadProgressCallback])
+    if (![self isCancelled])
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (![self isCancelled])
-            {
-                [self uploadProgressCallback](bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
-            }
-        });
-    }
-    
-    if (![self isCancelled] && totalBytesExpectedToWrite > 0.0)
-    {
-        [self setUploadProgress:totalBytesWritten / (double)totalBytesExpectedToWrite];
-    }
-    else
-    {
-        [self setUploadProgress:-1.0];
+        if (totalBytesExpectedToWrite > 0)
+        {
+            [self setUploadProgress:totalBytesWritten / (double)totalBytesExpectedToWrite];
+        }
+        else
+        {
+            [self setUploadProgress:-1.0];
+        }
+
+        if ([self uploadProgressCallback])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (![self isCancelled])
+                {
+                    [self uploadProgressCallback](bytesWritten, totalBytesWritten, totalBytesExpectedToWrite);
+                }
+            });
+        }
     }
 }
 
