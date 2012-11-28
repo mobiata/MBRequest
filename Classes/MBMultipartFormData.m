@@ -1,20 +1,20 @@
 //
-//  MBMultipartFormBody.m
+//  MBMultipartFormData.m
 //  MBRequest
 //
 //  Created by Ben Cochran on 11/8/12.
 //  Copyright (c) 2012 Mobiata, LLC. All rights reserved.
 //
 
-#import "MBMultipartFormBody.h"
+#import "MBMultipartFormData.h"
 
-@interface MBMultipartFormBody ()
+@interface MBMultipartFormData ()
 @property (nonatomic, retain, readwrite) NSString *boundary;
 @property (nonatomic, retain, readonly) NSMutableArray *parts;
 @end
 
 
-@implementation MBMultipartFormBody
+@implementation MBMultipartFormData
 
 @synthesize boundary = _boundary;
 @synthesize parts = _parts;
@@ -46,7 +46,7 @@
 
 #pragma mark - Accessors
 
-- (NSData *)bodyData
+- (NSData *)dataRepresentation
 {
     NSMutableData *bodyData = [NSMutableData data];
     [bodyData appendData:[[NSString stringWithFormat:@"--%@\r\n", [self boundary]] dataUsingEncoding:NSUTF8StringEncoding]];

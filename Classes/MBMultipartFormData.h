@@ -1,5 +1,5 @@
 //
-//  MBMultipartFormBody.h
+//  MBMultipartFormData.h
 //  MBRequest
 //
 //  Created by Ben Cochran on 11/8/12.
@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MBMultipartFormBody : NSObject
+@interface MBMultipartFormData : NSObject
 
 @property (nonatomic, retain, readonly) NSString *boundary;
 
-- (NSData *)bodyData;
+- (NSData *)dataRepresentation;
 
 - (void)appendPartWithString:(NSString *)string
                         name:(NSString *)name;
