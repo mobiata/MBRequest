@@ -27,7 +27,7 @@ To reference any of the functionality defined in MBRequest, simply `#import "MBR
 It is possible to use `MBJSONRequest` to quickly grab JSON data at any URL. For example, the following code will print out the titles and authors of the top-rated YouTube videos of the past week:
 
 ```objc
-NSURL *url = [NSURL URLWithString:@"https://gdata.youtube.com/feeds/api/standardfeeds/top_rated?alt=json?time=this_week"];
+NSURL *url = [NSURL URLWithString:@"https://gdata.youtube.com/feeds/api/standardfeeds/top_rated?alt=json&time=this_week"];
 NSRLRequest *urlRequest = [NSRLRequest requestWithURL:url];
 MBJSONRequest *jsonRequest = [[[MBJSONRequest alloc] init] autorelease];
 [jsonRequest performJSONRequest:urlRequest completionHandler:^(id responseJSON, NSError *error) {
