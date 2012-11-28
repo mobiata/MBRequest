@@ -28,19 +28,14 @@ It is possible to use `MBJSONRequest` to quickly grab JSON data at any URL. For 
 
 ```objc
 NSURL *url = [NSURL URLWithString:@"https://gdata.youtube.com/feeds/api/standardfeeds/top_rated?alt=json?time=this_week"];
-NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
-[urlRequest setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+NSRLRequest *urlRequest = [NSRLRequest requestWithURL:url];
 MBJSONRequest *jsonRequest = [[[MBJSONRequest alloc] init] autorelease];
 [jsonRequest performJSONRequest:urlRequest completionHandler:^(id responseJSON, NSError *error) {
-    if (error != nil)
-    {
+    if (error != nil) {
         NSLog(@"Error requesting top-rated videos: %@", error);
-    }
-    else
-    {
+    } else {
         NSArray *videos = [[responseJSON objectForKey:@"feed"] objectForKey:@"entry"];
-        for (NSDictionary *videoInfo in videos)
-        {
+        for (NSDictionary *videoInfo in videos) {
             NSString *title = [[videoInfo objectForKey:@"title"] objectForKey:@"$t"];
             NSString *author = [[[[videoInfo objectForKey:@"author"] objectAtIndex:0] objectForKey:@"name"] objectForKey:@"$t"];
             NSLog(@"'%@' by %@", title, author);
