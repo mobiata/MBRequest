@@ -55,7 +55,7 @@ typedef void (^MBRequestUploadProgressCallback)(NSUInteger bytes, NSUInteger tot
 
 // Percent complete for download and upload progress. Values between 0.0 and 1.0 tell completion
 // percentages. Values are -1.0 before request is started or after a request is canceled.
-@property (nonatomic, assign) double downloadProgress;
-@property (nonatomic, assign) double uploadProgress;
+@property (atomic, assign) double downloadProgress;
+@property (atomic, assign) double uploadProgress;
 
 @end
