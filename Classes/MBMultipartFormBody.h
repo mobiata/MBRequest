@@ -1,6 +1,6 @@
 //
 //  MBMultipartFormBody.h
-//  ExpediaBookings
+//  MBRequest
 //
 //  Created by Ben Cochran on 11/8/12.
 //  Copyright (c) 2012 Mobiata, LLC. All rights reserved.
@@ -10,30 +10,27 @@
 
 @interface MBMultipartFormBody : NSObject
 
+@property (nonatomic, retain, readonly) NSString *boundary;
+
 - (NSData *)bodyData;
-- (NSString *)boundary;
-
-#if __IPHONE_OS_VERSION_MIN_REQUIRED
-- (void)appendJPEGImage:(UIImage *)image
-                   name:(NSString *)name
-               filename:(NSString *)filename;
-- (void)appendPNGImage:(UIImage *)image
-                  name:(NSString *)name
-              filename:(NSString *)filename;
-#endif
-
-- (void)appendPartWithFileURL:(NSURL *)fileURL
-                         name:(NSString *)name;
-
-- (void)appendPartWithFileURL:(NSURL *)fileURL
-                         name:(NSString *)name
-                     mimetype:(NSString *)mimetype;
 
 - (void)appendPartWithString:(NSString *)string
                         name:(NSString *)name;
-
 - (void)appendPartWithNumber:(NSNumber *)number
                         name:(NSString *)name;
+
+- (void)appendPartWithFileURL:(NSURL *)fileURL
+                         name:(NSString *)name;
+- (void)appendPartWithFileURL:(NSURL *)fileURL
+                         name:(NSString *)name
+                     mimeType:(NSString *)mimeType;
+
+- (void)appendJPEGImageData:(NSData *)data
+                   withName:(NSString *)name
+                   fileName:(NSString *)fileName;
+- (void)appendPNGImageData:(NSData *)data
+                  withName:(NSString *)name
+                  fileName:(NSString *)fileName;
 
 - (void)appendPartWithHeaders:(NSDictionary *)headers
                          data:(NSData *)data;

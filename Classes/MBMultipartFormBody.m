@@ -1,6 +1,6 @@
 //
 //  MBMultipartFormBody.m
-//  ExpediaBookings
+//  MBRequest
 //
 //  Created by Ben Cochran on 11/8/12.
 //  Copyright (c) 2012 Mobiata, LLC. All rights reserved.
@@ -8,14 +8,15 @@
 
 #import "MBMultipartFormBody.h"
 
-static NSString * const kMOMultipartFormBoundary = @"MOBoundary+M0b14t4+1234";
-
 @interface MBMultipartFormBody ()
-@property (nonatomic, readonly) NSMutableArray *parts;
+@property (nonatomic, retain, readwrite) NSString *boundary;
+@property (nonatomic, retain, readonly) NSMutableArray *parts;
 @end
+
 
 @implementation MBMultipartFormBody
 
+@synthesize boundary = _boundary;
 @synthesize parts = _parts;
 
 #pragma mark - Object Lifecycle
@@ -26,109 +27,44 @@ static NSString * const kMOMultipartFormBoundary = @"MOBoundary+M0b14t4+1234";
     if (self)
     {
         _parts = [[NSMutableArray alloc] init];
+
+        // Generate a random boundary string.
+        CFUUIDRef uuidObj = CFUUIDCreate(nil);
+        _boundary = (NSString *)CFUUIDCreateString(nil, uuidObj);
+        CFRelease(uuidObj);
     }
+
     return self;
 }
 
 - (void)dealloc
 {
+    [_boundary release];
     [_parts release];
     [super dealloc];
 }
 
 #pragma mark - Accessors
 
-- (NSString *)boundary
-{
-    return kMOMultipartFormBoundary;
-}
-
 - (NSData *)bodyData
 {
     NSMutableData *bodyData = [NSMutableData data];
-    [bodyData appendData:[[NSString stringWithFormat:@"--%@\r\n", kMOMultipartFormBoundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [bodyData appendData:[[NSString stringWithFormat:@"--%@\r\n", [self boundary]] dataUsingEncoding:NSUTF8StringEncoding]];
     NSInteger count = [[self parts] count];
-    for (NSInteger i = 0 ; i < count; i++) {
+    for (NSInteger i = 0 ; i < count; i++)
+    {
         NSData *part = [[self parts] objectAtIndex:i];
         [bodyData appendData:part];
-        if (i+1 < count) {
-            [bodyData appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", kMOMultipartFormBoundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        if (i + 1 < count)
+        {
+            [bodyData appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", [self boundary]] dataUsingEncoding:NSUTF8StringEncoding]];
         }
     }
-    [bodyData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", kMOMultipartFormBoundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [bodyData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", [self boundary]] dataUsingEncoding:NSUTF8StringEncoding]];
     return bodyData;
 }
 
 #pragma mark - Appending parts
-
-#if __IPHONE_OS_VERSION_MIN_REQUIRED
-- (void)appendJPEGImage:(UIImage *)image
-                   name:(NSString *)name
-               filename:(NSString *)filename
-{
-    NSString *contentDisposition = [NSString stringWithFormat:@"form-data; name=\"%@\"; filename=\"%@\"",
-                                    name,
-                                    filename];
-    NSDictionary *headers = [NSDictionary dictionaryWithObjectsAndKeys:
-                             contentDisposition, @"Content-Disposition",
-                             @"image/jpeg", @"Content-Type",
-                             nil];
-    NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
-    [self appendPartWithHeaders:headers data:imageData];
-}
-
-- (void)appendPNGImage:(UIImage *)image
-                  name:(NSString *)name
-              filename:(NSString *)filename
-{
-    NSString *contentDisposition = [NSString stringWithFormat:@"form-data; name=\"%@\"; filename=\"%@\"",
-                                    name,
-                                    filename];
-    NSDictionary *headers = [NSDictionary dictionaryWithObjectsAndKeys:
-                             contentDisposition, @"Content-Disposition",
-                             @"image/png", @"Content-Type",
-                             nil];
-    NSData *imageData = UIImagePNGRepresentation(image);
-    [self appendPartWithHeaders:headers data:imageData];
-}
-#endif //__IPHONE_OS_VERSION_MIN_REQUIRED
-
-- (void)appendPartWithFileURL:(NSURL *)fileURL
-                         name:(NSString *)name
-{
-    NSString *mimetype = nil;
-#ifdef __UTTYPE__
-    NSString *extension = [[fileURL lastPathComponent] pathExtension];
-    CFStringRef UTITypeString = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (CFStringRef)extension, NULL);
-    mimetype = (NSString *)UTTypeCopyPreferredTagWithClass(UTITypeString, kUTTagClassMIMEType);
-    CFRelease(UTITypeString);
-#else
-    mimetype = @"application/octet-stream";
-#endif //__UTTYPE__
-    
-    [self appendPartWithFileURL:fileURL name:name mimetype:mimetype];
-    [mimetype release];
-}
-
-- (void)appendPartWithFileURL:(NSURL *)fileURL
-                         name:(NSString *)name
-                     mimetype:(NSString *)mimetype
-{
-#if defined(DEBUG) || defined(ALPHA) || defined(BETA)
-    NSAssert([fileURL isFileReferenceURL], @"File URL must be a file url.");
-    NSAssert([fileURL checkResourceIsReachableAndReturnError:NULL], @"File URL cannot be read.");
-#endif
-    
-    NSString *contentDisposition = [NSString stringWithFormat:@"form-data; name=\"%@\"; filename=\"%@\"",
-                                    name,
-                                    [fileURL lastPathComponent]];
-    NSDictionary *headers = [NSDictionary dictionaryWithObjectsAndKeys:
-                             contentDisposition, @"Content-Disposition",
-                             mimetype, @"Content-Type",
-                             nil];
-    NSData *fileData = [NSData dataWithContentsOfURL:fileURL];
-    [self appendPartWithHeaders:headers data:fileData];
-}
 
 - (void)appendPartWithString:(NSString *)string
                         name:(NSString *)name
@@ -146,6 +82,73 @@ static NSString * const kMOMultipartFormBoundary = @"MOBoundary+M0b14t4+1234";
     [self appendPartWithString:[number stringValue] name:name];
 }
 
+- (void)appendPartWithFileURL:(NSURL *)fileURL
+                         name:(NSString *)name
+{
+    NSString *mimetype = nil;
+#ifdef __UTTYPE__
+    NSString *extension = [[fileURL lastPathComponent] pathExtension];
+    CFStringRef UTITypeString = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (CFStringRef)extension, NULL);
+    mimetype = (NSString *)UTTypeCopyPreferredTagWithClass(UTITypeString, kUTTagClassMIMEType);
+    CFRelease(UTITypeString);
+#else
+    mimetype = @"application/octet-stream";
+#endif
+
+    [self appendPartWithFileURL:fileURL name:name mimeType:mimetype];
+    [mimetype release];
+}
+
+- (void)appendPartWithFileURL:(NSURL *)fileURL
+                         name:(NSString *)name
+                     mimeType:(NSString *)mimeType
+{
+    if (![fileURL isFileReferenceURL])
+    {
+        NSLog(@"Unable to append multipart file. File not found: %@", fileURL);
+        return;
+    }
+
+    NSError *error = nil;
+    if (![fileURL checkResourceIsReachableAndReturnError:&error])
+    {
+        NSLog(@"Unable to append multipart file. File is not reachable: %@", fileURL);
+        return;
+    }
+
+    NSString *contentDisposition = [NSString stringWithFormat:@"form-data; name=\"%@\"; filename=\"%@\"", name, [fileURL lastPathComponent]];
+    NSDictionary *headers = [NSDictionary dictionaryWithObjectsAndKeys:
+                             contentDisposition, @"Content-Disposition",
+                             mimeType, @"Content-Type",
+                             nil];
+    NSData *fileData = [NSData dataWithContentsOfURL:fileURL];
+    [self appendPartWithHeaders:headers data:fileData];
+}
+
+- (void)appendJPEGImageData:(NSData *)data
+                   withName:(NSString *)name
+                   fileName:(NSString *)fileName
+{
+    NSString *contentDisposition = [NSString stringWithFormat:@"form-data; name=\"%@\"; filename=\"%@\"", name, fileName];
+    NSDictionary *headers = [NSDictionary dictionaryWithObjectsAndKeys:
+                             contentDisposition, @"Content-Disposition",
+                             @"image/jpeg", @"Content-Type",
+                             nil];
+    [self appendPartWithHeaders:headers data:data];
+}
+
+- (void)appendPNGImageData:(NSData *)data
+                  withName:(NSString *)name
+                  fileName:(NSString *)fileName
+{
+    NSString *contentDisposition = [NSString stringWithFormat:@"form-data; name=\"%@\"; filename=\"%@\"", name, fileName];
+    NSDictionary *headers = [NSDictionary dictionaryWithObjectsAndKeys:
+                             contentDisposition, @"Content-Disposition",
+                             @"image/png", @"Content-Type",
+                             nil];
+    [self appendPartWithHeaders:headers data:data];
+}
+
 - (void)appendPartWithHeaders:(NSDictionary *)headers
                          data:(NSData *)data
 {
@@ -158,7 +161,7 @@ static NSString * const kMOMultipartFormBoundary = @"MOBoundary+M0b14t4+1234";
     }
     [part appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
     [part appendData:data];
-    [self.parts addObject:part];
+    [[self parts] addObject:part];
     [part release];
 }
 
