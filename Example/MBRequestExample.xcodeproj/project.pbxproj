@@ -32,6 +32,7 @@
 		633FA9C015177A090078A312 /* MBRBasicTopRatedVideosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA9BF15177A080078A312 /* MBRBasicTopRatedVideosViewController.m */; };
 		633FA9C715177D140078A312 /* MBRTopRatedVideosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA9C615177D140078A312 /* MBRTopRatedVideosViewController.m */; };
 		633FA9CA15177DCB0078A312 /* MBRBetterTopRatedVideosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA9C915177DCB0078A312 /* MBRBetterTopRatedVideosViewController.m */; };
+		637B52D41666C3A3008B2858 /* MBMultipartFormData.m in Sources */ = {isa = PBXBuildFile; fileRef = 637B52D31666C3A3008B2858 /* MBMultipartFormData.m */; };
 		637C88961621D9BB00FB00D0 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 637C88951621D9BA00FB00D0 /* Default-568h@2x.png */; };
 /* End PBXBuildFile section */
 
@@ -92,6 +93,8 @@
 		633FA9C615177D140078A312 /* MBRTopRatedVideosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBRTopRatedVideosViewController.m; sourceTree = "<group>"; };
 		633FA9C815177DCB0078A312 /* MBRBetterTopRatedVideosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBRBetterTopRatedVideosViewController.h; sourceTree = "<group>"; };
 		633FA9C915177DCB0078A312 /* MBRBetterTopRatedVideosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBRBetterTopRatedVideosViewController.m; sourceTree = "<group>"; };
+		637B52D21666C3A3008B2858 /* MBMultipartFormData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBMultipartFormData.h; sourceTree = "<group>"; };
+		637B52D31666C3A3008B2858 /* MBMultipartFormData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBMultipartFormData.m; sourceTree = "<group>"; };
 		637C88951621D9BA00FB00D0 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -198,6 +201,8 @@
 				633FA9A2151777570078A312 /* MBImageRequest.m */,
 				633FA9A3151777570078A312 /* MBJSONRequest.h */,
 				633FA9A4151777570078A312 /* MBJSONRequest.m */,
+				637B52D21666C3A3008B2858 /* MBMultipartFormData.h */,
+				637B52D31666C3A3008B2858 /* MBMultipartFormData.m */,
 				633FA9A5151777570078A312 /* MBRequest.h */,
 				633FA9A6151777570078A312 /* MBRequestError.h */,
 				633FA9A7151777570078A312 /* MBRequestError.m */,
@@ -331,6 +336,7 @@
 				633FA9C015177A090078A312 /* MBRBasicTopRatedVideosViewController.m in Sources */,
 				633FA9C715177D140078A312 /* MBRTopRatedVideosViewController.m in Sources */,
 				633FA9CA15177DCB0078A312 /* MBRBetterTopRatedVideosViewController.m in Sources */,
+				637B52D41666C3A3008B2858 /* MBMultipartFormData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
