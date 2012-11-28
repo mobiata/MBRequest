@@ -71,14 +71,10 @@ MBRYouTubeRequest *request = [[[MBRYouTubeRequest alloc] init] autorelease];
 [request requestTopRatedVideosFromIndex:1
                              maxResults:20
                       completionHandler:^(NSArray *videos, NSError *error) {
-                          if (error != nil)
-                          {
+                          if (error != nil) {
                               NSLog(@"Error: %@", error);
-                          }
-                          else
-                          {
-                              for (MBRVideo *video in videos)
-                              {
+                          } else {
+                              for (MBRVideo *video in videos) {
                                   NSLog(@"'%@' by %@", [video title], [video author]);
                               }
                           }
