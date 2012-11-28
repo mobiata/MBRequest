@@ -11,6 +11,7 @@
 #import "MBHTTPRequest.h"
 #import "MBImageRequest.h"
 #import "MBJSONRequest.h"
+#import "MBMultipartFormData.h"
 #import "MBRequestError.h"
 #import "MBRequestLocalization.h"
 #import "MBRequestLog.h"
