@@ -31,6 +31,7 @@
 
 - (void)dealloc
 {
+    [_responseImage release];
     [_imageCompletionHandler release];
     [_responseImage release];
     [super dealloc];
