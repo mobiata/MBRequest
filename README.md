@@ -28,7 +28,7 @@ It is possible to use `MBJSONRequest` to quickly grab JSON data at any URL. For 
 
 ```objc
 NSURL *url = [NSURL URLWithString:@"https://gdata.youtube.com/feeds/api/standardfeeds/top_rated?alt=json&time=this_week"];
-NSRLRequest *urlRequest = [NSRLRequest requestWithURL:url];
+NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
 MBJSONRequest *jsonRequest = [[[MBJSONRequest alloc] init] autorelease];
 [jsonRequest performJSONRequest:urlRequest completionHandler:^(id responseJSON, NSError *error) {
     if (error != nil) {
