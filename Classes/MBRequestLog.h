@@ -6,8 +6,10 @@
 //  Copyright (c) 2012 Mobiata, LLC. All rights reserved.
 //
 
+#ifndef MBRequestLog
 #ifdef MB_DEBUG_REQUESTS
 #define MBRequestLog(...) NSLog(__VA_ARGS__)
 #else
 #define MBRequestLog(...)
+#endif
 #endif
