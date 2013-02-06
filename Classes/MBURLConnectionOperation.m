@@ -88,7 +88,10 @@
             }
             [postBody release];
         }
-        MBRequestLog(@"Headers: %@", [[self request] allHTTPHeaderFields]);
+        if ([[[self request] allHTTPHeaderFields] count] > 0)
+        {
+            MBRequestLog(@"Headers: %@", [[self request] allHTTPHeaderFields]);
+        }
 #endif
 
         NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:[self request]
@@ -254,7 +257,16 @@
         {
             [self setResponseData:[NSData dataWithData:[self incrementalResponseData]]];
             [self setIncrementalResponseData:nil];
-            MBRequestLog(@"Received Response:\n%@", [self responseDataAsUTF8String]);
+#ifdef MB_DEBUG_REQUESTS
+            if ([[self responseData] length] < 100000)
+            {
+                MBRequestLog(@"Received Response:\n%@", [self responseDataAsUTF8String]);
+            }
+            else
+            {
+                MBRequestLog(@"Received Response");
+            }
+#endif
             [self handleResponse];
             [self finish];
         }
