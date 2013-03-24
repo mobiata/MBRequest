@@ -32,16 +32,13 @@
     [super parseResults];
 
     // Create an autorelease pool for this parser.
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-    // Parse the XML response.
-    NSXMLParser *parser = [[NSXMLParser alloc] initWithData:[[self connectionOperation] responseData]];
-    [parser setDelegate:self];
-    [parser parse];
-
-    // Cleanup
-    [parser release];
-    [pool release];
+    @autoreleasepool
+    {
+        // Parse the XML response.
+        NSXMLParser *parser = [[NSXMLParser alloc] initWithData:[[self connectionOperation] responseData]];
+        [parser setDelegate:self];
+        [parser parse];
+    }
 }
 
 #pragma mark - NSXMLParserDelegate

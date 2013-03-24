@@ -22,18 +22,13 @@
 
 #pragma mark - Object Lifecycle
 
-- (void)dealloc
-{
-    [_httpCompletionHandler release];
-    [super dealloc];
-}
 
 #pragma mark - Accessors
 
 - (MBURLConnectionOperation *)createConnectionOperation
 {
     MBHTTPConnectionOperation *op = [[MBHTTPConnectionOperation alloc] init];
-    return [op autorelease];
+    return op;
 }
 
 #pragma mark - Request

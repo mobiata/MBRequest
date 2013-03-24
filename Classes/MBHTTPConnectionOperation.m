@@ -14,7 +14,7 @@
 #import "MBURLConnectionOperationSubclass.h"
 
 @interface MBHTTPConnectionOperation ()
-@property (atomic, retain, readwrite) NSError *error;
+@property (atomic, strong, readwrite) NSError *error;
 @end
 
 
@@ -30,18 +30,12 @@
 {
     if ((self = [super init]))
     {
-        _successfulStatusCodes = [[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(200, 100)] retain];
+        _successfulStatusCodes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(200, 100)];
     }
     
     return self;
 }
 
-- (void)dealloc
-{
-    [_successfulStatusCodes release];
-    [_validContentTypes release];
-    [super dealloc];
-}
 
 #pragma mark - Accessors
 

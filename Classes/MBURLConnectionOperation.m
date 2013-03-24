@@ -14,11 +14,11 @@
 #import "MBURLConnectionOperationSubclass.h"
 
 @interface MBURLConnectionOperation ()
-@property (atomic, retain, readwrite) NSURLConnection *connection;
-@property (atomic, retain, readwrite) NSMutableData *incrementalResponseData;
-@property (atomic, retain, readwrite) NSURLResponse *response;
-@property (atomic, retain, readwrite) NSData *responseData;
-@property (atomic, retain, readwrite) NSError *error;
+@property (atomic, strong, readwrite) NSURLConnection *connection;
+@property (atomic, strong, readwrite) NSMutableData *incrementalResponseData;
+@property (atomic, strong, readwrite) NSURLResponse *response;
+@property (atomic, strong, readwrite) NSData *responseData;
+@property (atomic, strong, readwrite) NSError *error;
 @property (atomic, assign) CFRunLoopRef runLoop;
 @property (atomic, assign) BOOL runLoopIsRunning;
 @property (atomic, assign) BOOL shouldCancel;
@@ -42,17 +42,6 @@
 
 #pragma mark - Object Lifecycle
 
-- (void)dealloc
-{
-    [_connection release];
-    [_delegate release];
-    [_error release];
-    [_incrementalResponseData release];
-    [_request release];
-    [_response release];
-    [_responseData release];
-    [super dealloc];
-}
 
 #pragma mark - Accessors
 
@@ -86,7 +75,6 @@
             {
                 MBRequestLog(@"Body: %@", postBody);
             }
-            [postBody release];
         }
         if ([[[self request] allHTTPHeaderFields] count] > 0)
         {
@@ -98,7 +86,6 @@
                                                                       delegate:self
                                                               startImmediately:NO];
         [self setConnection:connection];
-        [connection release];
 
         if ([self connection] == nil)
         {
@@ -179,7 +166,7 @@
 - (NSString *)responseDataAsUTF8String
 {
     NSString *responseString = [[NSString alloc] initWithData:[self responseData] encoding:NSUTF8StringEncoding];
-    return [responseString autorelease];
+    return responseString;
 }
 
 #pragma mark - NSURLConnection Delegate

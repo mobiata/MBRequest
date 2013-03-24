@@ -18,6 +18,6 @@ typedef void (^MBJSONRequestCompletionHandler)(id responseJSON, NSError *error);
 - (void)performJSONRequest:(NSURLRequest *)request completionHandler:(MBJSONRequestCompletionHandler)completionHandler;
 
 // The response data, parsed into a JSON object.
-@property (atomic, retain, readonly) id responseJSON;
+@property (atomic, strong, readonly) id responseJSON;
 
 @end

@@ -12,7 +12,7 @@
 #import "MBNetworkActivityIndicatorManager.h"
 
 @interface MBBaseRequest ()
-@property (atomic, retain, readwrite) NSError *error;
+@property (atomic, strong, readwrite) NSError *error;
 @property (atomic, assign, readwrite, getter=isCancelled) BOOL cancelled;
 @property (atomic, assign, readwrite, getter=isRunning) BOOL running;
 @property (nonatomic, copy, readwrite) MBBaseRequestCompletionHandler baseCompletionHandler;
@@ -71,15 +71,6 @@ void _MBRemoveRequest(MBBaseRequest *request)
     return self;
 }
 
-- (void)dealloc
-{
-    [_baseCompletionHandler release];
-    [_connectionOperation release];
-    [_downloadProgressCallback release];
-    [_error release];
-    [_uploadProgressCallback release];
-    [super dealloc];
-}
 
 #pragma mark - Accessors
 
@@ -87,7 +78,7 @@ void _MBRemoveRequest(MBBaseRequest *request)
 {
     if (_connectionOperation == nil)
     {
-        _connectionOperation = [[self createConnectionOperation] retain];
+        _connectionOperation = [self createConnectionOperation];
         [_connectionOperation setDelegate:self];
     }
 
@@ -97,7 +88,7 @@ void _MBRemoveRequest(MBBaseRequest *request)
 - (MBURLConnectionOperation *)createConnectionOperation
 {
     MBURLConnectionOperation *op = [[MBURLConnectionOperation alloc] init];
-    return [op autorelease];
+    return op;
 }
 
 #pragma mark - Public Methods

@@ -9,8 +9,8 @@
 #import "MBMultipartFormData.h"
 
 @interface MBMultipartFormData ()
-@property (nonatomic, retain, readwrite) NSString *boundary;
-@property (nonatomic, retain, readonly) NSMutableArray *parts;
+@property (nonatomic, strong, readwrite) NSString *boundary;
+@property (nonatomic, strong, readonly) NSMutableArray *parts;
 @end
 
 
@@ -30,19 +30,13 @@
 
         // Generate a random boundary string.
         CFUUIDRef uuidObj = CFUUIDCreate(nil);
-        _boundary = (NSString *)CFUUIDCreateString(nil, uuidObj);
+        _boundary = (NSString *)CFBridgingRelease(CFUUIDCreateString(nil, uuidObj));
         CFRelease(uuidObj);
     }
 
     return self;
 }
 
-- (void)dealloc
-{
-    [_boundary release];
-    [_parts release];
-    [super dealloc];
-}
 
 #pragma mark - Accessors
 
@@ -96,7 +90,6 @@
 #endif
 
     [self appendPartWithFileURL:fileURL name:name mimeType:mimetype];
-    [mimetype release];
 }
 
 - (void)appendPartWithFileURL:(NSURL *)fileURL
@@ -162,7 +155,6 @@
     [part appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
     [part appendData:data];
     [[self parts] addObject:part];
-    [part release];
 }
 
 @end

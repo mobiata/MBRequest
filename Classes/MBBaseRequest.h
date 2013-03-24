@@ -41,10 +41,10 @@ typedef void (^MBRequestUploadProgressCallback)(NSUInteger bytes, NSUInteger tot
 - (void)performBasicRequest:(NSURLRequest *)request completionHandler:(MBBaseRequestCompletionHandler)completionHandler;
 
 // The operation associated with the URL connection.
-@property (nonatomic, retain, readonly) MBURLConnectionOperation *connectionOperation;
+@property (nonatomic, strong, readonly) MBURLConnectionOperation *connectionOperation;
 
 // An error associated with this request.
-@property (atomic, retain, readonly) NSError *error;
+@property (atomic, strong, readonly) NSError *error;
 
 // Callbacks for upload and download progress.
 @property (nonatomic, copy) MBRequestDownloadProgressCallback downloadProgressCallback;

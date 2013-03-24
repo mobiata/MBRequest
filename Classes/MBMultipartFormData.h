@@ -10,7 +10,7 @@
 
 @interface MBMultipartFormData : NSObject
 
-@property (nonatomic, retain, readonly) NSString *boundary;
+@property (nonatomic, strong, readonly) NSString *boundary;
 
 - (NSData *)dataRepresentation;
 

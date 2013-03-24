@@ -14,7 +14,7 @@
 
 @interface MBImageRequest ()
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
-@property (atomic, retain, readwrite) UIImage *responseImage;
+@property (atomic, strong, readwrite) UIImage *responseImage;
 #elif __MAC_OS_X_VERSION_MIN_REQUIRED
 @property (atomic, retain, readwrite) NSImage *responseImage;
 #endif
@@ -29,12 +29,6 @@
 
 #pragma mark - Object Lifecycle
 
-- (void)dealloc
-{
-    [_imageCompletionHandler release];
-    [_responseImage release];
-    [super dealloc];
-}
 
 #pragma mark - Request
 
@@ -59,7 +53,6 @@
         NSImage *image = [[NSImage alloc] initWithData:[[self connectionOperation] responseData]];
 #endif
         [self setResponseImage:image];
-        [image release];
     }
 
     if ([self error] == nil && [self responseImage] == nil)

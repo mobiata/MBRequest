@@ -16,7 +16,7 @@ typedef void (^MBHTTPRequestCompletionHandler)(NSData *responseData, NSError *er
 @interface MBHTTPRequest : MBBaseRequest
 
 // The operation associated with the URL connection.
-@property (nonatomic, retain, readonly) MBHTTPConnectionOperation *connectionOperation;
+@property (nonatomic, strong, readonly) MBHTTPConnectionOperation *connectionOperation;
 
 // Performs a basic request and notifies the caller with any data downloaded.
 - (void)performHTTPRequest:(NSURLRequest *)request completionHandler:(MBHTTPRequestCompletionHandler)completionHandler;

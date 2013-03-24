@@ -12,7 +12,7 @@
 #import "MBJSON.h"
 
 @interface MBJSONRequest ()
-@property (atomic, retain, readwrite) id responseJSON;
+@property (atomic, strong, readwrite) id responseJSON;
 @property (nonatomic, copy, readwrite) MBJSONRequestCompletionHandler JSONCompletionHandler;
 @end
 
@@ -35,12 +35,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    [_jsonCompletionHandler release];
-    [_responseJSON release];
-    [super dealloc];
-}
 
 #pragma mark - Request
 
