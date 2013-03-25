@@ -44,6 +44,6 @@
 
 // Any error which might occur in the request. We allow subclasses to easily set this
 // error by overriding the property here.
-@property (atomic, retain, readwrite) NSError *error;
+@property (atomic, strong, readwrite) NSError *error;
 
 @end

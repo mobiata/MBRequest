@@ -29,7 +29,7 @@ typedef void (^MBImageRequestCompletionHandler)(NSImage *image, NSError *error);
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
 @property (atomic, strong, readonly) UIImage *responseImage;
 #elif __MAC_OS_X_VERSION_MIN_REQUIRED
-@property (atomic, retain, readonly) NSImage *responseImage;
+@property (atomic, strong, readonly) NSImage *responseImage;
 #endif
 
 @end
