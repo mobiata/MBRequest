@@ -50,14 +50,7 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 @implementation MBBaseRequest
 
-@synthesize affectsNetworkActivityIndicator = _affectsNetworkActivityIndicator;
-@synthesize baseCompletionHandler = _baseCompletionHandler;
-@synthesize cancelled = _cancelled;
 @synthesize connectionOperation = _connectionOperation;
-@synthesize downloadProgressCallback = _downloadProgressCallback;
-@synthesize error = _error;
-@synthesize running = _running;
-@synthesize uploadProgressCallback = _uploadProgressCallback;
 
 #pragma mark - Object Lifecycle
 

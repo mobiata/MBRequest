@@ -21,8 +21,6 @@
 @implementation MBHTTPConnectionOperation
 
 @dynamic error;
-@synthesize successfulStatusCodes = _successfulStatusCodes;
-@synthesize validContentTypes = _validContentTypes;
 
 #pragma mark - Object Lifecycle
 
@@ -35,7 +33,6 @@
     
     return self;
 }
-
 
 #pragma mark - Accessors
 

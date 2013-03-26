@@ -22,26 +22,10 @@
 @property (atomic, assign) CFRunLoopRef runLoop;
 @property (atomic, assign) BOOL runLoopIsRunning;
 @property (atomic, assign) BOOL shouldCancel;
-- (void)finish;
 @end
 
 
 @implementation MBURLConnectionOperation
-
-@synthesize allowsUntrustedServerCertificates = _allowsUntrustedServerCertificates;
-@synthesize connection = _connection;
-@synthesize delegate = _delegate;
-@synthesize error = _error;
-@synthesize incrementalResponseData = _incrementalResponseData;
-@synthesize request = _request;
-@synthesize response = _response;
-@synthesize responseData = _responseData;
-@synthesize runLoop = _runLoop;
-@synthesize runLoopIsRunning = _runLoopIsRunning;
-@synthesize shouldCancel = _shouldCancel;
-
-#pragma mark - Object Lifecycle
-
 
 #pragma mark - Accessors
 

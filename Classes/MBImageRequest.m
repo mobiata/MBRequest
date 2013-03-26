@@ -24,12 +24,6 @@
 
 @implementation MBImageRequest
 
-@synthesize imageCompletionHandler = _imageCompletionHandler;
-@synthesize responseImage = _responseImage;
-
-#pragma mark - Object Lifecycle
-
-
 #pragma mark - Request
 
 - (void)performImageRequest:(NSURLRequest *)request completionHandler:(MBImageRequestCompletionHandler)completionHandler

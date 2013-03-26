@@ -18,10 +18,6 @@
 @implementation MBHTTPRequest
 
 @dynamic connectionOperation;
-@synthesize HTTPCompletionHandler = _httpCompletionHandler;
-
-#pragma mark - Object Lifecycle
-
 
 #pragma mark - Accessors
 

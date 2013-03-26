@@ -16,9 +16,6 @@
 
 @implementation MBMultipartFormData
 
-@synthesize boundary = _boundary;
-@synthesize parts = _parts;
-
 #pragma mark - Object Lifecycle
 
 - (id)init
@@ -36,7 +33,6 @@
 
     return self;
 }
-
 
 #pragma mark - Accessors
 

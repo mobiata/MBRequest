@@ -19,9 +19,6 @@
 
 @implementation MBJSONRequest
 
-@synthesize JSONCompletionHandler = _jsonCompletionHandler;
-@synthesize responseJSON = _responseJSON;
-
 #pragma mark - Object Lifecycle
 
 - (id)init
