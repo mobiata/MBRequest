@@ -86,7 +86,8 @@
         {
             NSString *format = MBRequestLocalizedString(@"request_unsuccessful_bad_status_code", @"Unable to perform request. An HTTP error occurred (%d).");
             NSString *msg = [NSString stringWithFormat:format, statusCode];
-            NSDictionary *userInfo = [NSDictionary dictionaryWithObject:msg forKey:NSLocalizedDescriptionKey];
+            NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:msg forKey:NSLocalizedDescriptionKey];
+            [userInfo setObject:@(statusCode) forKey:@"statusCode"];
             NSError *innerError = [NSError errorWithDomain:MBRequestErrorDomain
                                                       code:MBRequestErrorCodeUnsuccessfulServerResponse
                                                   userInfo:userInfo];
