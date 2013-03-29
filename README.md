@@ -117,8 +117,6 @@ You can look for all strings used by MBRequest by searching for references to `M
 NSString *msg = MBRequestLocalizedString(@"request_unsuccessful_could_not_download_image", @"Request failed. Unable to download image.");
 ```
 
-MBCommon also defines a number of its own localized strings by using `MBLocalizedString` and `MBLocalizationTable.` It is perfectly reasonable to set `MBLocalizationTable` and `MBRequestLocalizationTable` to the same value.
-
 [blocks]: http://developer.apple.com/library/ios/documentation/cocoa/Conceptual/Blocks/Articles/00_Introduction.html
 [NSURLConnection]: http://developer.apple.com/documentation/Cocoa/Reference/Foundation/Classes/nsurlconnection_Class/Reference/Reference.html
 [NSOperation]: http://developer.apple.com/library/ios/documentation/Cocoa/Reference/NSOperation_class/Reference/Reference.html
