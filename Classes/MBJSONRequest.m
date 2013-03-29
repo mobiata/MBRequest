@@ -48,7 +48,7 @@
 {
     [super parseResults];
 
-    if ([self error] == nil)
+    if ([[[self connectionOperation] responseData] length] > 0)
     {
         NSError *error = nil;
         id obj = MBJSONObjectFromData([[self connectionOperation] responseData], &error);
@@ -56,7 +56,7 @@
         {
             [self setResponseJSON:obj];
         }
-        else
+        else if ([self error] == nil)
         {
             [self setError:error];
         }
