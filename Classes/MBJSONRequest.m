@@ -9,7 +9,6 @@
 #import "MBJSONRequest.h"
 
 #import "MBBaseRequestSubclass.h"
-#import "MBJSON.h"
 
 @interface MBJSONRequest ()
 @property (atomic, strong, readwrite) id responseJSON;
@@ -51,7 +50,9 @@
     if ([[[self connectionOperation] responseData] length] > 0)
     {
         NSError *error = nil;
-        id obj = MBJSONObjectFromData([[self connectionOperation] responseData], &error);
+        id obj = [NSJSONSerialization JSONObjectWithData:[[self connectionOperation] responseData]
+                                                 options:[self JSONReadingOptions]
+                                                   error:&error];
         if (obj != nil)
         {
             [self setResponseJSON:obj];

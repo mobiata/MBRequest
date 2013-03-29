@@ -20,4 +20,7 @@ typedef void (^MBJSONRequestCompletionHandler)(id responseJSON, NSError *error);
 // The response data, parsed into a JSON object.
 @property (atomic, strong, readonly) id responseJSON;
 
+// The reading options to use when parsing the responseJSON. Defaults to 0.
+@property (atomic, assign) NSJSONReadingOptions JSONReadingOptions;
+
 @end
