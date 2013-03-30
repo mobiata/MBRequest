@@ -67,7 +67,7 @@ Even though it is possible to download JSON data directly with `MBJSONRequest` (
 Using this class would simplify the above example as follows:
 
 ```objc
-MBRYouTubeRequest *request = [[[MBRYouTubeRequest alloc] init] autorelease];
+MBRYouTubeRequest *request = [[MBRYouTubeRequest alloc] init];
 [request requestTopRatedVideosFromIndex:1
                              maxResults:20
                       completionHandler:^(NSArray *videos, NSError *error) {
