@@ -78,8 +78,8 @@
     NSString *mimetype = nil;
 #ifdef __UTTYPE__
     NSString *extension = [[fileURL lastPathComponent] pathExtension];
-    CFStringRef UTITypeString = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (CFStringRef)extension, NULL);
-    mimetype = (NSString *)UTTypeCopyPreferredTagWithClass(UTITypeString, kUTTagClassMIMEType);
+    CFStringRef UTITypeString = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)extension, NULL);
+    mimetype = (NSString *)CFBridgingRelease(UTTypeCopyPreferredTagWithClass(UTITypeString, kUTTagClassMIMEType));
     CFRelease(UTITypeString);
 #else
     mimetype = @"application/octet-stream";
