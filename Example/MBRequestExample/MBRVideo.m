@@ -10,14 +10,4 @@
 
 @implementation MBRVideo
 
-@synthesize author = _author;
-@synthesize title = _title;
-
-- (void)dealloc
-{
-    [_author release];
-    [_title release];
-    [super dealloc];
-}
-
 @end

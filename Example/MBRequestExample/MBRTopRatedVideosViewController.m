@@ -12,8 +12,6 @@
 
 @implementation MBRTopRatedVideosViewController
 
-@synthesize videos = _videos;
-
 #pragma mark - Controller Lifecycle
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -24,12 +22,6 @@
     }
     
     return self;
-}
-
-- (void)dealloc
-{
-    [_videos release];
-    [super dealloc];
 }
 
 #pragma mark - UIViewController
@@ -43,7 +35,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_videos count];
+    return [[self videos] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -53,7 +45,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
     {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
     MBRVideo *video = [[self videos] objectAtIndex:[indexPath row]];

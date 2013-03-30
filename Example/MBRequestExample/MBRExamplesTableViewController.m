@@ -46,7 +46,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
     {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
@@ -74,10 +74,10 @@
     switch ([indexPath row])
     {
         case 0:
-            vc = [[[MBRBasicTopRatedVideosViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+            vc = [[MBRBasicTopRatedVideosViewController alloc] initWithStyle:UITableViewStylePlain];
             break;
         case 1:
-            vc = [[[MBRBetterTopRatedVideosViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+            vc = [[MBRBetterTopRatedVideosViewController alloc] initWithStyle:UITableViewStylePlain];
             break;
         default:
             break;

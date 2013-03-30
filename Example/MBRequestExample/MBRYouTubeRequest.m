@@ -17,19 +17,8 @@
 @property (nonatomic, strong) NSArray *youTubeVideos;
 @end
 
+
 @implementation MBRYouTubeRequest
-
-@synthesize youTubeCompletionHandler = _youTubeCompletionHandler;
-@synthesize youTubeVideos = _youTubeVideos;
-
-#pragma mark - Request Lifecycle
-
-- (void)dealloc
-{
-    [_youTubeCompletionHandler release];
-    [_youTubeVideos release];
-    [super dealloc];
-}
 
 #pragma mark - Public Methods
 
@@ -72,11 +61,9 @@
             [video setTitle:title];
             [video setAuthor:author];
             [videos addObject:video];
-            [video release];
         }
         
         [self setYouTubeVideos:[NSArray arrayWithArray:videos]];
-        [videos release];
     }
 }
 

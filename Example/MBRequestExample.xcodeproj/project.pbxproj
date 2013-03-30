@@ -13,8 +13,6 @@
 		633FA932151759710078A312 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA931151759710078A312 /* main.m */; };
 		633FA936151759710078A312 /* MBRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA935151759710078A312 /* MBRAppDelegate.m */; };
 		633FA939151759710078A312 /* MBRExamplesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA938151759710078A312 /* MBRExamplesTableViewController.m */; };
-		633FA9931517774A0078A312 /* MBError.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA9871517774A0078A312 /* MBError.m */; };
-		633FA9941517774A0078A312 /* MBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA9891517774A0078A312 /* MBJSON.m */; };
 		633FA9951517774A0078A312 /* MBNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA98C1517774A0078A312 /* MBNetworkActivityIndicatorManager.m */; };
 		633FA9961517774A0078A312 /* NSDictionary+MBCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA98E1517774A0078A312 /* NSDictionary+MBCommon.m */; };
 		633FA9971517774A0078A312 /* NSString+MBCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA9901517774A0078A312 /* NSString+MBCommon.m */; };
@@ -49,11 +47,6 @@
 		633FA937151759710078A312 /* MBRExamplesTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MBRExamplesTableViewController.h; sourceTree = "<group>"; };
 		633FA938151759710078A312 /* MBRExamplesTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MBRExamplesTableViewController.m; sourceTree = "<group>"; };
 		633FA9851517774A0078A312 /* MBCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBCommon.h; sourceTree = "<group>"; };
-		633FA9861517774A0078A312 /* MBError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBError.h; sourceTree = "<group>"; };
-		633FA9871517774A0078A312 /* MBError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBError.m; sourceTree = "<group>"; };
-		633FA9881517774A0078A312 /* MBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBJSON.h; sourceTree = "<group>"; };
-		633FA9891517774A0078A312 /* MBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBJSON.m; sourceTree = "<group>"; };
-		633FA98A1517774A0078A312 /* MBLocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBLocalization.h; sourceTree = "<group>"; };
 		633FA98B1517774A0078A312 /* MBNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
 		633FA98C1517774A0078A312 /* MBNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
 		633FA98D1517774A0078A312 /* NSDictionary+MBCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+MBCommon.h"; sourceTree = "<group>"; };
@@ -169,11 +162,6 @@
 			isa = PBXGroup;
 			children = (
 				633FA9851517774A0078A312 /* MBCommon.h */,
-				633FA9861517774A0078A312 /* MBError.h */,
-				633FA9871517774A0078A312 /* MBError.m */,
-				633FA9881517774A0078A312 /* MBJSON.h */,
-				633FA9891517774A0078A312 /* MBJSON.m */,
-				633FA98A1517774A0078A312 /* MBLocalization.h */,
 				633FA98B1517774A0078A312 /* MBNetworkActivityIndicatorManager.h */,
 				633FA98C1517774A0078A312 /* MBNetworkActivityIndicatorManager.m */,
 				633FA98D1517774A0078A312 /* NSDictionary+MBCommon.h */,
@@ -278,7 +266,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = MBR;
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Mobiata, LLC";
 			};
 			buildConfigurationList = 633FA91B151759710078A312 /* Build configuration list for PBXProject "MBRequestExample" */;
@@ -317,8 +305,6 @@
 				633FA932151759710078A312 /* main.m in Sources */,
 				633FA936151759710078A312 /* MBRAppDelegate.m in Sources */,
 				633FA939151759710078A312 /* MBRExamplesTableViewController.m in Sources */,
-				633FA9931517774A0078A312 /* MBError.m in Sources */,
-				633FA9941517774A0078A312 /* MBJSON.m in Sources */,
 				633FA9951517774A0078A312 /* MBNetworkActivityIndicatorManager.m in Sources */,
 				633FA9961517774A0078A312 /* NSDictionary+MBCommon.m in Sources */,
 				633FA9971517774A0078A312 /* NSString+MBCommon.m in Sources */,
@@ -348,6 +334,11 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -372,6 +363,11 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

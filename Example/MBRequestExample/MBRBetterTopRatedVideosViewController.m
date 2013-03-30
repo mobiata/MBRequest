@@ -17,49 +17,43 @@
 
 @implementation MBRBetterTopRatedVideosViewController
 
-@synthesize youTubeRequest = _youTubeRequest;
-
-#pragma mark - Controller Lifecycle
-
-- (void)dealloc
-{
-    [_youTubeRequest release];
-    [super dealloc];
-}
-
 #pragma mark - UIViewController
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    MBRYouTubeRequest *request = [[[MBRYouTubeRequest alloc] init] autorelease];
+    MBRYouTubeRequest *request = [[MBRYouTubeRequest alloc] init];
     [self setYouTubeRequest:request];
     
-    __block MBRBetterTopRatedVideosViewController *safeSelf = self;
+    MBRBetterTopRatedVideosViewController * __weak weakSelf = self;
     [request requestTopRatedVideosFromIndex:1
                                  maxResults:5
                           completionHandler:^(NSArray *videos, NSError *error) {
-                              if (error != nil)
+                              MBRBetterTopRatedVideosViewController *strongSelf = weakSelf;
+                              if (strongSelf != nil)
                               {
-                                  NSLog(@"Error: %@", error);
-                              }
-                              else
-                              {
-                                  [safeSelf setVideos:videos];
-                                  if ([safeSelf isViewLoaded])
+                                  if (error != nil)
                                   {
-                                      [[safeSelf tableView] reloadData];
+                                      NSLog(@"Error: %@", error);
                                   }
+                                  else
+                                  {
+                                      [strongSelf setVideos:videos];
+                                      if ([strongSelf isViewLoaded])
+                                      {
+                                          [[strongSelf tableView] reloadData];
+                                      }
+                                  }
+                                  
+                                  [strongSelf setYouTubeRequest:nil];
                               }
-                              
-                              [safeSelf setYouTubeRequest:nil];
                           }];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [_youTubeRequest cancel];
+    [[self youTubeRequest] cancel];
     [self setYouTubeRequest:nil];
     
     [super viewWillDisappear:animated];
