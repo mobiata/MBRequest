@@ -153,7 +153,7 @@
     return responseString;
 }
 
-#pragma mark - NSURLConnection Delegate
+#pragma mark - NSURLConnectionDelegate
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
@@ -273,34 +273,7 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
     }
 }
 
-#pragma mark Authentication Challenges
-
-// iOS 5+ only.
 - (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{
-    [self handleAuthenticationChallenge:challenge forConnection:connection];
-}
-
-// This method has been deprecated for connection:willSendRequestForAuthenticationChallenge in iOS 5.
-- (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace
-{
-    BOOL canAuth = NO;
-    if ([self allowsUntrustedServerCertificates] &&
-        [[protectionSpace authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust])
-    {
-        canAuth = YES;
-    }
-
-    return canAuth;
-}
-
-// This method has been deprecated for connection:willSendRequestForAuthenticationChallenge in iOS 5.
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
-{
-    [self handleAuthenticationChallenge:challenge forConnection:connection];
-}
-
-- (void)handleAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge forConnection:(NSURLConnection *)connection
 {
     BOOL handledAuth = NO;
     if ([self allowsUntrustedServerCertificates] &&
