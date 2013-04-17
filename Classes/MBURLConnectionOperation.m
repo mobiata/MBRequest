@@ -50,21 +50,9 @@
     }
     else
     {
-#ifdef MB_DEBUG_REQUESTS
         MBRequestLog(@"Sending %@ Request: %@", [[self request] HTTPMethod], [[self request] URL]);
-        if ([[[self request] HTTPBody] length] > 0)
-        {
-            NSString *postBody = [[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding];
-            if (postBody != nil)
-            {
-                MBRequestLog(@"Body: %@", postBody);
-            }
-        }
-        if ([[[self request] allHTTPHeaderFields] count] > 0)
-        {
-            MBRequestLog(@"Headers: %@", [[self request] allHTTPHeaderFields]);
-        }
-#endif
+        MBRequestLog(@"Headers: %@", [[self request] allHTTPHeaderFields]);
+        MBRequestLog(@"Body: %@", [[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding]);
 
         NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:[self request]
                                                                       delegate:self
@@ -228,16 +216,7 @@
         {
             [self setResponseData:[NSData dataWithData:[self incrementalResponseData]]];
             [self setIncrementalResponseData:nil];
-#ifdef MB_DEBUG_REQUESTS
-            if ([[self responseData] length] < 100000)
-            {
-                MBRequestLog(@"Received Response:\n%@", [self responseDataAsUTF8String]);
-            }
-            else
-            {
-                MBRequestLog(@"Received Response");
-            }
-#endif
+            MBRequestLog(@"Received Response:\n%@", [self responseDataAsUTF8String]);
             [self handleResponse];
             [self finish];
         }
