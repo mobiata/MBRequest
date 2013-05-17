@@ -10,15 +10,11 @@ MBRequest is a simple networking library for iOS and OS X. It uses a [blocks-bas
 
 MBRequest runs on iOS 5.0 and above and OS X 10.7 and above.
 
-MBRequest also requires [MBCommon][MBCommon]. MBCommon is included as a git submodule to this project. Or, if you'd rather, MBCommon can be downloaded directly from its [GitHub project page][MBCommon] or by running:
-
-    $ git clone git://github.com/mobiata/MBCommon.git
-
 ## Usage
 
-To include MBRequest in your applications, clone the MBRequest repository and include all of the MBRequest and MBCommon source files in your project.
+To include MBRequest in your applications, clone the MBRequest repository and include all of the MBRequest source files in your project.
 
-    $ git clone --recursive git://github.com/mobiata/MBRequest.git
+    $ git clone git://github.com/mobiata/MBRequest.git
 
 To reference any of the functionality defined in MBRequest, simply `#import "MBRequest.h"` at the top of your source file.
 
@@ -83,11 +79,11 @@ MBRYouTubeRequest *request = [[MBRYouTubeRequest alloc] init];
 
 ## ARC Support
 
-MBRequest and MBCommon use [ARC (Automatic Reference Counting)][ARC]. If you are not using ARC in your own projects, you will need to set the `-fobjc-arc` compiler flag on all MBRequest and MBCommon files. To do this:
+MBRequest uses [ARC (Automatic Reference Counting)][ARC]. If you are not using ARC in your own projects, you will need to set the `-fobjc-arc` compiler flag on all MBRequest files. To do this:
 
 1. Launch Xcode for your project.
 2. Navigate to the "Builds Phases" tab of your target(s).
-3. Find all MBRequest and MBCommon source files and add `-f-objc-arc` to the "Compiler Flags" column.
+3. Find all MBRequest source files and add `-f-objc-arc` to the "Compiler Flags" column.
 
 ## Localization
 
@@ -121,7 +117,6 @@ NSString *msg = MBRequestLocalizedString(@"request_unsuccessful_could_not_downlo
 [NSURLConnection]: http://developer.apple.com/documentation/Cocoa/Reference/Foundation/Classes/nsurlconnection_Class/Reference/Reference.html
 [NSOperation]: http://developer.apple.com/library/ios/documentation/Cocoa/Reference/NSOperation_class/Reference/Reference.html
 [CLGeocoder]: http://developer.apple.com/library/ios/documentation/CoreLocation/Reference/CLGeocoder_class/Reference/Reference.html
-[MBCommon]: https://github.com/mobiata/MBCommon
 [MBRYouTubeRequest.h]: https://github.com/mobiata/MBRequest/blob/master/Example/MBRequestExample/MBRYouTubeRequest.h
 [MBRYouTubeRequest.m]: https://github.com/mobiata/MBRequest/blob/master/Example/MBRequestExample/MBRYouTubeRequest.m
 [ARC]: http://clang.llvm.org/docs/AutomaticReferenceCounting.html
