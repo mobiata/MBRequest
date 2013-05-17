@@ -10,14 +10,8 @@
 		633FA926151759710078A312 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 633FA925151759710078A312 /* UIKit.framework */; };
 		633FA928151759710078A312 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 633FA927151759710078A312 /* Foundation.framework */; };
 		633FA92A151759710078A312 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 633FA929151759710078A312 /* CoreGraphics.framework */; };
-		633FA932151759710078A312 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA931151759710078A312 /* main.m */; };
-		633FA936151759710078A312 /* MBRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA935151759710078A312 /* MBRAppDelegate.m */; };
-		633FA939151759710078A312 /* MBRExamplesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA938151759710078A312 /* MBRExamplesTableViewController.m */; };
 		633FA9B91517777A0078A312 /* MBRVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA9B81517777A0078A312 /* MBRVideo.m */; };
 		633FA9BC151778020078A312 /* MBRYouTubeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA9BB151778020078A312 /* MBRYouTubeRequest.m */; };
-		633FA9C015177A090078A312 /* MBRBasicTopRatedVideosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA9BF15177A080078A312 /* MBRBasicTopRatedVideosViewController.m */; };
-		633FA9C715177D140078A312 /* MBRTopRatedVideosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA9C615177D140078A312 /* MBRTopRatedVideosViewController.m */; };
-		633FA9CA15177DCB0078A312 /* MBRBetterTopRatedVideosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA9C915177DCB0078A312 /* MBRBetterTopRatedVideosViewController.m */; };
 		63485E261746794E0025B566 /* MBBaseRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485E081746794E0025B566 /* MBBaseRequest.m */; };
 		63485E271746794E0025B566 /* MBHTTPConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485E0B1746794E0025B566 /* MBHTTPConnectionOperation.m */; };
 		63485E281746794E0025B566 /* MBHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485E0D1746794E0025B566 /* MBHTTPRequest.m */; };
@@ -32,11 +26,6 @@
 		63485E311746794E0025B566 /* NSString+MBRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485E231746794E0025B566 /* NSString+MBRequest.m */; };
 		63485E321746794E0025B566 /* NSURL+MBRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485E251746794E0025B566 /* NSURL+MBRequest.m */; };
 		63485E5917467C2D0025B566 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63485E5817467C2D0025B566 /* Cocoa.framework */; };
-		63485E6317467C2D0025B566 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 63485E6117467C2D0025B566 /* InfoPlist.strings */; };
-		63485E6517467C2D0025B566 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485E6417467C2D0025B566 /* main.m */; };
-		63485E6917467C2D0025B566 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 63485E6717467C2D0025B566 /* Credits.rtf */; };
-		63485E6C17467C2D0025B566 /* MBRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485E6B17467C2D0025B566 /* MBRAppDelegate.m */; };
-		63485E6F17467C2E0025B566 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63485E6D17467C2E0025B566 /* MainMenu.xib */; };
 		63485E73174695FE0025B566 /* MBBaseRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485E081746794E0025B566 /* MBBaseRequest.m */; };
 		63485E74174695FE0025B566 /* MBHTTPConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485E0B1746794E0025B566 /* MBHTTPConnectionOperation.m */; };
 		63485E75174695FE0025B566 /* MBHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485E0D1746794E0025B566 /* MBHTTPRequest.m */; };
@@ -52,31 +41,27 @@
 		63485E7F174695FE0025B566 /* NSURL+MBRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485E251746794E0025B566 /* NSURL+MBRequest.m */; };
 		63485E80174696020025B566 /* MBRVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA9B81517777A0078A312 /* MBRVideo.m */; };
 		63485E81174696020025B566 /* MBRYouTubeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 633FA9BB151778020078A312 /* MBRYouTubeRequest.m */; };
-		637C88961621D9BB00FB00D0 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 637C88951621D9BA00FB00D0 /* Default-568h@2x.png */; };
+		63485E911746978A0025B566 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63485E831746978A0025B566 /* Default-568h@2x.png */; };
+		63485E921746978A0025B566 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485E841746978A0025B566 /* main.m */; };
+		63485E931746978A0025B566 /* MBRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485E861746978A0025B566 /* MBRAppDelegate.m */; };
+		63485E941746978A0025B566 /* MBRBasicTopRatedVideosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485E881746978A0025B566 /* MBRBasicTopRatedVideosViewController.m */; };
+		63485E951746978A0025B566 /* MBRBetterTopRatedVideosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485E8A1746978A0025B566 /* MBRBetterTopRatedVideosViewController.m */; };
+		63485E971746978A0025B566 /* MBRExamplesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485E8E1746978A0025B566 /* MBRExamplesTableViewController.m */; };
+		63485E981746978A0025B566 /* MBRTopRatedVideosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485E901746978A0025B566 /* MBRTopRatedVideosViewController.m */; };
+		63485EA7174697900025B566 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63485E9E174697900025B566 /* MainMenu.xib */; };
+		63485EA8174697900025B566 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485EA0174697900025B566 /* main.m */; };
+		63485EA9174697900025B566 /* MBRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 63485EA2174697900025B566 /* MBRAppDelegate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		633FA921151759710078A312 /* MBRequestExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MBRequestExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		633FA921151759710078A312 /* MBRequestExample-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MBRequestExample-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		633FA925151759710078A312 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		633FA927151759710078A312 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		633FA929151759710078A312 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		633FA92D151759710078A312 /* MBRequestExample-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MBRequestExample-Info.plist"; sourceTree = "<group>"; };
-		633FA931151759710078A312 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		633FA933151759710078A312 /* MBRequestExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MBRequestExample-Prefix.pch"; sourceTree = "<group>"; };
-		633FA934151759710078A312 /* MBRAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MBRAppDelegate.h; sourceTree = "<group>"; };
-		633FA935151759710078A312 /* MBRAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MBRAppDelegate.m; sourceTree = "<group>"; };
-		633FA937151759710078A312 /* MBRExamplesTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MBRExamplesTableViewController.h; sourceTree = "<group>"; };
-		633FA938151759710078A312 /* MBRExamplesTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MBRExamplesTableViewController.m; sourceTree = "<group>"; };
 		633FA9B71517777A0078A312 /* MBRVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBRVideo.h; sourceTree = "<group>"; };
 		633FA9B81517777A0078A312 /* MBRVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBRVideo.m; sourceTree = "<group>"; };
 		633FA9BA151778020078A312 /* MBRYouTubeRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBRYouTubeRequest.h; sourceTree = "<group>"; };
 		633FA9BB151778020078A312 /* MBRYouTubeRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBRYouTubeRequest.m; sourceTree = "<group>"; };
-		633FA9BE15177A080078A312 /* MBRBasicTopRatedVideosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBRBasicTopRatedVideosViewController.h; sourceTree = "<group>"; };
-		633FA9BF15177A080078A312 /* MBRBasicTopRatedVideosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBRBasicTopRatedVideosViewController.m; sourceTree = "<group>"; };
-		633FA9C515177D140078A312 /* MBRTopRatedVideosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBRTopRatedVideosViewController.h; sourceTree = "<group>"; };
-		633FA9C615177D140078A312 /* MBRTopRatedVideosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBRTopRatedVideosViewController.m; sourceTree = "<group>"; };
-		633FA9C815177DCB0078A312 /* MBRBetterTopRatedVideosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBRBetterTopRatedVideosViewController.h; sourceTree = "<group>"; };
-		633FA9C915177DCB0078A312 /* MBRBetterTopRatedVideosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBRBetterTopRatedVideosViewController.m; sourceTree = "<group>"; };
 		63485E071746794E0025B566 /* MBBaseRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBBaseRequest.h; sourceTree = "<group>"; };
 		63485E081746794E0025B566 /* MBBaseRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBBaseRequest.m; sourceTree = "<group>"; };
 		63485E091746794E0025B566 /* MBBaseRequestSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBBaseRequestSubclass.h; sourceTree = "<group>"; };
@@ -113,15 +98,28 @@
 		63485E5B17467C2D0025B566 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		63485E5C17467C2D0025B566 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		63485E5D17467C2D0025B566 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		63485E6017467C2D0025B566 /* MBRequestExample-OSX-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MBRequestExample-OSX-Info.plist"; sourceTree = "<group>"; };
-		63485E6217467C2D0025B566 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		63485E6417467C2D0025B566 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		63485E6617467C2D0025B566 /* MBRequestExample-OSX-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MBRequestExample-OSX-Prefix.pch"; sourceTree = "<group>"; };
-		63485E6817467C2D0025B566 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
-		63485E6A17467C2D0025B566 /* MBRAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MBRAppDelegate.h; sourceTree = "<group>"; };
-		63485E6B17467C2D0025B566 /* MBRAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MBRAppDelegate.m; sourceTree = "<group>"; };
-		63485E6E17467C2E0025B566 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		637C88951621D9BA00FB00D0 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		63485E831746978A0025B566 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		63485E841746978A0025B566 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		63485E851746978A0025B566 /* MBRAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBRAppDelegate.h; sourceTree = "<group>"; };
+		63485E861746978A0025B566 /* MBRAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBRAppDelegate.m; sourceTree = "<group>"; };
+		63485E871746978A0025B566 /* MBRBasicTopRatedVideosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBRBasicTopRatedVideosViewController.h; sourceTree = "<group>"; };
+		63485E881746978A0025B566 /* MBRBasicTopRatedVideosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBRBasicTopRatedVideosViewController.m; sourceTree = "<group>"; };
+		63485E891746978A0025B566 /* MBRBetterTopRatedVideosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBRBetterTopRatedVideosViewController.h; sourceTree = "<group>"; };
+		63485E8A1746978A0025B566 /* MBRBetterTopRatedVideosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBRBetterTopRatedVideosViewController.m; sourceTree = "<group>"; };
+		63485E8B1746978A0025B566 /* MBRequestExample-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MBRequestExample-Info.plist"; sourceTree = "<group>"; };
+		63485E8C1746978A0025B566 /* MBRequestExample-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBRequestExample-Prefix.pch"; sourceTree = "<group>"; };
+		63485E8D1746978A0025B566 /* MBRExamplesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBRExamplesTableViewController.h; sourceTree = "<group>"; };
+		63485E8E1746978A0025B566 /* MBRExamplesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBRExamplesTableViewController.m; sourceTree = "<group>"; };
+		63485E8F1746978A0025B566 /* MBRTopRatedVideosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBRTopRatedVideosViewController.h; sourceTree = "<group>"; };
+		63485E901746978A0025B566 /* MBRTopRatedVideosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBRTopRatedVideosViewController.m; sourceTree = "<group>"; };
+		63485E9B174697900025B566 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		63485E9D174697900025B566 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		63485E9F174697900025B566 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		63485EA0174697900025B566 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		63485EA1174697900025B566 /* MBRAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBRAppDelegate.h; sourceTree = "<group>"; };
+		63485EA2174697900025B566 /* MBRAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBRAppDelegate.m; sourceTree = "<group>"; };
+		63485EA3174697900025B566 /* MBRequestExample-OSX-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MBRequestExample-OSX-Info.plist"; sourceTree = "<group>"; };
+		63485EA4174697900025B566 /* MBRequestExample-OSX-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBRequestExample-OSX-Prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,7 +157,7 @@
 		633FA922151759710078A312 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				633FA921151759710078A312 /* MBRequestExample.app */,
+				633FA921151759710078A312 /* MBRequestExample-iOS.app */,
 				63485E5717467C2D0025B566 /* MBRequestExample-OSX.app */,
 			);
 			name = Products;
@@ -182,21 +180,10 @@
 			children = (
 				633FA9C415177CFC0078A312 /* Model */,
 				633FA9C215177CE20078A312 /* Requests */,
-				63485E3317467A9B0025B566 /* iOS */,
-				63485E5E17467C2D0025B566 /* OS X */,
+				63485E821746978A0025B566 /* iOS */,
+				63485E99174697900025B566 /* OSX */,
 			);
 			path = MBRequestExample;
-			sourceTree = "<group>";
-		};
-		633FA92C151759710078A312 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				633FA92D151759710078A312 /* MBRequestExample-Info.plist */,
-				633FA931151759710078A312 /* main.m */,
-				633FA933151759710078A312 /* MBRequestExample-Prefix.pch */,
-				637C88951621D9BA00FB00D0 /* Default-568h@2x.png */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		633FA999151777570078A312 /* MBRequest */ = {
@@ -247,21 +234,6 @@
 			name = Requests;
 			sourceTree = "<group>";
 		};
-		633FA9C315177CEC0078A312 /* View Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				633FA9BE15177A080078A312 /* MBRBasicTopRatedVideosViewController.h */,
-				633FA9BF15177A080078A312 /* MBRBasicTopRatedVideosViewController.m */,
-				633FA9C815177DCB0078A312 /* MBRBetterTopRatedVideosViewController.h */,
-				633FA9C915177DCB0078A312 /* MBRBetterTopRatedVideosViewController.m */,
-				633FA937151759710078A312 /* MBRExamplesTableViewController.h */,
-				633FA938151759710078A312 /* MBRExamplesTableViewController.m */,
-				633FA9C515177D140078A312 /* MBRTopRatedVideosViewController.h */,
-				633FA9C615177D140078A312 /* MBRTopRatedVideosViewController.m */,
-			);
-			name = "View Controllers";
-			sourceTree = "<group>";
-		};
 		633FA9C415177CFC0078A312 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -269,17 +241,6 @@
 				633FA9B81517777A0078A312 /* MBRVideo.m */,
 			);
 			name = Model;
-			sourceTree = "<group>";
-		};
-		63485E3317467A9B0025B566 /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				633FA934151759710078A312 /* MBRAppDelegate.h */,
-				633FA935151759710078A312 /* MBRAppDelegate.m */,
-				633FA9C315177CEC0078A312 /* View Controllers */,
-				633FA92C151759710078A312 /* Supporting Files */,
-			);
-			name = iOS;
 			sourceTree = "<group>";
 		};
 		63485E5A17467C2D0025B566 /* Other Frameworks */ = {
@@ -292,28 +253,40 @@
 			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
-		63485E5E17467C2D0025B566 /* OS X */ = {
+		63485E821746978A0025B566 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				63485E6A17467C2D0025B566 /* MBRAppDelegate.h */,
-				63485E6B17467C2D0025B566 /* MBRAppDelegate.m */,
-				63485E6D17467C2E0025B566 /* MainMenu.xib */,
-				63485E5F17467C2D0025B566 /* Supporting Files */,
+				63485E831746978A0025B566 /* Default-568h@2x.png */,
+				63485E841746978A0025B566 /* main.m */,
+				63485E851746978A0025B566 /* MBRAppDelegate.h */,
+				63485E861746978A0025B566 /* MBRAppDelegate.m */,
+				63485E871746978A0025B566 /* MBRBasicTopRatedVideosViewController.h */,
+				63485E881746978A0025B566 /* MBRBasicTopRatedVideosViewController.m */,
+				63485E891746978A0025B566 /* MBRBetterTopRatedVideosViewController.h */,
+				63485E8A1746978A0025B566 /* MBRBetterTopRatedVideosViewController.m */,
+				63485E8B1746978A0025B566 /* MBRequestExample-Info.plist */,
+				63485E8C1746978A0025B566 /* MBRequestExample-Prefix.pch */,
+				63485E8D1746978A0025B566 /* MBRExamplesTableViewController.h */,
+				63485E8E1746978A0025B566 /* MBRExamplesTableViewController.m */,
+				63485E8F1746978A0025B566 /* MBRTopRatedVideosViewController.h */,
+				63485E901746978A0025B566 /* MBRTopRatedVideosViewController.m */,
 			);
-			name = "OS X";
-			path = "MBRequestExample-OSX";
-			sourceTree = SOURCE_ROOT;
+			path = iOS;
+			sourceTree = "<group>";
 		};
-		63485E5F17467C2D0025B566 /* Supporting Files */ = {
+		63485E99174697900025B566 /* OSX */ = {
 			isa = PBXGroup;
 			children = (
-				63485E6017467C2D0025B566 /* MBRequestExample-OSX-Info.plist */,
-				63485E6117467C2D0025B566 /* InfoPlist.strings */,
-				63485E6417467C2D0025B566 /* main.m */,
-				63485E6617467C2D0025B566 /* MBRequestExample-OSX-Prefix.pch */,
-				63485E6717467C2D0025B566 /* Credits.rtf */,
+				63485E9A174697900025B566 /* Credits.rtf */,
+				63485E9C174697900025B566 /* InfoPlist.strings */,
+				63485E9E174697900025B566 /* MainMenu.xib */,
+				63485EA0174697900025B566 /* main.m */,
+				63485EA1174697900025B566 /* MBRAppDelegate.h */,
+				63485EA2174697900025B566 /* MBRAppDelegate.m */,
+				63485EA3174697900025B566 /* MBRequestExample-OSX-Info.plist */,
+				63485EA4174697900025B566 /* MBRequestExample-OSX-Prefix.pch */,
 			);
-			name = "Supporting Files";
+			path = OSX;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -333,7 +306,7 @@
 			);
 			name = "MBRequestExample-iOS";
 			productName = MBRequestExample;
-			productReference = 633FA921151759710078A312 /* MBRequestExample.app */;
+			productReference = 633FA921151759710078A312 /* MBRequestExample-iOS.app */;
 			productType = "com.apple.product-type.application";
 		};
 		63485E5617467C2D0025B566 /* MBRequestExample-OSX */ = {
@@ -386,7 +359,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				637C88961621D9BB00FB00D0 /* Default-568h@2x.png in Resources */,
+				63485E911746978A0025B566 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,9 +367,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63485E6317467C2D0025B566 /* InfoPlist.strings in Resources */,
-				63485E6917467C2D0025B566 /* Credits.rtf in Resources */,
-				63485E6F17467C2E0025B566 /* MainMenu.xib in Resources */,
+				63485EA7174697900025B566 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,14 +378,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				633FA932151759710078A312 /* main.m in Sources */,
-				633FA936151759710078A312 /* MBRAppDelegate.m in Sources */,
-				633FA939151759710078A312 /* MBRExamplesTableViewController.m in Sources */,
 				633FA9B91517777A0078A312 /* MBRVideo.m in Sources */,
 				633FA9BC151778020078A312 /* MBRYouTubeRequest.m in Sources */,
-				633FA9C015177A090078A312 /* MBRBasicTopRatedVideosViewController.m in Sources */,
-				633FA9C715177D140078A312 /* MBRTopRatedVideosViewController.m in Sources */,
-				633FA9CA15177DCB0078A312 /* MBRBetterTopRatedVideosViewController.m in Sources */,
 				63485E261746794E0025B566 /* MBBaseRequest.m in Sources */,
 				63485E271746794E0025B566 /* MBHTTPConnectionOperation.m in Sources */,
 				63485E281746794E0025B566 /* MBHTTPRequest.m in Sources */,
@@ -428,6 +393,12 @@
 				63485E301746794E0025B566 /* NSDictionary+MBRequest.m in Sources */,
 				63485E311746794E0025B566 /* NSString+MBRequest.m in Sources */,
 				63485E321746794E0025B566 /* NSURL+MBRequest.m in Sources */,
+				63485E921746978A0025B566 /* main.m in Sources */,
+				63485E931746978A0025B566 /* MBRAppDelegate.m in Sources */,
+				63485E941746978A0025B566 /* MBRBasicTopRatedVideosViewController.m in Sources */,
+				63485E951746978A0025B566 /* MBRBetterTopRatedVideosViewController.m in Sources */,
+				63485E971746978A0025B566 /* MBRExamplesTableViewController.m in Sources */,
+				63485E981746978A0025B566 /* MBRTopRatedVideosViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,8 +406,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63485E6517467C2D0025B566 /* main.m in Sources */,
-				63485E6C17467C2D0025B566 /* MBRAppDelegate.m in Sources */,
 				63485E73174695FE0025B566 /* MBBaseRequest.m in Sources */,
 				63485E74174695FE0025B566 /* MBHTTPConnectionOperation.m in Sources */,
 				63485E75174695FE0025B566 /* MBHTTPRequest.m in Sources */,
@@ -452,32 +421,34 @@
 				63485E7F174695FE0025B566 /* NSURL+MBRequest.m in Sources */,
 				63485E80174696020025B566 /* MBRVideo.m in Sources */,
 				63485E81174696020025B566 /* MBRYouTubeRequest.m in Sources */,
+				63485EA8174697900025B566 /* main.m in Sources */,
+				63485EA9174697900025B566 /* MBRAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		63485E6117467C2D0025B566 /* InfoPlist.strings */ = {
+		63485E9A174697900025B566 /* Credits.rtf */ = {
 			isa = PBXVariantGroup;
 			children = (
-				63485E6217467C2D0025B566 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		63485E6717467C2D0025B566 /* Credits.rtf */ = {
-			isa = PBXVariantGroup;
-			children = (
-				63485E6817467C2D0025B566 /* en */,
+				63485E9B174697900025B566 /* en */,
 			);
 			name = Credits.rtf;
 			sourceTree = "<group>";
 		};
-		63485E6D17467C2E0025B566 /* MainMenu.xib */ = {
+		63485E9C174697900025B566 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				63485E6E17467C2E0025B566 /* en */,
+				63485E9D174697900025B566 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		63485E9E174697900025B566 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				63485E9F174697900025B566 /* en */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -542,7 +513,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MBRequestExample/MBRequestExample-Prefix.pch";
+				GCC_PREFIX_HEADER = "MBRequestExample/iOS/MBRequestExample-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
@@ -552,7 +523,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
-				INFOPLIST_FILE = "MBRequestExample/MBRequestExample-Info.plist";
+				INFOPLIST_FILE = "MBRequestExample/iOS/MBRequestExample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -563,7 +534,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MBRequestExample/MBRequestExample-Prefix.pch";
+				GCC_PREFIX_HEADER = "MBRequestExample/iOS/MBRequestExample-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
@@ -573,7 +544,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
-				INFOPLIST_FILE = "MBRequestExample/MBRequestExample-Info.plist";
+				INFOPLIST_FILE = "MBRequestExample/iOS/MBRequestExample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -594,9 +565,9 @@
 				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MBRequestExample-OSX/MBRequestExample-OSX-Prefix.pch";
+				GCC_PREFIX_HEADER = "MBRequestExample/OSX/MBRequestExample-OSX-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				INFOPLIST_FILE = "MBRequestExample-OSX/MBRequestExample-OSX-Info.plist";
+				INFOPLIST_FILE = "MBRequestExample/OSX/MBRequestExample-OSX-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -620,9 +591,9 @@
 				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MBRequestExample-OSX/MBRequestExample-OSX-Prefix.pch";
+				GCC_PREFIX_HEADER = "MBRequestExample/OSX/MBRequestExample-OSX-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				INFOPLIST_FILE = "MBRequestExample-OSX/MBRequestExample-OSX-Info.plist";
+				INFOPLIST_FILE = "MBRequestExample/OSX/MBRequestExample-OSX-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -658,6 +629,7 @@
 				63485E7217467C2E0025B566 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
