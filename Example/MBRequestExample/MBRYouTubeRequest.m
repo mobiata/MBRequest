@@ -10,7 +10,7 @@
 
 #import "MBBaseRequestSubclass.h"
 #import "MBRVideo.h"
-#import "NSURL+MBCommon.h"
+#import "NSURL+MBRequest.h"
 
 @interface MBRYouTubeRequest ()
 @property (nonatomic, copy) MBRYouTubeCompletionHandler youTubeCompletionHandler;
@@ -30,8 +30,8 @@
     NSMutableDictionary *urlParams = [NSMutableDictionary dictionary];
     [urlParams setObject:@"json" forKey:@"alt"];
     [urlParams setObject:@"this_week" forKey:@"time"];
-    [urlParams setObject:[NSString stringWithFormat:@"%d", startIndex] forKey:@"start-index"];
-    [urlParams setObject:[NSString stringWithFormat:@"%d", maxResults] forKey:@"max-results"];
+    [urlParams setObject:[NSString stringWithFormat:@"%ld", (long)startIndex] forKey:@"start-index"];
+    [urlParams setObject:[NSString stringWithFormat:@"%ld", (long)maxResults] forKey:@"max-results"];
     NSURL *url = [NSURL mb_URLWithBaseString:@"https://gdata.youtube.com/feeds/api/standardfeeds/top_rated" parameters:urlParams];
     NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
     [urlRequest setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
