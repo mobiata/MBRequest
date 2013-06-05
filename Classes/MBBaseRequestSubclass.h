@@ -29,7 +29,7 @@
 // you might want a special queue to handle certain requests which are fast and return very little
 // data. This queue could have 20 max concurrent operations while another, slower queue might only
 // 2 or 3.
-- (NSOperationQueue *)sharedRequestQueue;
+- (NSOperationQueue *)sharedRequestQueue __attribute__((deprecated));
 
 // This method is used to create the URL connection operation. Override this method if you need
 // to create a subclass of MBURLConnectionOperation or customize just how that operation is

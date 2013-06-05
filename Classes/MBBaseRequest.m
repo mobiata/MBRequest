@@ -84,6 +84,12 @@ void _MBRemoveRequest(MBBaseRequest *request)
     return op;
 }
 
+- (NSOperationQueue *)sharedRequestQueue
+{
+    return [MBBaseRequest sharedOperationQueue];
+}
+
+
 #pragma mark - Public Methods
 
 - (void)performBasicRequest:(NSURLRequest *)request completionHandler:(MBBaseRequestCompletionHandler)completionHandler
@@ -157,7 +163,7 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 #pragma mark - Request Queues
 
-- (NSOperationQueue *)sharedRequestQueue
++ (NSOperationQueue *)sharedOperationQueue
 {
     static NSOperationQueue *sharedQueue;
     static dispatch_once_t onceToken;
@@ -172,7 +178,12 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 - (void)scheduleOperation
 {
-    [self scheduleOperationOnQueue:[self sharedRequestQueue]];
+    NSOperationQueue *queue = [self operationQueue];
+    if (queue == nil)
+    {
+        queue = [MBBaseRequest sharedOperationQueue];
+    }
+    [self scheduleOperationOnQueue:queue];
 }
 
 - (void)scheduleOperationOnQueue:(NSOperationQueue *)queue
