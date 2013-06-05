@@ -36,11 +36,8 @@
 // created.
 - (MBURLConnectionOperation *)createConnectionOperation;
 
-// Schedules the operation on the sharedRequestQueue returned by the current class.
+// Schedules the operation on the appropriate queue.
 - (void)scheduleOperation;
-
-// Schedules the operation on a particular NSOperationQueue.
-- (void)scheduleOperationOnQueue:(NSOperationQueue *)queue;
 
 // Any error which might occur in the request. We allow subclasses to easily set this
 // error by overriding the property here.

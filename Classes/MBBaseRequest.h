@@ -58,10 +58,11 @@ typedef void (^MBRequestUploadProgressCallback)(NSUInteger bytes, NSUInteger tot
 @property (atomic, assign) double downloadProgress;
 @property (atomic, assign) double uploadProgress;
 
-// Custom operation queue for this request. If not set, the sharedOperationQueue is used. 
-@property (nonatomic, strong, readwrite) NSOperationQueue *operationQueue;
+// Custom operation queue for this request. If nil, the sharedOperationQueue is used.
+@property (nonatomic, strong) NSOperationQueue *operationQueue;
 
-// Shared operation queue used by default for all MBBaseRequests.
+// Shared operation queue used by default for all MBRequests. Your MBBaseRequest subclass can override
+// this method to change the default queue for all instances of that subclass.
 + (NSOperationQueue *)sharedOperationQueue;
 
 @end

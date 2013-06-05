@@ -64,7 +64,6 @@ void _MBRemoveRequest(MBBaseRequest *request)
     return self;
 }
 
-
 #pragma mark - Accessors
 
 - (MBURLConnectionOperation *)connectionOperation
@@ -83,12 +82,6 @@ void _MBRemoveRequest(MBBaseRequest *request)
     MBURLConnectionOperation *op = [[MBURLConnectionOperation alloc] init];
     return op;
 }
-
-- (NSOperationQueue *)sharedRequestQueue
-{
-    return [MBBaseRequest sharedOperationQueue];
-}
-
 
 #pragma mark - Public Methods
 
@@ -178,21 +171,18 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 - (void)scheduleOperation
 {
-    NSOperationQueue *queue = [self operationQueue];
-    if (queue == nil)
-    {
-        queue = [MBBaseRequest sharedOperationQueue];
-    }
-    [self scheduleOperationOnQueue:queue];
-}
-
-- (void)scheduleOperationOnQueue:(NSOperationQueue *)queue
-{
     [self setRunning:YES];
 
     if ([self affectsNetworkActivityIndicator])
     {
         [[MBNetworkActivityIndicatorManager sharedManager] networkActivityStarted];
+    }
+
+    // Get the operation queue for this request.
+    NSOperationQueue *queue = [self operationQueue];
+    if (queue == nil)
+    {
+        queue = [[self class] sharedOperationQueue];
     }
 
     if ([[self connectionOperation] responseData] != nil)
