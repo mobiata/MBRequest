@@ -24,13 +24,6 @@
 // and performBasicRequest:completionHandler:. This method will be called on the main thread.
 - (void)notifyCaller;
 
-// The shared request queue for all MBBaseRequest objects. You may override this method to return
-// a different queue if you would like to separate some requests from other requests. For example,
-// you might want a special queue to handle certain requests which are fast and return very little
-// data. This queue could have 20 max concurrent operations while another, slower queue might only
-// 2 or 3.
-- (NSOperationQueue *)sharedRequestQueue __attribute__((deprecated));
-
 // This method is used to create the URL connection operation. Override this method if you need
 // to create a subclass of MBURLConnectionOperation or customize just how that operation is
 // created.
