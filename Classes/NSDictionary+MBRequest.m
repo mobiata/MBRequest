@@ -38,7 +38,7 @@
                     appendAmp = YES;
                 }
 
-                [urlString appendString:key];
+                [urlString appendString:[key mb_URLEncodedString]];
                 [urlString appendString:@"="];
                 [urlString appendString:[value mb_URLEncodedString]];
             }
@@ -54,7 +54,7 @@
                 appendAmp = YES;
             }
 
-            [urlString appendString:key];
+            [urlString appendString:[key mb_URLEncodedString]];
             [urlString appendString:@"="];
             [urlString appendString:[[self objectForKey:key] mb_URLEncodedString]];;
         }
