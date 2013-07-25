@@ -83,7 +83,7 @@ MBRequest uses [ARC (Automatic Reference Counting)][ARC]. If you are not using A
 
 1. Launch Xcode for your project.
 2. Navigate to the "Builds Phases" tab of your target(s).
-3. Find all MBRequest source files and add `-f-objc-arc` to the "Compiler Flags" column.
+3. Find all MBRequest source files and add `-fobjc-arc` to the "Compiler Flags" column.
 
 ## Localization
 
