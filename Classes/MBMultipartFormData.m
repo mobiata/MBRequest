@@ -56,41 +56,24 @@
 
 #pragma mark - Appending parts
 
-- (void)appendPartWithString:(NSString *)string
-                        name:(NSString *)name
+- (void)appendPartWithString:(NSString *)string name:(NSString *)name
 {
     NSString *contentDisposition = [NSString stringWithFormat:@"form-data; name=\"%@\"", name];
-    NSDictionary *headers = [NSDictionary dictionaryWithObjectsAndKeys:
-                             contentDisposition, @"Content-Disposition",
-                             nil];
+    NSDictionary *headers = @{@"Content-Disposition": contentDisposition};
     [self appendPartWithHeaders:headers data:[string dataUsingEncoding:NSUTF8StringEncoding]];
 }
 
-- (void)appendPartWithNumber:(NSNumber *)number
-                        name:(NSString *)name
+- (void)appendPartWithNumber:(NSNumber *)number name:(NSString *)name
 {
     [self appendPartWithString:[number stringValue] name:name];
 }
 
-- (void)appendPartWithFileURL:(NSURL *)fileURL
-                         name:(NSString *)name
+- (void)appendPartWithFileURL:(NSURL *)fileURL name:(NSString *)name
 {
-    NSString *mimetype = nil;
-#ifdef __UTTYPE__
-    NSString *extension = [[fileURL lastPathComponent] pathExtension];
-    CFStringRef UTITypeString = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)extension, NULL);
-    mimetype = (NSString *)CFBridgingRelease(UTTypeCopyPreferredTagWithClass(UTITypeString, kUTTagClassMIMEType));
-    CFRelease(UTITypeString);
-#else
-    mimetype = @"application/octet-stream";
-#endif
-
-    [self appendPartWithFileURL:fileURL name:name mimeType:mimetype];
+    [self appendPartWithFileURL:fileURL name:name mimeType:nil];
 }
 
-- (void)appendPartWithFileURL:(NSURL *)fileURL
-                         name:(NSString *)name
-                     mimeType:(NSString *)mimeType
+- (void)appendPartWithFileURL:(NSURL *)fileURL name:(NSString *)name mimeType:(NSString *)mimeType
 {
     if (![fileURL isFileReferenceURL])
     {
@@ -105,41 +88,44 @@
         return;
     }
 
+#ifdef __UTTYPE__
+    if (mimeType == nil)
+    {
+        NSString *extension = [[fileURL lastPathComponent] pathExtension];
+        CFStringRef UTITypeString = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)extension, NULL);
+        mimetype = (NSString *)CFBridgingRelease(UTTypeCopyPreferredTagWithClass(UTITypeString, kUTTagClassMIMEType));
+        CFRelease(UTITypeString);
+    }
+#endif
+    if (mimeType == nil)
+    {
+        mimeType = @"application/octet-stream";
+    }
+
     NSString *contentDisposition = [NSString stringWithFormat:@"form-data; name=\"%@\"; filename=\"%@\"", name, [fileURL lastPathComponent]];
-    NSDictionary *headers = [NSDictionary dictionaryWithObjectsAndKeys:
-                             contentDisposition, @"Content-Disposition",
-                             mimeType, @"Content-Type",
-                             nil];
+    NSDictionary *headers = @{@"Content-Disposition": contentDisposition,
+                              @"Content-Type": mimeType};
     NSData *fileData = [NSData dataWithContentsOfURL:fileURL];
     [self appendPartWithHeaders:headers data:fileData];
 }
 
-- (void)appendJPEGImageData:(NSData *)data
-                   withName:(NSString *)name
-                   fileName:(NSString *)fileName
+- (void)appendJPEGImageData:(NSData *)data withName:(NSString *)name fileName:(NSString *)fileName
 {
     NSString *contentDisposition = [NSString stringWithFormat:@"form-data; name=\"%@\"; filename=\"%@\"", name, fileName];
-    NSDictionary *headers = [NSDictionary dictionaryWithObjectsAndKeys:
-                             contentDisposition, @"Content-Disposition",
-                             @"image/jpeg", @"Content-Type",
-                             nil];
+    NSDictionary *headers = @{@"Content-Disposition": contentDisposition,
+                              @"Content-Type": @"image/jpeg"};
     [self appendPartWithHeaders:headers data:data];
 }
 
-- (void)appendPNGImageData:(NSData *)data
-                  withName:(NSString *)name
-                  fileName:(NSString *)fileName
+- (void)appendPNGImageData:(NSData *)data withName:(NSString *)name fileName:(NSString *)fileName
 {
     NSString *contentDisposition = [NSString stringWithFormat:@"form-data; name=\"%@\"; filename=\"%@\"", name, fileName];
-    NSDictionary *headers = [NSDictionary dictionaryWithObjectsAndKeys:
-                             contentDisposition, @"Content-Disposition",
-                             @"image/png", @"Content-Type",
-                             nil];
+    NSDictionary *headers = @{@"Content-Disposition": contentDisposition,
+                              @"Content-Type": @"image/png"};
     [self appendPartWithHeaders:headers data:data];
 }
 
-- (void)appendPartWithHeaders:(NSDictionary *)headers
-                         data:(NSData *)data
+- (void)appendPartWithHeaders:(NSDictionary *)headers data:(NSData *)data
 {
     NSMutableData *part = [[NSMutableData alloc] init];
     for (NSString *headerName in [headers allKeys])

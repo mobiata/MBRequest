@@ -22,7 +22,8 @@
 
 - (id)init
 {
-    if ((self = [super init]))
+    self = [super init];
+    if (self)
     {
         NSSet *types = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", nil];
         [[self connectionOperation] setValidContentTypes:types];

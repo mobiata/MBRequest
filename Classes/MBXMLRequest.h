@@ -8,12 +8,13 @@
 
 #import "MBHTTPRequest.h"
 
-// A basic starter class for implementing an XML parser. When you subclass this class,
-// implement the NSXMLParserDelegate methods and be sure to check [self isCancelled]
-// often, especially when expecting large XML documents that might take a significant
-// amount of time to parse. If [self isCancelled] ever comes back true, make sure that
-// you abort the NSXMLParser as quickly as possible.
-
+/**
+ MBXMLRequest is a basic starter class for implementing an XML parser. When you subclass this class,
+ implement the NSXMLParserDelegate methods and be sure to check [self isCancelled] often, especially
+ when expecting large XML documents that might take a significant amount of time to parse. If
+ [self isCancelled] ever comes back true, make sure that you abort the NSXMLParser as quickly as
+ possible.
+ */
 @interface MBXMLRequest : MBHTTPRequest <NSXMLParserDelegate>
 
 @end

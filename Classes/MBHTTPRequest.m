@@ -23,8 +23,7 @@
 
 - (MBURLConnectionOperation *)createConnectionOperation
 {
-    MBHTTPConnectionOperation *op = [[MBHTTPConnectionOperation alloc] init];
-    return op;
+    return [[MBHTTPConnectionOperation alloc] init];
 }
 
 #pragma mark - Request

@@ -15,20 +15,45 @@
 #import "MBHTTPRequest.h"
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
+/**
+ A basic callback for an image request that passes back the image data and any error that may have
+ occurred.
+ @param image The image downloaded from the request.
+ @param error Any error that occurred during the request.
+ */
 typedef void (^MBImageRequestCompletionHandler)(UIImage *image, NSError *error);
 #elif __MAC_OS_X_VERSION_MIN_REQUIRED
+/**
+ A basic callback for an image request that passes back the image data and any error that may have
+ occurred. This completion handler is always executed on the main thread.
+ @param image The image downloaded from the request.
+ @param error Any error that occurred during the request.
+ */
 typedef void (^MBImageRequestCompletionHandler)(NSImage *image, NSError *error);
 #endif
 
+/**
+ An MBBaseRequest subclass designed for downloading image data.
+ */
 @interface MBImageRequest : MBHTTPRequest
 
-// Performs a basic request and notifies the caller with any data downloaded.
+/**
+ Performs a basic request and notifies the caller when the request finishes.
+ @param request The NSURLRequest to perform.
+ @param completionHandler A block to execute after the request finishes. This block will always run
+ on the main thread.
+ */
 - (void)performImageRequest:(NSURLRequest *)request completionHandler:(MBImageRequestCompletionHandler)completionHandler;
 
-// The image returned in the response.
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
+/**
+ The image returned in the response.
+ */
 @property (atomic, strong, readonly) UIImage *responseImage;
 #elif __MAC_OS_X_VERSION_MIN_REQUIRED
+/**
+ The image returned in the response.
+ */
 @property (atomic, strong, readonly) NSImage *responseImage;
 #endif
 

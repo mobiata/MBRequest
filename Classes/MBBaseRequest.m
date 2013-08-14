@@ -19,12 +19,13 @@
 @end
 
 
-// This set of active requests serves the sole purpose of ensuring that the request
-// objects are not dealloced out from under the request. connectionOperationDidFinish
-// runs on a background thread, and without lots of @synchronized calls it would
-// be possible for the main thread to cancel and dealloc the request while the background
-// thread was executing this method. This NSMutableSet ensures that the request sticks
-// around long enough that we don't run into any memory issues.
+/**
+ This set of active requests serves the sole purpose of ensuring that the request objects are not
+ dealloced out from under the request. connectionOperationDidFinish runs on a background thread, and
+ without lots of @synchronized calls it would be possible for the main thread to cancel and dealloc
+ the request while the background thread was executing this method. This NSMutableSet ensures that
+ the request sticks around long enough that we don't run into any memory issues.
+ */
 static NSMutableSet *_activeRequests;
 
 void _MBAddRequest(MBBaseRequest *request)
@@ -56,7 +57,8 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 - (id)init
 {
-    if ((self = [super init]))
+    self = [super init];
+    if (self)
     {
         _affectsNetworkActivityIndicator = YES;
     }

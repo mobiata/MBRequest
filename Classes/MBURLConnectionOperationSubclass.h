@@ -12,9 +12,11 @@
 
 @interface MBURLConnectionOperation (ForSubclassEyesOnly)
 
-// This method is called after the NSURLConnection has finished loading (either successfully or
-// with an error). Subclasses should use this method to check for any errors they want to handle
-// as well as parse whatever response the server sent to the client.
+/**
+ This method is called after the NSURLConnection has finished loading (either successfully or
+ with an error). Subclasses should use this method to check for any errors they want to handle
+ as well as parse whatever response the server sent to the client.
+ */
 - (void)handleResponse;
 
 @end
