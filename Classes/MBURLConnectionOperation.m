@@ -53,7 +53,6 @@
         MBRequestLog(@"Sending %@ Request: %@", [[self request] HTTPMethod], [[self request] URL]);
         MBRequestLog(@"Headers: %@", [[self request] allHTTPHeaderFields]);
         MBRequestLog(@"Body: %@", [[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding]);
-        MBRequestLog(@"Cookies: %@", [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[[self request] URL]]);
 
         NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:[self request]
                                                                       delegate:self
@@ -218,7 +217,6 @@
             [self setResponseData:[NSData dataWithData:[self incrementalResponseData]]];
             [self setIncrementalResponseData:nil];
             MBRequestLog(@"Received Response:\n%@", [self responseDataAsUTF8String]);
-            MBRequestLog(@"Current Cookie State: %@", [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[[connection currentRequest] URL]]);
             [self handleResponse];
             [self finish];
         }
