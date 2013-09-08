@@ -93,7 +93,7 @@
     {
         NSString *extension = [[fileURL lastPathComponent] pathExtension];
         CFStringRef UTITypeString = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)extension, NULL);
-        mimetype = (NSString *)CFBridgingRelease(UTTypeCopyPreferredTagWithClass(UTITypeString, kUTTagClassMIMEType));
+        mimeType = (NSString *)CFBridgingRelease(UTTypeCopyPreferredTagWithClass(UTITypeString, kUTTagClassMIMEType));
         CFRelease(UTITypeString);
     }
 #endif
