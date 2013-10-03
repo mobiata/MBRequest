@@ -21,6 +21,12 @@
 - (void)parseResults;
 
 /**
+ Subclasses should override this method to handle an error that occurred during the connection.
+ Either this method or parseResults will get called, but not both.
+ */
+- (void)handleError;
+
+/**
  Subclasses should override this method and notify their caller that the request has completed
  (either successfully or unsuccessfully). Subclasses should call the super implementation if they
  want the basic superclass request methods to work (like performJSONRequest:completionHandler:

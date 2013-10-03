@@ -145,7 +145,12 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 - (void)parseResults
 {
-    // Nothing to do.
+    // Handled by subclasses.
+}
+
+- (void)handleError
+{
+    // Handled by subclasses.
 }
 
 - (void)notifyCaller
@@ -211,6 +216,10 @@ void _MBRemoveRequest(MBBaseRequest *request)
         if ([self error] == nil)
         {
             [self parseResults];
+        }
+        else
+        {
+            [self handleError];
         }
 
         [self finish];
