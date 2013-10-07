@@ -11,10 +11,10 @@
 /**
  Common error codes for MBRequest.
  */
-typedef enum {
+typedef NS_ENUM(NSInteger, MBRequestErrorCode) {
     MBRequestErrorCodeUnknown = -1,
     MBRequestErrorCodeUnsuccessfulServerResponse = 1
-} MBRequestErrorCode;
+};
 
 /**
  An error domain used for all MBRequest-specific errors.
