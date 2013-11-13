@@ -53,7 +53,7 @@
             {
                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
             }
-            self.networkActivityCounter++;
+            self.networkActivityCounter = self.networkActivityCounter + 1;
         });
     }
 #endif
