@@ -98,9 +98,9 @@ void _MBRemoveRequest(MBBaseRequest *request)
 {
     @synchronized (self)
     {
-        if ([self isRunning] && ![self isCancelled])
+        [self setCancelled:YES];
+        if ([self isRunning])
         {
-            [self setCancelled:YES];
             [[self connectionOperation] cancel];
             [self finish];
         }
@@ -178,31 +178,34 @@ void _MBRemoveRequest(MBBaseRequest *request)
 
 - (void)scheduleOperation
 {
-    [self setRunning:YES];
-
-    if ([self affectsNetworkActivityIndicator])
+    if (![self isCancelled])
     {
-        [[MBNetworkActivityIndicatorManager sharedManager] networkActivityStarted];
-    }
-
-    // Get the operation queue for this request.
-    NSOperationQueue *queue = [self operationQueue];
-    if (queue == nil)
-    {
-        queue = [[self class] sharedOperationQueue];
-    }
-
-    if ([[self connectionOperation] responseData] != nil)
-    {
-        NSBlockOperation *myOperation = [NSBlockOperation blockOperationWithBlock: ^{
-            [self connectionOperationDidFinish:[self connectionOperation]];
-        }];
-        [queue addOperation:myOperation];
-    }
-    else
-    {
-        _MBAddRequest(self);
-        [queue addOperation:[self connectionOperation]];
+        [self setRunning:YES];
+        
+        if ([self affectsNetworkActivityIndicator])
+        {
+            [[MBNetworkActivityIndicatorManager sharedManager] networkActivityStarted];
+        }
+        
+        // Get the operation queue for this request.
+        NSOperationQueue *queue = [self operationQueue];
+        if (queue == nil)
+        {
+            queue = [[self class] sharedOperationQueue];
+        }
+        
+        if ([[self connectionOperation] responseData] != nil)
+        {
+            NSBlockOperation *myOperation = [NSBlockOperation blockOperationWithBlock: ^{
+                [self connectionOperationDidFinish:[self connectionOperation]];
+            }];
+            [queue addOperation:myOperation];
+        }
+        else
+        {
+            _MBAddRequest(self);
+            [queue addOperation:[self connectionOperation]];
+        }
     }
 }
 
