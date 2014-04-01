@@ -80,10 +80,9 @@
     {
         NSHTTPURLResponse *response = [self response];
         NSInteger statusCode = [response statusCode];
-        if (![[self successfulStatusCodes] containsIndex:statusCode])
+        if (![[self successfulStatusCodes] containsIndex:(NSUInteger)statusCode])
         {
-            NSString *format = MBRequestLocalizedString(@"request_unsuccessful_bad_status_code", @"Unable to perform request. An HTTP error occurred (%d).");
-            NSString *msg = [NSString stringWithFormat:format, statusCode];
+            NSString *msg = [NSString stringWithFormat:MBRequestLocalizedString(@"request_unsuccessful_bad_status_code", @"Unable to perform request. An HTTP error occurred (%d)."), statusCode];
             NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithObject:msg forKey:NSLocalizedDescriptionKey];
             [userInfo setObject:@(statusCode) forKey:@"statusCode"];
             NSError *innerError = [NSError errorWithDomain:MBRequestErrorDomain
@@ -104,14 +103,11 @@
             if ([currentType isEqualToString:@"text/html"])
             {
                 NSLog(@"Unexpected content type 'text/html' is often (but not always) due to a captive portal capturing all network requests and then trying to show a login form to the user.");
-                msg = MBRequestLocalizedString(@"unable_perform_request_check_internet_connection_try_again",
-                                               @"Unable to perform request. Please check your internet connection and try again.");
+                msg = MBRequestLocalizedString(@"unable_perform_request_check_internet_connection_try_again", @"Unable to perform request. Please check your internet connection and try again.");
             }
             else
             {
-                NSString *format = MBRequestLocalizedString(@"unexpected_content_type_received",
-                                                            @"Unable to perform request. Unexpected content type received (%@).");
-                msg = [NSString stringWithFormat:format, currentType];
+                msg = [NSString stringWithFormat:MBRequestLocalizedString(@"unexpected_content_type_received", @"Unable to perform request. Unexpected content type received (%@)."), currentType];
             }
 
             NSDictionary *userInfo = [NSDictionary dictionaryWithObject:msg forKey:NSLocalizedDescriptionKey];

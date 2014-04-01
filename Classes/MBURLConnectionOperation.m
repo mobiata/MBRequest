@@ -244,8 +244,8 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
             if ([_delegate respondsToSelector:@selector(connectionOperation:didSendBodyData:totalBytesWritten:totalBytesExpectedToWrite:)])
             {
                 [_delegate connectionOperation:self
-                               didSendBodyData:bytesWritten
-                             totalBytesWritten:totalBytesWritten
+                               didSendBodyData:(NSUInteger)bytesWritten
+                             totalBytesWritten:(NSUInteger)totalBytesWritten
                      totalBytesExpectedToWrite:totalBytesExpectedToWrite];
             }
         }
