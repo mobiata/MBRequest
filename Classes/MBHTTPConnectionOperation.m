@@ -8,10 +8,9 @@
 
 #import "MBHTTPConnectionOperation.h"
 
-#import "MBRequestLocalization.h"
-#import "MBRequestLog.h"
 #import "MBRequestError.h"
 #import "MBRequestLocalization.h"
+#import "MBRequestLog.h"
 #import "MBURLConnectionOperationSubclass.h"
 
 @interface MBHTTPConnectionOperation ()
