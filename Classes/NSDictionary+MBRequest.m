@@ -56,7 +56,7 @@
 
             [urlString appendString:[key mb_URLEncodedString]];
             [urlString appendString:@"="];
-            [urlString appendString:[[self objectForKey:key] mb_URLEncodedString]];;
+            [urlString appendString:[[self objectForKey:key] mb_URLEncodedString]];
         }
     }
 

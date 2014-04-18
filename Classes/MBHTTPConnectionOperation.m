@@ -9,6 +9,7 @@
 #import "MBHTTPConnectionOperation.h"
 
 #import "MBRequestLocalization.h"
+#import "MBRequestLog.h"
 #import "MBRequestError.h"
 #import "MBRequestLocalization.h"
 #import "MBURLConnectionOperationSubclass.h"
@@ -46,6 +47,7 @@
 
 - (void)handleResponse
 {
+    MBRequestLog(@"Response Status Code: %ld", (long)[[self response] statusCode]);
     [super handleResponse];
 
     NSError *error = [self error];
