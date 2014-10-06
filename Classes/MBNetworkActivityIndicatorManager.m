@@ -49,11 +49,11 @@
     if ([self isEnabled])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (self.networkActivityCounter == 0)
+            if ([self networkActivityCounter] == 0)
             {
                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
             }
-            self.networkActivityCounter++;
+            [self setNetworkActivityCounter:[self networkActivityCounter]+1];
         });
     }
 #endif
@@ -65,11 +65,11 @@
     if ([self isEnabled])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (self.networkActivityCounter == 1)
+            if ([self networkActivityCounter] == 1)
             {
                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
             }
-            self.networkActivityCounter = self.networkActivityCounter - 1;
+            [self setNetworkActivityCounter:[self networkActivityCounter]-1];
         });
     }
 #endif

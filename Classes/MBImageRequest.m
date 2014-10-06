@@ -26,6 +26,19 @@
 
 #pragma mark - Request
 
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+- (id)init
+{
+    self = [super init];
+    if (self)
+    {
+        _scale = 1.0f;
+    }
+    
+    return self;
+}
+#endif
+
 - (void)performImageRequest:(NSURLRequest *)request completionHandler:(MBImageRequestCompletionHandler)completionHandler
 {
     [[self connectionOperation] setRequest:request];
@@ -42,7 +55,7 @@
     if ([self error] == nil)
     {
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
-        UIImage *image = [[UIImage alloc] initWithData:[[self connectionOperation] responseData]];
+        UIImage *image = [[UIImage alloc] initWithData:[[self connectionOperation] responseData] scale:[self scale]];
 #elif __MAC_OS_X_VERSION_MIN_REQUIRED
         NSImage *image = [[NSImage alloc] initWithData:[[self connectionOperation] responseData]];
 #endif
