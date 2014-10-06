@@ -17,8 +17,8 @@
  */
 #ifdef MBRequestLocalizationTable
 #define MBRequestLocalizedString(key, default) \
-[[NSBundle mainBundle] localizedStringForKey:(key) value:(default) table:MBRequestLocalizationTable]
+NSLocalizedStringWithDefaultValue((key), MBRequestLocalizationTable, [NSBundle mainBundle], (default), nil)
 #else
 #define MBRequestLocalizedString(key, default) \
-[[NSBundle mainBundle] localizedStringForKey:(key) value:(default) table:nil]
+NSLocalizedStringWithDefaultValue((key), nil, [NSBundle mainBundle], (default), nil)
 #endif

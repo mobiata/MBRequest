@@ -50,9 +50,15 @@
     }
     else
     {
+#ifdef MB_DEBUG_REQUESTS
         MBRequestLog(@"Sending %@ Request: %@", [[self request] HTTPMethod], [[self request] URL]);
         MBRequestLog(@"Headers: %@", [[self request] allHTTPHeaderFields]);
-        MBRequestLog(@"Body: %@", [[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding]);
+        NSString *bodyString = [[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding];
+        if ([bodyString length] > 0)
+        {
+            MBRequestLog(@"Body: %@", [[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding]);
+        }
+#endif
 
         NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:[self request]
                                                                       delegate:self
@@ -131,14 +137,23 @@
 
 - (void)handleResponse
 {
+#ifdef MB_DEBUG_REQUESTS
+    if ([[self responseData] length] > 0)
+    {
+        NSString *responseString = [self responseDataAsUTF8String];
+        if ([responseString length] > 0)
+        {
+            MBRequestLog(@"Response String: %@", [self responseDataAsUTF8String]);
+        }
+    }
+#endif
 }
 
 #pragma mark - Helper Methods
 
 - (NSString *)responseDataAsUTF8String
 {
-    NSString *responseString = [[NSString alloc] initWithData:[self responseData] encoding:NSUTF8StringEncoding];
-    return responseString;
+    return [[NSString alloc] initWithData:[self responseData] encoding:NSUTF8StringEncoding];
 }
 
 #pragma mark - NSURLConnectionDelegate
@@ -216,7 +231,6 @@
         {
             [self setResponseData:[NSData dataWithData:[self incrementalResponseData]]];
             [self setIncrementalResponseData:nil];
-            MBRequestLog(@"Received Response:\n%@", [self responseDataAsUTF8String]);
             [self handleResponse];
             [self finish];
         }
@@ -244,8 +258,8 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
             if ([_delegate respondsToSelector:@selector(connectionOperation:didSendBodyData:totalBytesWritten:totalBytesExpectedToWrite:)])
             {
                 [_delegate connectionOperation:self
-                               didSendBodyData:bytesWritten
-                             totalBytesWritten:totalBytesWritten
+                               didSendBodyData:(NSUInteger)bytesWritten
+                             totalBytesWritten:(NSUInteger)totalBytesWritten
                      totalBytesExpectedToWrite:totalBytesExpectedToWrite];
             }
         }

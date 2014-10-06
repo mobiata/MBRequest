@@ -40,10 +40,10 @@
 {
     NSMutableData *bodyData = [NSMutableData data];
     [bodyData appendData:[[NSString stringWithFormat:@"--%@\r\n", [self boundary]] dataUsingEncoding:NSUTF8StringEncoding]];
-    NSInteger count = [[self parts] count];
+    NSInteger count = (NSInteger)[[self parts] count];
     for (NSInteger i = 0 ; i < count; i++)
     {
-        NSData *part = [[self parts] objectAtIndex:i];
+        NSData *part = [[self parts] objectAtIndex:(NSUInteger)i];
         [bodyData appendData:part];
         if (i + 1 < count)
         {
