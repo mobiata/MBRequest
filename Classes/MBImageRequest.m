@@ -26,18 +26,17 @@
 
 #pragma mark - Request
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED
 - (id)init
 {
     self = [super init];
     if (self)
     {
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
         _scale = 1.0f;
+#endif
     }
-    
     return self;
 }
-#endif
 
 - (void)performImageRequest:(NSURLRequest *)request completionHandler:(MBImageRequestCompletionHandler)completionHandler
 {

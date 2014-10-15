@@ -50,6 +50,7 @@ typedef void (^MBImageRequestCompletionHandler)(NSImage *image, NSError *error);
  The image returned in the response.
  */
 @property (atomic, strong, readonly) UIImage *responseImage;
+
 /**
  The scale of the image returned in the response.
  */
