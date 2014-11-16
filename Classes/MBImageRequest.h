@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Mobiata, LLC. All rights reserved.
 //
 
+#import "Availability.h"
+
 #if __IPHONE_OS_VERSION_MIN_REQUIRED
 #import <UIKit/UIKit.h>
 #elif __MAC_OS_X_VERSION_MIN_REQUIRED
