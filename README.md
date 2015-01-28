@@ -87,7 +87,16 @@ MBRequest uses [ARC (Automatic Reference Counting)][ARC]. If you are not using A
 
 ## App Extensions
 
-When using MBRequest in an App Extension, `#define APPLICATION_EXTENSION_API_ONLY` to avoid using unavailable APIs.
+When using MBRequest in an App Extension, `#define APPLICATION_EXTENSION_API_ONLY` to avoid using unavailable APIs. If using MBRequest in both an App Extension and a Containing App, make sure to set the `sharedApplication` property on `MBNetworkActivityIndicatorManager` in your appDelegate to  `[UIApplication sharedApplication]`. Doing so will ensure that the indicator displays properly in your Containing App.
+
+```objc
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    [[MBNetworkActivityIndicatorManager sharedManager] setSharedApplication:[UIApplication sharedApplication]];
+
+    ...
+}
+```
 
 ## Localization
 

@@ -8,10 +8,6 @@
 
 #import "MBNetworkActivityIndicatorManager.h"
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED
-#import <UIKit/UIKit.h>
-#endif
-
 
 @interface MBNetworkActivityIndicatorManager ()
 @property (nonatomic, assign) NSInteger networkActivityCounter;
@@ -28,6 +24,10 @@
     if (self)
     {
         _enabled = YES;
+        
+#if !defined(APPLICATION_EXTENSION_API_ONLY)
+        _sharedApplication = [UIApplication sharedApplication];
+#endif
     }
     
     return self;
@@ -45,13 +45,13 @@
 
 - (void)networkActivityStarted
 {
-#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && !defined(APPLICATION_EXTENSION_API_ONLY)
+#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
     if ([self isEnabled])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (self.networkActivityCounter == 0)
             {
-                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+                [[self sharedApplication] setNetworkActivityIndicatorVisible:YES];
             }
             self.networkActivityCounter = self.networkActivityCounter + 1;
         });
@@ -61,13 +61,13 @@
 
 - (void)networkActivityStopped
 {
-#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && !defined(APPLICATION_EXTENSION_API_ONLY)
+#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
     if ([self isEnabled])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (self.networkActivityCounter == 1)
             {
-                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+                [[self sharedApplication] setNetworkActivityIndicatorVisible:NO];
             }
             self.networkActivityCounter = self.networkActivityCounter - 1;
         });
