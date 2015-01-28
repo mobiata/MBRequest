@@ -85,6 +85,10 @@ MBRequest uses [ARC (Automatic Reference Counting)][ARC]. If you are not using A
 2. Navigate to the "Builds Phases" tab of your target(s).
 3. Find all MBRequest source files and add `-fobjc-arc` to the "Compiler Flags" column.
 
+## App Extensions
+
+When using MBRequest in an App Extension, `#define APPLICATION_EXTENSION_API_ONLY` to avoid using unavailable APIs.
+
 ## Localization
 
 MBRequest defines a few strings that could theoretically be shown to users. These are most often error messages placed into the `userInfo` dictionary of `NSError` objects. MBRequest uses the `MBRequestLocalizedString` macro to try and find translated versions of these strings for your users. This macro gives you a couple of choices if you decide to localize your application for languages other than English. `MBRequestLocalizedString` is defined as follows:

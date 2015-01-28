@@ -45,7 +45,7 @@
 
 - (void)networkActivityStarted
 {
-#if __IPHONE_OS_VERSION_MIN_REQUIRED
+#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && !defined(APPLICATION_EXTENSION_API_ONLY)
     if ([self isEnabled])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -61,7 +61,7 @@
 
 - (void)networkActivityStopped
 {
-#if __IPHONE_OS_VERSION_MIN_REQUIRED
+#if defined(__IPHONE_OS_VERSION_MIN_REQUIRED) && !defined(APPLICATION_EXTENSION_API_ONLY)
     if ([self isEnabled])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
