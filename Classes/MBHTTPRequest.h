@@ -28,6 +28,11 @@ typedef void (^MBHTTPRequestCompletionHandler)(NSData *responseData, NSError *er
 @property (nonatomic, strong, readonly) MBHTTPConnectionOperation *connectionOperation;
 
 /**
+ All the response header fields associated with the request
+ */
+@property (nonatomic, strong, readonly) NSDictionary *responseHeaderFields;
+
+/**
  Performs a basic request and notifies the caller when the request finishes.
  @param request The NSURLRequest to perform.
  @param completionHandler A block to execute after the request finishes. This block will always run

@@ -13,6 +13,7 @@
 
 @interface MBHTTPRequest ()
 @property (nonatomic, copy, readwrite) MBHTTPRequestCompletionHandler HTTPCompletionHandler;
+@property (nonatomic, strong, readwrite) NSDictionary *responseHeaderFields;
 @end
 
 @implementation MBHTTPRequest
@@ -33,6 +34,7 @@
 {
     [[self connectionOperation] setRequest:request];
     [self setHTTPCompletionHandler:completionHandler];
+    self.responseHeaderFields = nil;
     [self scheduleOperation];
 }
 
@@ -42,6 +44,7 @@
     
     if ([self HTTPCompletionHandler] != nil)
     {
+        self.responseHeaderFields = self.connectionOperation.response.allHeaderFields;
         [self HTTPCompletionHandler]([[self connectionOperation] responseData], [self error]);
     }
 }
