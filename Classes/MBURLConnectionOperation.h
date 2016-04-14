@@ -64,10 +64,11 @@
 @property (atomic, strong) NSURLRequest *request;
 
 /**
- The NSURLConnection associated with this operation. It is created with `request`.
+ The NSURLSessionDataTask and NSURLSession associated with this operation. It is created with `request`.
  @see -[MBURLConnectionOperation request]
  */
-@property (atomic, strong, readonly) NSURLConnection *connection;
+@property (atomic, strong, readonly) NSURLSession *session;
+@property (atomic, strong, readonly) NSURLSessionDataTask *dataTask;
 
 /**
  Any error that occurs when processing the NSURLConnection.
