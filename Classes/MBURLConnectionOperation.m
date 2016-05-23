@@ -13,8 +13,9 @@
 #import "MBRequestLog.h"
 #import "MBURLConnectionOperationSubclass.h"
 
-@interface MBURLConnectionOperation ()
-@property (atomic, strong, readwrite) NSURLConnection *connection;
+@interface MBURLConnectionOperation () <NSURLSessionDataDelegate, NSURLSessionTaskDelegate, NSURLSessionDelegate>
+@property (atomic, strong, readwrite) NSURLSession *session;
+@property (atomic, strong, readwrite) NSURLSessionDataTask *dataTask;
 @property (atomic, strong, readwrite) NSMutableData *incrementalResponseData;
 @property (atomic, strong, readwrite) NSURLResponse *response;
 @property (atomic, strong, readwrite) NSData *responseData;
@@ -27,18 +28,19 @@
 
 @implementation MBURLConnectionOperation
 
+@synthesize finished = _finished;
+@synthesize executing = _executing;
+
 #pragma mark - Accessors
 
 - (void)setResponseDataOverride:(NSData *)data
 {
-    [self setResponseData:data];
+    self.responseData = data;
 }
-
-#pragma mark - Main Functionality
 
 - (void)main
 {
-    if ([self request] == nil)
+    if (self.request == nil)
     {
         [NSException raise:NSInternalInconsistencyException format:@"%@: Unable to send request. No NSURLRequest object set!", self];
     }
@@ -59,28 +61,29 @@
             MBRequestLog(@"Body: %@", [[NSString alloc] initWithData:[[self request] HTTPBody] encoding:NSUTF8StringEncoding]);
         }
 #endif
-
-        NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:[self request]
-                                                                      delegate:self
-                                                              startImmediately:NO];
-        [self setConnection:connection];
-
-        if ([self connection] == nil)
+        
+        self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]
+                                                     delegate:self
+                                                delegateQueue:nil];
+        
+        self.dataTask = [self.session dataTaskWithRequest:self.request];
+                                          
+        if (self.dataTask == nil)
         {
-            NSLog(@"NSURLConnection's initWithRequest returned nil for %@. How is this possible?", [self request]);
+            NSLog(@"NSURLSession returned nil for %@. How is this possible?", self.request);
             NSString *message = MBRequestLocalizedString(@"unknown_error_occurred", @"An unknown error has occurred.");
             NSDictionary *userInfo = [NSDictionary dictionaryWithObject:message forKey:NSLocalizedDescriptionKey];
             NSError *error = [NSError errorWithDomain:MBRequestErrorDomain
                                                  code:MBRequestErrorCodeUnknown
                                              userInfo:userInfo];
-            [self setError:error];
+            self.error = error;
             [self finish];
         }
         else
         {
-            [[self connection] start];
-            [self setRunLoop:CFRunLoopGetCurrent()];
-            [self setRunLoopIsRunning:YES];
+            [self.dataTask resume];
+            self.runLoop = CFRunLoopGetCurrent();
+            self.runLoopIsRunning = YES;
             CFRunLoopRun();
         }
     }
@@ -91,15 +94,15 @@
     if (![self isCancelled] && ![self isFinished])
     {
         // Defer the actual cancellation to a later iteration of the operation runloop.
-        [self setShouldCancel:YES];
+        self.shouldCancel = YES;
     }
 }
 
 - (void)cancelFromRunLoop
 {
-    [self setShouldCancel:NO];
-    [[self connection] cancel];
-    [self setConnection:nil];
+    self.shouldCancel = NO;
+    [self.dataTask cancel];
+    self.dataTask = nil;
     dispatch_async(dispatch_get_main_queue(), ^{
         // We run this on the main thread to ensure safe cleanup of the operation and
         // the run loop. Without this block, it would be possible for [self cancelOperation]
@@ -119,26 +122,36 @@
 {
     if (![self isCancelled] && ![self isFinished])
     {
-        [[self delegate] connectionOperationDidFinish:self];
+        [self.delegate connectionOperationDidFinish:self];
     }
 
     // Break the retain cycle. We no longer need to retain our delegate since we never need to
     // reference it again. This must be done on the runloop (if it is running) since the runloop's
     // thread may be *just* about to send a message to the delegate.
-    [self setDelegate:nil];
-
+    self.delegate = nil;
+    self.session = nil;
+    self.dataTask = nil;
+    
     if ([self isExecuting] && [self runLoopIsRunning])
     {
-        CFRunLoopStop([self runLoop]);
-        [self setRunLoop:NULL];
-        [self setRunLoopIsRunning:NO];
+        CFRunLoopStop(self.runLoop);
+        self.runLoop = nil;
+        self.runLoopIsRunning = NO;
     }
+    
+    [self willChangeValueForKey:@"isExecuting"];
+    _executing = NO;
+    [self didChangeValueForKey:@"isExecuting"];
+    
+    [self willChangeValueForKey:@"isFinished"];
+    _finished = YES;
+    [self didChangeValueForKey:@"isFinished"];
 }
 
 - (void)handleResponse
 {
 #ifdef MB_DEBUG_REQUESTS
-    if ([[self responseData] length] > 0)
+    if ([self.responseData length] > 0)
     {
         NSString *responseString = [self responseDataAsUTF8String];
         if ([responseString length] > 0)
@@ -153,142 +166,128 @@
 
 - (NSString *)responseDataAsUTF8String
 {
-    return [[NSString alloc] initWithData:[self responseData] encoding:NSUTF8StringEncoding];
+    return [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding];
 }
 
-#pragma mark - NSURLConnectionDelegate
+#pragma mark - NSURLSessionDataDelegate
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response
+ completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler
 {
-    if (![self isCancelled] && ![self isFinished])
+    if (!self.cancelled && !self.finished)
     {
-        if ([self shouldCancel])
+        if (self.shouldCancel)
         {
+            completionHandler(NSURLSessionResponseCancel);
             [self cancelFromRunLoop];
         }
         else
         {
-            [self setResponse:response];
-
-            long long capacity = [response expectedContentLength];
+            self.response = response;
+            
+            long long capacity = response.expectedContentLength;
             capacity = (capacity == NSURLResponseUnknownLength) ? 1024 : capacity;
             capacity = MIN(capacity, 1024 * 1000);
-            [self setIncrementalResponseData:[NSMutableData dataWithCapacity:(NSUInteger)capacity]];
+            self.incrementalResponseData = [NSMutableData dataWithCapacity:(NSUInteger)capacity];
+            completionHandler(NSURLSessionResponseAllow);
         }
     }
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
 {
-    if (![self isCancelled] && ![self isFinished])
+    if (!self.cancelled && !self.finished)
     {
-        if ([self shouldCancel])
+        if (self.shouldCancel)
         {
             [self cancelFromRunLoop];
         }
         else
         {
-            [[self incrementalResponseData] appendData:data];
-
-            if ([_delegate respondsToSelector:@selector(connectionOperation:didReceiveBodyData:totalBytesRead:totalBytesExpectedToRead:)])
+            [self.incrementalResponseData appendData:data];
+            
+            if ([self.delegate respondsToSelector:@selector(connectionOperation:didReceiveBodyData:totalBytesRead:totalBytesExpectedToRead:)])
             {
-                [_delegate connectionOperation:self
-                            didReceiveBodyData:[data length]
-                                totalBytesRead:[[self incrementalResponseData] length]
-                      totalBytesExpectedToRead:[[self response] expectedContentLength]];
+                [self.delegate connectionOperation:self
+                                didReceiveBodyData:data.length
+                                    totalBytesRead:self.incrementalResponseData.length
+                          totalBytesExpectedToRead:self.response.expectedContentLength];
             }
         }
     }
 }
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask willCacheResponse:(NSCachedURLResponse *)proposedResponse completionHandler:(void (^)(NSCachedURLResponse *cachedResponse))completionHandler
 {
-    if (![self isCancelled] && ![self isFinished])
+    NSCachedURLResponse *cachedURLResponse = (self.cancelled || self.shouldCancel) ? nil : proposedResponse;
+    completionHandler(cachedURLResponse);
+}
+
+#pragma mark - NSURLSessionTaskDelegate
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didSendBodyData:(int64_t)bytesSent totalBytesSent:(int64_t)totalBytesSent totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
+{
+    if (!self.cancelled && !self.finished)
     {
-        if ([self shouldCancel])
+        if (self.shouldCancel)
         {
             [self cancelFromRunLoop];
         }
         else
         {
-            [self setError:error];
-            MBRequestLog(@"Request Error: %@", [self error]);
+            if ([self.delegate respondsToSelector:@selector(connectionOperation:didSendBodyData:totalBytesWritten:totalBytesExpectedToWrite:)])
+            {
+                [self.delegate connectionOperation:self
+                               didSendBodyData:(NSUInteger)bytesSent
+                             totalBytesWritten:(NSUInteger)totalBytesSent
+                     totalBytesExpectedToWrite:totalBytesExpectedToSend];
+            }
+        }
+    }
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(nullable NSError *)error
+{
+    if (!self.cancelled && !self.finished)
+    {
+        if (self.shouldCancel)
+        {
+            [self cancelFromRunLoop];
+        }
+        else
+        {
+            if (error == nil)  // If no error, finished sucesfully
+            {
+                self.responseData = [NSData dataWithData:self.incrementalResponseData];
+                self.incrementalResponseData = nil;
+            }
+            else
+            {
+                self.error = error;
+                MBRequestLog(@"Request Error: %@", [self error]);
+            }
             [self handleResponse];
             [self finish];
         }
     }
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-    if (![self isCancelled] && ![self isFinished])
-    {
-        if ([self shouldCancel])
-        {
-            [self cancelFromRunLoop];
-        }
-        else
-        {
-            [self setResponseData:[NSData dataWithData:[self incrementalResponseData]]];
-            [self setIncrementalResponseData:nil];
-            [self handleResponse];
-            [self finish];
-        }
-    }
-}
-
-- (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse
-{
-    return ([self isCancelled] || [self shouldCancel]) ? nil : cachedResponse;
-}
-
-- (void)connection:(NSURLConnection *)connection
-   didSendBodyData:(NSInteger)bytesWritten
- totalBytesWritten:(NSInteger)totalBytesWritten
-totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite
-{
-    if (![self isCancelled] && ![self isFinished])
-    {
-        if ([self shouldCancel])
-        {
-            [self cancelFromRunLoop];
-        }
-        else
-        {
-            if ([_delegate respondsToSelector:@selector(connectionOperation:didSendBodyData:totalBytesWritten:totalBytesExpectedToWrite:)])
-            {
-                [_delegate connectionOperation:self
-                               didSendBodyData:(NSUInteger)bytesWritten
-                             totalBytesWritten:(NSUInteger)totalBytesWritten
-                     totalBytesExpectedToWrite:totalBytesExpectedToWrite];
-            }
-        }
-    }
-}
-
-- (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler
 {
     BOOL handledAuth = NO;
-    if ([self allowsUntrustedServerCertificates] &&
-        [[[challenge protectionSpace] authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust] &&
-        [challenge previousFailureCount] == 0 &&
-        [challenge proposedCredential] == nil)
+    if (self.allowsUntrustedServerCertificates &&
+        [challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust] &&
+        challenge.previousFailureCount == 0 &&
+        challenge.proposedCredential == nil)
     {
-        [[challenge sender] useCredential:[NSURLCredential credentialForTrust:[[challenge protectionSpace] serverTrust]]
-               forAuthenticationChallenge:challenge];
+        NSURLCredential *credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
         handledAuth = YES;
     }
-
+    
     if (!handledAuth)
     {
-        if ([[challenge sender] respondsToSelector:@selector(performDefaultHandlingForAuthenticationChallenge:)])
-        {
-            [[challenge sender] performDefaultHandlingForAuthenticationChallenge:challenge];
-        }
-        else
-        {
-            [[challenge sender] continueWithoutCredentialForAuthenticationChallenge:challenge];
-        }
+        completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
     }
 }
 
